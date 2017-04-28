@@ -320,8 +320,8 @@
 # selparm[4]; cole fixed at mle
 0.0	   9.0	 0.01018  2.6	  -1	50	  -5	  0	0	0	0	0	2 2	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
-# selparm[6]; cole added informative prior N(2,.5^2)
--5.0	 5.0	2	  2	    1	.5  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
+# selparm[6]; cole added informative prior N(2,.25^2)
+-5.0	 5.0	2	  2	    1	.25  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
 
 #TWL retention  (i.e., 1-discard_rate)
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn
@@ -410,7 +410,8 @@
 # selparm[47]; cole added N(1.548458, 1)
 0.0	   9.0	 0.001  1.548458	 1	1	  5	  	# Desc WIDTH exp
 0.0	   9.0	 0.001  2.6	  -1	50	  5	  	# Desc WIDTH exp
--5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
+# selparm[49]; cole added N(0,1) prior
+-5.0	 5.0	-1.0	  0	    1	1   	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal
