@@ -14,7 +14,7 @@
 0       # Use Soft Boundaries to aid convergence (0,1) (recommended)
 1       # N bootstrap datafiles to create
 25      # Last phase for estimation
-0       # MCMC burn-in
+201     # MCMC burn-in
 1       # MCMC thinning interval
 0       # Jitter initial parameter values by this fraction
 -1      # Min year for spbio sd_report (neg val = styr-2, virgin state)
