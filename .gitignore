@@ -57,7 +57,7 @@ fit.rwm.RDS
 */snowcrab2/Check.Out
 */snowcrab2/R_input.txt
 */snowcrab2/snowcrab2.cpp
-admb_models/*/*.cpp
+*/*.cpp
 halibut.tpl
 halibut2.tpl
 hake.tpl
