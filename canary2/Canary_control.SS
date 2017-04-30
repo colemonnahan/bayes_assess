@@ -223,9 +223,13 @@
 0	0	0	0	# 31_Coastwide_prerec
 
 # Catchability parameter lines
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
+
+# Q_parm[1]: cole added N(0.68, .75) prior
+0     3   0.4     0.68     0         .75         2       # Q_extraSD_14_pre-recruit
+# Q_parm[2]: cole added N(0.57, .75) prior
+0     3   0.4     0.57     0         .75         2       # Q_extraSD_14_pre-recruit
+# Q_parm[3]: cole added N(1.1, .75) prior
+0     3   0.4     1.1     0         .75         2       # Q_extraSD_14_pre-recruit
 
 # Selectivity section
 # Size-based setup
@@ -321,7 +325,7 @@
 0.0	   9.0	 0.01018  2.6	  -1	50	  -5	  0	0	0	0	0	2 2	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
 # selparm[6]; cole added informative prior N(2,.25^2)
--5.0	 5.0	2	  2	    1	.25  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
+-5.0	 5.0	2	  2	    0	.25  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
 
 #TWL retention  (i.e., 1-discard_rate)
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn
@@ -382,10 +386,10 @@
 
 # 19_CA_Tri_early double normal
 # selparm[31]; cole added prior N(54.2563,5^2)
-13.001 65	   40	 54.2563  1	5	 4	  0	0	0	0	0	0	0	# PEAK
+13.001 65	   40	 54.2563  0	5	 4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 # selparm[33]; cole added prior N(6.594939,2^2)
-0.0	   9.0	 4.3	  6.594939	  1	2	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+0.0	   9.0	 4.3	  6.594939	  0	2	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
 0.0	   9.0	 0.01	  2.6	  -1	50	  5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	  0	0	0	0	0	0	0	# FINAL (logistic)
@@ -408,15 +412,16 @@
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 # selparm[47]; cole added N(1.548458, 1)
-0.0	   9.0	 0.001  1.548458	 1	1	  5	  	# Desc WIDTH exp
+0.0	   9.0	 0.001  1.548458	 0	1	  5	  	# Desc WIDTH exp
 0.0	   9.0	 0.001  2.6	  -1	50	  5	  	# Desc WIDTH exp
 # selparm[49]; cole added N(0,1) prior
--5.0	 5.0	-1.0	  0	    1	1   	5	    # FINAL (logistic)
+-5.0	 5.0	-1.0	  0	    0	1   	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
+# selparm[52]; cole added N(4.5,1.5) prior
+0.0	   9.0	 4.3	  4.5	  0	1.5	  5	  	# Asc WIDTH exp
 0.0	   9.0	 9.0    2.6	  -1	50	  5	  	# Desc WIDTH exp
 -5.0	 5.0	 5.0	  5	    -1	50    5	    # FINAL (logistic)
 

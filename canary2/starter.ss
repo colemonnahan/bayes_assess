@@ -13,7 +13,7 @@ Canary_control.SS	# Control file
 1 	# Use Soft Boundaries to aid convergence (0,1) (recommended)
 0 	# N bootstrap datafiles to create
 25 	# Last phase for estimation
-1 	# MCMC burn-in
+0 	# MCMC burn-in
 1 	# MCMC thinning interval
 0 	# Jitter initial parameter values by this fraction
 -1	# Min year for spbio sd_report (neg val = styr-2, virgin state)
