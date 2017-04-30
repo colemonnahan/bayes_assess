@@ -165,6 +165,9 @@ pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace',
            pars=hitbounds)
 plot.improvement(snowcrab.rwm, snowcrab2.rwm)
 dev.off()
+pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace',
+           pars=c('SRPars[5]', 'SRPars[6]'))
+;dev.off()
 
 
 

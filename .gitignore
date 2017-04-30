@@ -66,9 +66,12 @@ tanner.tpl
 tanner2.tpl
 canary.tpl
 canary2.tpl
-*/tanner/Check.Out
-*/tanner/OutputFile1.Out
-*/tanner/gradient*
+tanner/Check.Out
+tanner/OutputFile1.Out
+tanner/gradient*
+tanner2/Check.Out
+tanner2/OutputFile1.Out
+tanner2/gradient*
 admb_models/hake/plots
 cod2.tpl
 *_chain_*
