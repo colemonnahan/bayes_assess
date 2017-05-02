@@ -9,11 +9,12 @@ DATA_SECTION
   init_int styr  																							//start year of the model
   init_int endyr 																							//end year of the model
 
+ 
   // Data stuff only from here
   init_int nirec     																				    	 //number of intial recruitments to estimate 
   init_int nlenm      																				     //number of length bins for males in the model
   init_int nobs_fish 																					 //number of years of fishery retained length data
-  init_ivector yrs_fish(1,nobs_fish) 															//years when have fishery retained length data
+  init_ivector yrs_fish(1,nobs_fish) 
   init_matrix nsamples_fish(1,2,1,nobs_fish)											//nsamples weight for fish length comps needmatrix each year,new/old shell
   init_int nobs_fish_discf  																		//number of years of fishery female discard length data
   init_ivector yrs_fish_discf(1,nobs_fish_discf) 										//years when have fishery discard length data
@@ -29,21 +30,22 @@ DATA_SECTION
   init_int nobs_srv1_length              												         //number of years of survey length data
   init_ivector yrs_srv1_length(1,nobs_srv1_length) 						       	//years when have length data
   init_4darray nsamples_srv1_length(1,2,1,2,1,2,1,nobs_srv1_length)	 //number of samples for each length comp by immat,mat,new/old,sex,year
-   
+
 //extra survey in 2009
   init_int yrs_srv2                     																 //years when have biomass estimates for extra survey
   init_3darray nsamples_srv2_length(1,2,1,2,1,2)									 //number of samples for each length comp by sruvey,sex,immat,mat
   init_4darray obs_p_srv2_lend(1,2,1,2,1,2,1,nlenm) 							 //numbers by length two surveys, sex, immat, mat
   init_vector  obs_srv2(1,2)
   init_matrix  obs_srv2_cv(1,2,1,2)
-  
+
+   
 //extra survey in 2010
   init_int yrs_srv10                          															  //years when have biomass estimates for extra survey
   init_3darray nsamples_srv10_length(1,2,1,2,1,2)								 //number of samples for each length comp by sruvey,sex,immat,mat
   init_4darray obs_p_srv10_lend(1,2,1,2,1,2,1,nlenm)  							//numbers by length two surveys, sex, immat, mat
   init_vector  obs_srv10(1,2)
   init_matrix  obs_srv10_cv(1,2,1,2)
-  
+
  //standard survey for length data
  //first index,1 immat, 2 mature,1 new shell, 2 old shell, then female 1 male 2
   init_5darray obs_p_srv1_lend(1,2,1,2,1,2,1,nobs_srv1_length,1,nlenm)  //immat,mat,new, old survey length data,female,male,year then bin
@@ -62,7 +64,7 @@ DATA_SECTION
   init_vector obs_srv1(1,nobs_srv1)  															  //survey numbers
   !! obs_srv1 /= 1000.;
   init_matrix cv_srv1o(1,2,1,nobs_srv1)   													 //survey cv
- 
+	  
   init_vector maturity_logistic(1,nlenm)   													 //logistic maturity probability curve for new shell immature males
   init_matrix maturity_average(1,2,1,nlenm)  												 //probability mature for new immature females, avearge proportion mature by length for new males
   init_matrix maturity_old_average(1,2,1,nlenm) 										 //average proportion mature by length for old shell females, males
@@ -82,9 +84,6 @@ DATA_SECTION
   init_vector malegrowdatx(1,nobs_growm)
   init_vector malegrowdaty(1,nobs_growm)
 
-  !!cout<<malegrowdatx<<endl;
-  !!cout<<malegrowdaty<<endl;  
-  
   // End of reading normal data file 
  // Open control file....
  !! ad_comm::change_datafile_name("snowcrab2.ctl");
@@ -206,6 +205,7 @@ DATA_SECTION
   init_number maturity_switch
   init_int f_penalties
   init_int retro_years
+  init_int only_linear_growth
 
    int styr_rec;   
    //year,age,sex
@@ -258,27 +258,35 @@ INITIALIZATION_SECTION
   srv1_q 1.0
   srv2_q 1.0
   srv3_q 1.0
-  srv1_sel95 60
+  srv1_sel95 55.5
   srv1_sel50 40 
   fish_fit_sel50_mn 95.1
   fish_fit_sel50_mo 100.0
   log_sel50_dev_mn  0.0000
   discard_mult 1.0
-  mateste -0.7
-  matestfe -0.7
+  mateste -0.03
+  matestfe -0.03
   cpueq 0.001
   fish_disc_sel50_f 4.2
-  af 7 
-  am 4
+  af 9 
+  am 5
   bf 1.15
   bm 1.19
+  srv10ind_q .98
+  srv10ind_q_f .98
+  deltam 25.2141
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
-  init_bounded_number af(-50,50,growth_phase)
+  init_bounded_number af(-100,30.0,growth_phase)
   init_bounded_number am(-50.0,50.0,growth_phase)
   init_bounded_number bf(1.0,10.0,growth_phase)
   init_bounded_number bm(1.0,5.0,growth_phase)
+  init_bounded_number b1(1.0,1.5,growth_phase2)
+  init_bounded_number bf1(1.0,2.0,growth_phase2)
+  init_bounded_number deltam(10.0,50.0,growth_phase2)
+  init_bounded_number deltaf(5.0,50.0,growth_phase2)
+  init_bounded_number st_gr(0.5,0.5,-growth_phase2)
   init_bounded_vector growth_beta(1,2,0.749,0.751,-2)
   
  //Maturity parameters
@@ -789,7 +797,7 @@ PARAMETER_SECTION
 PRELIMINARY_CALCS_SECTION
    int mat;
    int m;
-
+  cout<<"in prelims"<<endl;
   // Calculate weight at length
   for(i=1;i<=nlenm;i++)
   {
@@ -815,7 +823,7 @@ PRELIMINARY_CALCS_SECTION
    fnatlen_styr(1,j) = log(10*(obs_p_srv1_lend(1,1,1,1,j)+obs_p_srv1_lend(2,1,1,1,j)+1e-02));
    fnatlen_styr(2,j) = log(10*(obs_p_srv1_lend(1,2,1,1,j)+obs_p_srv1_lend(2,2,1,1,j)+1e-02));
    }
-
+    cout<<1<<endl;
 //use logistic maturity curve for new shell males instead of fractions by year if switch>0
 //this would be for initial population not probability of moving to mature
    if(maturity_switch>0){
@@ -846,7 +854,7 @@ PRELIMINARY_CALCS_SECTION
      sumfishdiscm(i)+=sum(obs_p_fish_discmd(1,i));
      sumfishdiscm(i)+=sum(obs_p_fish_discmd(2,i));
   } 
-  
+      cout<<2<<endl;
   for(i=1; i<=nobs_fish; i++){
     for(j=1; j<=2; j++){
       sumfishret(i)+=sum(obs_p_fish_retd(j,i));
@@ -862,7 +870,7 @@ PRELIMINARY_CALCS_SECTION
       sumtrawl(i)+=sum(obs_p_trawld(k,i));
     }
   }
-
+    cout<<3<<endl;
 //length obs sex ratio in survey
   for(i=1; i<=nobs_srv1_length;i++)
   {
@@ -891,7 +899,7 @@ PRELIMINARY_CALCS_SECTION
     obs_p_fish_ret(1,i) = obs_p_fish_retd(1,i)*fraction_new_error;
     obs_p_fish_ret(2,i) = obs_p_fish_retd(2,i)+(1.-fraction_new_error)*obs_p_fish_retd(1,i);
    }
-
+    cout<<4<<endl;
     //make observations proportions by year      
          //fishery offset
    for (i=1; i <= nobs_fish; i++)
@@ -905,7 +913,7 @@ PRELIMINARY_CALCS_SECTION
                offset(1)-=nsamples_fish(1,i)*(obs_p_fish_ret(1,i,j)+obs_p_fish_ret(2,i,j))*log(obs_p_fish_ret(1,i,j)+obs_p_fish_ret(2,i,j)+p_const);
         }
 	}
-
+    cout<<4<<endl;
    for(k=1; k<=2; k++)
     {
        for (i=1; i <= nobs_fish_discm; i++)
@@ -914,7 +922,7 @@ PRELIMINARY_CALCS_SECTION
          //fishery offset
            for (j=1; j<=nlenm; j++)
            {
-               obs_p_fish_tot(k,i,j)=((obs_p_fish_ret(k,i+yrs_fish_discm(1)-1978,j)*catch_numbers(yrs_fish_discm(i)))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
+               obs_p_fish_tot(k,i,j)=((obs_p_fish_ret(k,i+yrs_fish_discm(1)-styr,j)*catch_numbers(yrs_fish_discm(i)))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
              //old and new shell together
              if (k<2)
                 offset(2)-=nsamples_fish(k,i)*(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j) )*log(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j)+p_const);
@@ -922,7 +930,7 @@ PRELIMINARY_CALCS_SECTION
 
        }
     }
-  
+      cout<<5<<endl;
   //make observations proportions by year      
         //fishery offset
   for (i=1; i <= nobs_fish_discf; i++)
@@ -954,7 +962,7 @@ PRELIMINARY_CALCS_SECTION
     for(j=1; j<=2; j++)
     sumsrv(ll)+=sum(obs_p_srv1_lend(mat,k,j,ll));
 
-
+    cout<<6<<endl;
   for(mat=1; mat<=2; mat++) //maturity
    for(l=1; l<=2; l++) //shell condition
     for(k=1; k<=2;k++) //sex
@@ -1208,7 +1216,7 @@ FUNCTION get_catch_tot
     for (i=1; i <= nobs_fish_discm; i++)
     for (j=1; j<=nlenm; j++)
     {
-        obs_p_fish_tot(k,i,j)=(obs_p_fish_retd(k,i+yrs_fish_discm(1)-1978,j)/sumfishret(i+yrs_fish_discm(1)-1978))*(catch_numbers(yrs_fish_discm(i))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
+        obs_p_fish_tot(k,i,j)=(obs_p_fish_retd(k,i+yrs_fish_discm(1)-styr,j)/sumfishret(i+yrs_fish_discm(1)-styr))*(catch_numbers(yrs_fish_discm(i))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
    //old and new shell together
        if (k<2){
          offset(2)-=nsamples_fish(k,i)*(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j) )*log(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j)+p_const);
@@ -1404,7 +1412,12 @@ FUNCTION get_growth
   if(growth_switch==1)
    {
 //growth slope different males and females first two bins different
-     mean_length(1,ilen) = (af+bf*length_bins(ilen));
+     mean_length(1,ilen) = ((af+bf*length_bins(ilen))*(1-cumd_norm((length_bins(ilen)-deltaf)/st_gr))+((af+(bf-bf1)*deltaf)+bf1*length_bins(ilen))*(cumd_norm((length_bins(ilen)-deltaf)/st_gr)));
+     mean_length(2,ilen) = ((am+bm*length_bins(ilen))*(1-cumd_norm((length_bins(ilen)-deltam)/st_gr))+((am+(bm-b1)*deltam)+b1*length_bins(ilen))*(cumd_norm((length_bins(ilen)-deltam)/st_gr)));
+   }
+   if(only_linear_growth>0)
+   {
+	 mean_length(1,ilen) = (af+bf*length_bins(ilen));
      mean_length(2,ilen) = (am+bm*length_bins(ilen));
    }
   }
@@ -2445,7 +2458,21 @@ FUNCTION evaluate_the_objective_function
     f+=discf_like;
     Fout(29)=discf_like;
     }
- 
+
+// // Cole added priors here:
+//    f+=dnorm(selsmo09ind(1), -3.95, .02);	  
+//    f+=dnorm(selsmo09ind(2), -3.95, .02);
+//    f+=dnorm(selsmo09ind(3), -3.95, .02);
+//    f+=dnorm(selsmo09ind(14), -.05, .02);
+//    f+=dnorm(selsmo09ind(15), -.05, .02);
+//    f+=dnorm(selsmo09ind(22), -.05, .02);
+//    f+=dnorm(selsmo10ind(6), -.03, .01);
+   // f+=dnorm(mateste(17), -.05, .02);
+   // f+=dnorm(srvind_sel95_f, 55.5, .02);
+   // f+=dnorm(srv10ind_q, .97, .02);
+   // f+=dnorm(srv10ind_q_f, .95, .02);
+
+// end of cole's priors
   f+=like_wght(1)*len_like(1);     // Retained fishery
   Fout(3)=like_wght(1)*len_like(1);
   f+=like_wght(2)*len_like(2);     // Total (ret+disc)
@@ -2502,15 +2529,25 @@ FUNCTION evaluate_the_objective_function
    if(active(am))
    {
 	 for(i=1;i<=nobs_growm ;i++)
-	  like_am+= growth_data_wght_m *pow(malegrowdaty(i)-(am+bm*malegrowdatx(i)),2);       
-      f += like_am;
+	 {
+	  if(only_linear_growth==0)
+		like_am+= growth_data_wght_m *pow(malegrowdaty(i)-((am+bm*malegrowdatx(i))*(1-cumd_norm((malegrowdatx(i)-deltam)/st_gr))+((am+(bm-b1)*deltam)+b1*malegrowdatx(i))*(cumd_norm((malegrowdatx(i)-deltam)/st_gr))),2);       
+	  if(only_linear_growth==1)
+		like_am+= growth_data_wght_m *pow(malegrowdaty(i)-((am+bm*malegrowdatx(i))),2);       
+   	 }
+	 f += like_am;
       Fout(12)=like_am;
     }
 	
    if(active(af))
    {
 	for(i=1;i<=nobs_growf ;i++)
-     like_af+= growth_data_wght_f *pow(femalegrowdaty(i)-(af+bf*femalegrowdatx(i)),2);
+	 {
+	  if(only_linear_growth==0)
+       like_af+= growth_data_wght_f *pow(femalegrowdaty(i)-((af+bf*femalegrowdatx(i))*(1-cumd_norm((femalegrowdatx(i)-deltaf)/st_gr))+((af+(bf-bf1)*deltaf)+bf1*femalegrowdatx(i))*(cumd_norm((femalegrowdatx(i)-deltaf)/st_gr))),2);
+      if(only_linear_growth==1)
+       like_af+= growth_data_wght_f *pow(femalegrowdaty(i)-((af+bf*femalegrowdatx(i))),2);
+	 }
 	 f += like_af;
      Fout(13)=like_af;
    }
@@ -2567,22 +2604,7 @@ FUNCTION evaluate_the_objective_function
 
    int yrc;
    cpue_pred = cpueq * legal_males;
- 
-   // calculate the observed large males
-   obs_lmales.initialize();
-   obs_lmales_bio.initialize();
-   for(i=1;i<=nobs_srv1_length;i++)
-    {
-    //take 1/2 of the 100-104 bin, 
-          obs_lmales(i)=0.5*obs_srv1_num(2,yrs_srv1_length(i),16);
-          obs_lmales_bio(i)=obs_lmales(i)*wtm(16);
-      for(j=17;j<=nlenm;j++)
-        {
-          obs_lmales(i)+=obs_srv1_num(2,yrs_srv1_length(i),j);
-          obs_lmales_bio(i)+=obs_srv1_num(2,yrs_srv1_length(i),j)*wtm(j);
-        }
-     }
- 
+   
   //fishery cpue likelihood
     cpue_like=0.0;
    if(active(cpueq))
@@ -2745,7 +2767,7 @@ FUNCTION Find_OFL
   int BMSY_Yr1, BMSY_Yr2,ii,Iyr,kk,jj;
   
  //Define time period for BMSY  
-  BMSY_Yr1 = 1979;BMSY_Yr2 = endyr-1;
+  BMSY_Yr1 = styr;BMSY_Yr2 = endyr-1;
   alpha = 0.1;
   beta = 0.25;
   Fmsy = F35;
@@ -2815,7 +2837,7 @@ FUNCTION Find_OFL
 // ===========================================================================
 FUNCTION Francis_weights  
   int w,x,y,z;
-
+  cout<<"In francis"<<endl;
   Lbar.initialize();
   Lbar_hat_new.initialize();
   Lbar_hat_old.initialize();
@@ -2907,6 +2929,7 @@ FUNCTION Francis_weights
    
    Francis_weight_m = 1/(MaleMeanVarTerm/(countMal-1));
    Francis_weight_f = 1/(FemMeanVarTerm/(countFem-1));
+     cout<<"Out francis"<<endl;
 // ========================y==================================================   
    
 REPORT_SECTION
@@ -3022,7 +3045,7 @@ REPORT_SECTION
   report<<mspbio_matetime(styr,endyr-1)<<endl;
   report <<"#selectivity survey males 1989 to endyr: '27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
   report << sel_srv3(2) << endl;
-   
+   cout<<1<<endl;
 //Rout section 
     if (last_phase())
   {
@@ -3118,7 +3141,7 @@ REPORT_SECTION
       {
            R_out<<yrs_srv1_length(i)<<" "<<obs_p_srv1_len(2,2,2,i)*obs_srv1t(yrs_srv1_length(i))<<endl;
       }
-
+   cout<<2<<endl;
   //  R_out << "Observed Survey Numbers by length females:  'year','27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
   R_out << "$Observed survey numbers female" << endl;
       for (i=1; i <= nobs_srv1_length; i++)
@@ -3156,20 +3179,13 @@ REPORT_SECTION
       {
          R_out<<i<<" "<< natlength(2,i)<< endl;
        }
-
+   cout<<3<<endl;
   //  R_out<<"observed number of males greater than 101 mm: seq(1978,"<<endyr<<")"<<endl;
   R_out << "$Observed number males greater than 101mm" << endl;
   R_out<<obs_lmales<<endl;
   //  R_out<<"observed biomass of males greater than 101 mm: seq(1978,"<<endyr<<")"<<endl;
   R_out << "$Observed biomass males greater than 101mm" << endl;
   R_out<<obs_lmales_bio<<endl;
-  //  R_out<<"Predicted number of males greater than 101 mm: seq(1978,"<<endyr<<")"<<endl;
-  R_out << "$Predicted number males greater than 101mm" << endl;
-  R_out<<num_males_gt101<<endl;
-  //  R_out<<"Predicted biomass of males greater than 101 mm: seq(1978,"<<endyr<<")"<<endl;
-  R_out << "$Predicted biomass males greater than 101mm" << endl;
-  R_out<<bio_males_gt101<<endl;
-  
   //  R_out<<"pop estimate numbers of males >101: seq(1978,"<<endyr<<")"<<endl;
   R_out << "$Population numbers male" << endl;
         R_out<<legal_males<<endl;
@@ -3197,6 +3213,7 @@ REPORT_SECTION
        tmpp(k,i)=sum(pred_srv1(k,i));
       }
      }
+	    cout<<4<<endl;
   //  R_out << "Observed survey numbers female: seq(1978,"<<endyr<<")"<<endl;
   R_out << "$Observed survey numbers female" << endl;
   R_out << tmpo(1)<<endl;
@@ -3341,6 +3358,7 @@ REPORT_SECTION
   R_out << "$Predicted Male survey old mature numbers" << endl;
   R_out << mspbio_srv1_num(2)<< endl;
 //2009 bsfrf study
+   cout<<5<<endl;
   //  R_out << "Observed industry survey mature biomass: seq(1,4) " << endl;
   R_out << "$Observed industry survey mature biomass" << endl;
   R_out << obs_srv2_spbiom(1,1)<<" "<<obs_srv2_spbiom(1,2)<<" "<<obs_srv2_spbiom(2,1)<<" "<<obs_srv2_spbiom(2,2)<<endl;
@@ -3403,7 +3421,7 @@ REPORT_SECTION
   R_out << "$Predicted Prop 2010 industry nmfs survey male" << endl;
   R_out <<pred_p_srv10_len_nmfs(2)<<endl;
 
-
+   cout<<6<<endl;
 
    //  R_out << "Observed Prop fishery ret new males:'year','27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
   R_out << "$Observed proportion fishery retained new male" << endl;
@@ -3475,7 +3493,7 @@ REPORT_SECTION
         {
           R_out << yrs_fish_discm(i) << " " << obs_p_fish_discm(2,i)<< endl;
          }
-
+   cout<<7<<endl;
     //  R_out << "Observed length prop fishery discard all females: 'year','27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'" << endl;
   R_out << "$Observed proportion fishery discard all female" << endl;
     for (i=1; i<=nobs_fish_discf; i++)
@@ -3684,7 +3702,7 @@ REPORT_SECTION
   R_out << "$Sum of observed proportion survey all male" << endl;
             R_out <<tmpp2<<endl;
                 
-
+   cout<<8<<endl;
 // R_out << "Observed Length Prop fishery new males: 'year','27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'" << endl;
 //         for (i=1; i<=nobs_fish_length; i++)
 //          {
@@ -3724,13 +3742,31 @@ REPORT_SECTION
   //  R_out << "af: 'females'" << endl;
   R_out << "$af " << endl;
   R_out << af << endl;
-  R_out << "$bf " << endl;
-  R_out << bf << endl;  //  R_out << "am: 'males'" << endl;
+  //  R_out << "am: 'males'" << endl;
   R_out << "$am" << endl;
   R_out << am << endl;
+  R_out << "$af2" << endl;
+  R_out << af +(bf-bf1)*deltaf << endl;
+  R_out << "$am2" << endl;
+  R_out << am+(bm-b1)*deltam << endl;
+  //  R_out << "bf: 'females'" << endl;
+  R_out << "$bf " << endl;
+  R_out << bf << endl;
+  R_out << "$bf1" << endl;
+  R_out << bf1 << endl;
+  R_out << "$EN4" << endl;
+    R_out << deltaf << endl;
   R_out << "$bm " << endl;
   R_out << bm << endl;
-  //  R_out << "Predicted probability of maturing females:  '27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
+  R_out << "$b1" << endl;
+  R_out << b1 << endl;
+  R_out << "$delta male" << endl;
+    R_out << deltam << endl;
+  R_out << "$st_gr" << endl;
+  R_out << st_gr << endl;
+  R_out << "$st_gr" << endl;
+  R_out << st_gr << endl;
+    //  R_out << "Predicted probability of maturing females:  '27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
   R_out << "$Predicted probability of maturing female" << endl;
   R_out << maturity_est(1)<<endl; 
   //  R_out << "Predicted probability of maturing males:  '27.5','32.5','37.5','42.5','47.5','52.5','57.5','62.5','67.5','72.5','77.5','82.5','87.5','92.5','97.5','102.5','107.5','112.5','117.5','122.5','127.5','132.5'"<< endl;
@@ -3747,10 +3783,10 @@ REPORT_SECTION
   R_out <<moltp_mat(2)<<endl;
   //  R_out << "observed pot fishery cpue 1979 fishery to endyr fishery: seq(1979,"<<endyr<<")" << endl;
   R_out << "$observed pot fishery cpue" << endl;
-  R_out <<cpue(1979,endyr)<<endl;
+  R_out <<cpue(styr,endyr)<<endl;
   //  R_out << "predicted pot fishery cpue 1978 to endyr-1 survey: seq(1978,"<<endyr-1<<")" << endl;
   R_out << "$predicted pot fishery cpue" << endl;
-  R_out <<cpue_pred(1978,endyr-1)<<endl;
+  R_out <<cpue_pred(styr,endyr-1)<<endl;
   //  R_out << "observed retained catch biomass: seq(1979,"<<endyr<<")" << endl;
   R_out << "$Observed retained catch biomass" << endl;
   R_out << catch_ret(styr,endyr-1) << endl;
@@ -3821,7 +3857,7 @@ REPORT_SECTION
         {
          obs_tmp(i) = obs_lmales_bio(i-(styr-1));
         }
-
+   cout<<9<<endl;
   //  R_out << "estimated total catch biomass of males >101 div. by survey estimate male biomass >101 at fishtime: seq(1979,"<<endyr<<")" << endl;
   R_out << "$estimated total catch biomass of males 101 div by survey estimate male biomass 101 at fishtime" << endl;
   R_out <<elem_div(pred_catch_gt101(styr,endyr-1),obs_tmp(styr,endyr-1)*mfexp(-M_matn(2)*(7/12)) ) << endl;
@@ -3840,6 +3876,7 @@ REPORT_SECTION
           R_out <<F_ret(1,i)(22)<<" ";
          }
   R_out<<endl;
+     cout<<10<<endl;
 //  R_out <<"predicted ghl: seq(1978,"<<endyr<<")" << endl;
 //  R_out <<pred_catch_target<<endl;
   //  R_out <<"ghl: seq(1978,"<<endyr<<")" << endl;
@@ -3977,7 +4014,8 @@ REPORT_SECTION
 GLOBALS_SECTION
  #include <math.h>
  #include <admodel.h>
-  #include <time.h>
+ #include <time.h>
+ #include <statslib.h>	  
  ofstream CheckFile;
   time_t start,finish;
   long hour,minute,second;

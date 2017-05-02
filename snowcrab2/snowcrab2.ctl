@@ -204,7 +204,7 @@
 0.05
 # growth_data_wght_m : weight on the growth data (was 1)
  10
-# growth_data_wght_f : weight on the growth data (was 5)
+# growth_data_wght_f : weight on the growth data (was 1)
  10
 # extra_wght_ind_m : add extra weight to the male lengths from the industry survey
  2
@@ -221,7 +221,7 @@
 # growth_phase : phase to estimate growth parameters
 6
 # growth_phase2 : phase to estimate growth parameters
-6
+7
 # maturity_phase : phase to estimate maturity
 5
 # natM_phase : estimate multiplier for natural mortality
@@ -258,3 +258,5 @@
 0
 # retro_years : number of years from endyr to chop off when fitting
 0
+# only_linear_growth : gets rid of breakpoint model
+1
