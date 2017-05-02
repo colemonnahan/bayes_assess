@@ -6,7 +6,7 @@ library(adnuts)
 library(snowfall)
 library(r4ss)
 
-reps <- 4 # chains to run in parallel
+reps <- 3 # chains to run in parallel
 
 sfStop()
 d <- m <- 'cod'
@@ -91,7 +91,7 @@ fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
               dir=d, cores=reps, algorithm='RWM')
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 ## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_MSY", "SPB_45", "Bratio_45")
+dq.names <- c("SSB_MSY", "SPB_2015", "Bratio_2015")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
 xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
 ## Get estimates for derived quantitiesd
@@ -115,13 +115,11 @@ fit.rwm <- sample_admb(m, iter=iter*thin, init=inits,  thin=thin,
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 sfStop()
-d <- m <- 'canary2'
 d <- m <- 'canary'
+d <- m <- 'canary2'
 thin <- 1000
 iter <- 1000
-warmup <- iter/4
-mle <- read_mle_fit(paste0(d,'/',m))
-N <- mle$nopar
+warmup <- iter/10
 inits <- NULL
 sfInit(parallel=TRUE, cpus=reps)
 sfExportAll()
