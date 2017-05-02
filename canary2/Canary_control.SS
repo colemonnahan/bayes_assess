@@ -360,7 +360,8 @@
 # 10_CA_AHSOP double normal
 13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+# selparm[21]; cole added N(3, 1) prior
+0.0	   9.0	 4.3	  3	  0	1	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
 # selparm[22]; cole fixed at mle
 0.0	   9.0	 0.0061214  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
