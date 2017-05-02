@@ -57,8 +57,8 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 sfStop()
 d <- m <- 'tanner'
 d <- m <- 'tanner2'
-thin <- 1
-iter <- 100
+thin <- 1000
+iter <- 1000
 warmup <- iter/4
 inits <- NULL
 sfInit(parallel=TRUE, cpus=reps)
@@ -66,12 +66,14 @@ sfExportAll()
 fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               dir=d, cores=reps, algorithm='RWM')
-## Get estimates for derived quantities
-temp <- read_mle_fit(m,d)
-temp$names.all
-temp$cov
-dq <- read.table(file.path(m, 'posterior.txt'), sep=',', header=FALSE)
-names(dq) <- c("SSB0", "Terminal_Depletion", "Terminal")
+## Get posterior draws of dqs to cbind onto parameter draws later
+dq.names <- c("SSB_1995", "SSB_2010", "SSB_2015")
+post <- read.csv(file.path(m, 'posterior.csv'), header=FALSE)
+names(post) <- dq.names
+fit.rwm$dq.post <- post
+## Get estimates for derived quantitiesd
+ind <- which(fit.rwm$mle$names.all %in% dq.names)
+fit.rwm$dq <- data.frame(dq=fit.rwm$mle$names.all[ind], mle=fit.rwm$mle$est[ind], se=fit.rwm$mle$se[ind])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
