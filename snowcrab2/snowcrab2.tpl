@@ -274,7 +274,7 @@ INITIALIZATION_SECTION
   bm 1.19
   srv10ind_q .98
   srv10ind_q_f .98
-  deltam 25.2141
+
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
@@ -282,10 +282,10 @@ PARAMETER_SECTION
   init_bounded_number am(-50.0,50.0,growth_phase)
   init_bounded_number bf(1.0,10.0,growth_phase)
   init_bounded_number bm(1.0,5.0,growth_phase)
-  init_bounded_number b1(1.0,1.5,growth_phase2)
-  init_bounded_number bf1(1.0,2.0,growth_phase2)
-  init_bounded_number deltam(10.0,50.0,growth_phase2)
-  init_bounded_number deltaf(5.0,50.0,growth_phase2)
+  init_bounded_number b1(1.0,1.5,-growth_phase2)
+  init_bounded_number bf1(1.0,2.0,-growth_phase2)
+  init_bounded_number deltam(10.0,50.0,-growth_phase2)
+  init_bounded_number deltaf(5.0,50.0,-growth_phase2)
   init_bounded_number st_gr(0.5,0.5,-growth_phase2)
   init_bounded_vector growth_beta(1,2,0.749,0.751,-2)
   
