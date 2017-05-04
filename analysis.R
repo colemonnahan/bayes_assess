@@ -70,7 +70,7 @@ pairs_admb(canary.post, mle=mle, chains=chain, pars=slow, diag='acf')
 dev.off()
 ## Look at which parameter MLE vs posterior variances are different
 var.post <- apply(extract_samples(canary.rwm),2, var)
-var.mle <- diag(canary.rwm$mle$cov)[1:canary.rwm$mle$nopar]
+var.mle <- canary.rwm$mle$se[1:canary.rwm$mle$nopar]
 vars <- data.frame(post=var.post, mle=var.mle)
 g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
   geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
@@ -85,17 +85,17 @@ canary2.post <- extract_samples(canary2.rwm, inc_lp=TRUE)
 mle <- canary2.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary2.rwm$samples)[2], each=dim(canary2.rwm$samples)[1]-canary2.rwm$warmup)
-#slow <- c(names(sort(canary2.rwm$ess))[1:n.slow], names(canary2.rwm$dq.post), 'lp__')
+slow <- c(names(sort(canary2.rwm$ess))[1:n.slow], names(canary2.rwm$dq.post), 'lp__')
 png('plots/pairs.canary2.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(canary2.post, mle=mle, chains=chain, pars=slow, diag='acf')
+pairs_admb(canary2.post, mle=mle, chains=chain, pars=slow, diag='trace')
 dev.off()
 ## Look at which parameter MLE vs posterior variances are different
-var.post <- apply(extract_samples(canary2.rwm),2, var)
-var.mle <- canary2.rwm$mle$est[1:canary2.rwm$mle$nopar]
+var.post <- apply(extract_samples(canary2.rwm),2, sd)
+var.mle <- canary2.rwm$mle$se[1:canary2.rwm$mle$nopar]
 vars <- data.frame(post=var.post, mle=var.mle)
 g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
   geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
-gggsave(paste0('plots/vars.canary2.png'), g, width=7, height=5)
+ggsave(paste0('plots/vars.canary2.png'), g, width=7, height=5)
 plot.improvement(canary.rwm, canary2.rwm)
 ## ## Compare estimates of DQs
 ## xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
