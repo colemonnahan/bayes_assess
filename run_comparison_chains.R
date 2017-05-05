@@ -3,22 +3,21 @@ library(shinystan)
 library(rstan)
 library(adnuts)
 library(snowfall)
-td <- 10
+td <- 12
 ## Investigate performance differences between algorithms and settings
 
 reps <- 3                        # chains/reps to run
-
 iter <- 1000; warmup <- (iter/10)
 m <- d <- 'halibut2'
 ad <- .9                                # adapt_delta
 source('template.R')
 
-reps <- 6                        # chains/reps to run
+reps <- 3                        # chains/reps to run
 iter <- 1000; warmup <- (iter/10)
-m <- d <- 'cod'
-ad <- .9                                # adapt_delta
+m <- d <- 'hake'
+ad <- .8                                # adapt_delta
+td <- 12
 source('template.R')
-
 
 ## Old code to look at unbounded space
 rotated <- read.csv(file.path(d,'rotated.csv'), head=FALSE)

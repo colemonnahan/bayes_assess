@@ -9,8 +9,8 @@ library(r4ss)
 reps <- 3 # chains to run in parallel
 
 sfStop()
-d <- m <- 'cod'
 d <- m <- 'cod2'
+d <- m <- 'cod'
 thin <- 1000
 iter <- 1000
 warmup <- iter/4
@@ -57,7 +57,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 sfStop()
 d <- m <- 'tanner'
 d <- m <- 'tanner2'
-thin <- 1000
+thin <- 100
 iter <- 1000
 warmup <- iter/4
 inits <- NULL
