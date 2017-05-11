@@ -55,8 +55,8 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
 sfStop()
-d <- m <- 'tanner'
 d <- m <- 'tanner2'
+d <- m <- 'tanner'
 thin <- 100
 iter <- 1000
 warmup <- iter/4
