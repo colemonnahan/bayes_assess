@@ -152,23 +152,25 @@ plot.improvement(snowcrab.rwm, snowcrab2.rwm)
 ## launch_shinyadmb(snowcrab.rwm)
 ## launch_shinyadmb(snowcrab.nuts)
 
-tanner.rwm <- readRDS('results/long_rwm_tanner.RDS')
+n.slow <- 15
+tanner.rwm <- readRDS('results/pilot_rwm_tanner.RDS')
 tanner.post <- extract_samples(tanner.rwm, inc_lp=TRUE)
 chain <- rep(1:dim(tanner.rwm$samples)[2], each=dim(tanner.rwm$samples)[1]-tanner.rwm$warmup)
 slow <- names(sort(tanner.rwm$ess, FALSE))[1:n.slow]
-png('plots/pairs.tanner.rwm.png', width=7, height=5, units='in', res=500)
+png('plots/pairs.tanner.slow.png', width=7, height=5, units='in', res=500)
 pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
 ## I found this manually by looking at par file
 hitbounds <- c(1,7,33, 67,70)
 png('plots/pairs.tanner.rwm.hitbounds.png', width=7, height=5, units='in', res=500)
 pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace',
            pars=hitbounds)
-plot.improvement(snowcrab.rwm, snowcrab2.rwm)
-dev.off()
-pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace',
-           pars=c('SRPars[5]', 'SRPars[6]'))
-;dev.off()
-
+tanner2.rwm <- readRDS('results/pilot_rwm_tanner2.RDS')
+tanner2.post <- extract_samples(tanner2.rwm, inc_lp=TRUE)
+chain <- rep(1:dim(tanner2.rwm$samples)[2], each=dim(tanner2.rwm$samples)[1]-tanner2.rwm$warmup)
+slow <- names(sort(tanner2.rwm$ess, FALSE))[1:n.slow]
+png('plots/pairs.tanner2.slow.png', width=7, height=5, units='in', res=500)
+pairs_admb(tanner2.post, mle=tanner2.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
+plot.improvement(tanner.rwm, tanner2.rwm)
 
 
 ## Look at which parameter MLE vs posterior variances are different
