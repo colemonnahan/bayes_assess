@@ -89,9 +89,8 @@ inits <- lapply(1:reps, function(i) mle$est[1:N])
 sfInit(parallel=TRUE, cpus=reps)
 sfExportAll()
 fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
-              parallel=TRUE, chains=reps, warmup=warmup*thin,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               dir=d, cores=reps, algorithm='RWM')
-saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_MSY", "SPB_2015", "Bratio_2015")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
@@ -100,6 +99,7 @@ xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
 dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
+saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
 sfStop()
