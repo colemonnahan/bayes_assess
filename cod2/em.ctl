@@ -1,3 +1,8 @@
+# This is the cod2 control file. Different from the other regularized
+#  models, this one actually is more complicated. Instead of turning off
+#  parameters, here I've added informative priors to M and h (both centered
+#  at truth) to test how this affects estimabilty.
+
 #V3.24O
 #_data_and_control_files: ss3.dat // em.ctl
 #_SS-V3.24O-safe-win64;_04/10/2013;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_11.1
@@ -36,8 +41,11 @@
 #
 #_growth_parms
 #_LO HI INIT PRIOR PR_type SD PHASE env-var use_dev dev_minyr dev_maxyr dev_stddev Block Block_Fxn
- 0.01 1.8 0.2 0.2 1 0.02 6 0 0 0 0 0 0 0 # NatM_p_1_Fem_GP_1
- 1 100 20 30.8 -1 0.2 4 0 0 0 0 0 0 0 # L_at_Amin_Fem_GP_1
+
+# Natural mortality: cole added N(.2, .05) prior (centered at true value)
+0.01 1.8 0.2 0.2 0 0.05 6 0 0 0 0 0 0 0 # NatM_p_1_Fem_GP_1
+
+1 100 20 30.8 -1 0.2 4 0 0 0 0 0 0 0 # L_at_Amin_Fem_GP_1
  6.6 660 132 120.1 -1 0.2 4 0 0 0 0 0 0 0 # L_at_Amax_Fem_GP_1
  0.01 1 0.2 0.25 -1 0.8 4 0 0 0 0 0 0 0 # VonBert_K_Fem_GP_1
  0.01 0.5 0.1 0.1 -1 0.8 5 0 0 0 0 0 0 0 # CV_young_Fem_GP_1
@@ -70,8 +78,11 @@
 3 #_SR_function: 2=Ricker; 3=std_B-H; 4=SCAA; 5=Hockey; 6=B-H_flattop; 7=survival_3Parm
 #_LO HI INIT PRIOR PR_type SD PHASE
  4 20 18.7 10.3 -1 10 1 # SR_LN(R0)
- 0.2 1 0.65 0.7 -1 0.05 -4 # SR_BH_steep
- 0 2 0.4 0.8 -1 0.8 -5 # SR_sigmaR
+
+# steepness: cole added N(.65, .15) prior (centered at true value)
+0.2 1 0.65 0.65 0 0.1 4 # SR_BH_steep
+
+0 2 0.4 0.8 -1 0.8 -5 # SR_sigmaR
  -5 5 0 0 -1 1 -3 # SR_envlink
  -5 5 0 0 -1 1 -4 # SR_R1_offset
  0 0 0 0 -1 0 -99 # SR_autocorr
@@ -86,11 +97,11 @@
  -4 #_recdev_early_phase
  0 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
  1 #_lambda for Fcast_recr_like occurring before endyr+1
--23.7   #_last_early_yr_nobias_adj_in_MPD 
-3.0   #_first_yr_fullbias_adj_in_MPD 
-48.6   #_last_yr_fullbias_adj_in_MPD 
-48.9   #_first_recent_yr_nobias_adj_in_MPD 
-0.8674   #_max_bias_adj_in_MPD (1.0 to mimic pre-2009 models) 
+-23.7   #_last_early_yr_nobias_adj_in_MPD
+3.0   #_first_yr_fullbias_adj_in_MPD
+48.6   #_last_yr_fullbias_adj_in_MPD
+48.9   #_first_recent_yr_nobias_adj_in_MPD
+0.8674   #_max_bias_adj_in_MPD (1.0 to mimic pre-2009 models)
  0 #_period of cycles in recruitment (N parms read below)
  -5 #min rec_dev
  5 #max rec_dev

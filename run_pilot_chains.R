@@ -9,9 +9,9 @@ library(r4ss)
 reps <- 3 # chains to run in parallel
 
 sfStop()
-d <- m <- 'cod2'
 d <- m <- 'cod'
-thin <- 1000
+d <- m <- 'cod2'
+thin <- 100
 iter <- 1000
 warmup <- iter/4
 inits <- NULL
@@ -22,8 +22,8 @@ fit.rwm <-
               parallel=TRUE, chains=reps, warmup=warmup*thin,
               dir=d, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_MSY", "SPB_45")
-fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+dq.names <- c("SSB_MSY", "SPB_50", "Bratio_50")
+fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]] [,dq.names]
 xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
 ## Get estimates for derived quantitiesd
 dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
