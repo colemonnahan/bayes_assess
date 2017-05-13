@@ -67,7 +67,7 @@ fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               dir=d, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_1995", "SSB_2010", "SSB_2015")
+dq.names <- c("SSB_2015", "depletion_2015", "OFL_main")
 post <- read.csv(file.path(m, 'posterior.csv'), header=FALSE)
 names(post) <- dq.names
 fit.rwm$dq.post <- post
@@ -105,7 +105,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 sfStop()
 d <- 'snowcrab'; m <- 'snowcrab'
 d <- 'snowcrab2'; m <- 'snowcrab2'
-thin <- 1000
+thin <- 100
 iter <- 1000
 warmup <- iter/4
 inits <- NULL
@@ -114,7 +114,14 @@ sfExportAll()
 fit.rwm <- sample_admb(m, iter=iter*thin, init=inits,  thin=thin,
               parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               dir=d, cores=reps, algorithm='RWM')
+## Get posterior draws of dqs to cbind onto parameter draws later
+dq.names <- c("SSB_2015", "depletion_2015", "OFL_main")
+fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
+## Get estimates for derived quantities
+xx <- read_mle_fit(m,d); ind <- which(xx$names.all %in% dq.names)
+fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$est[ind], se=xx$se[ind])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
+
 
 sfStop()
 d <- m <- 'canary'
