@@ -7,7 +7,7 @@ source("functions.R")
 
 ## Run model with hbf=1 to get right covariance matrix and MLEs
 setwd(d)
-system(paste('admb', m))
+## system(paste('admb', m))
 system(paste(m, '-hbf 1 -nox'))
 setwd('..')
 
