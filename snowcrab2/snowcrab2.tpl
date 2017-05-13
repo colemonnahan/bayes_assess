@@ -269,6 +269,7 @@ INITIALIZATION_SECTION
   fish_disc_sel50_f 4.2
   srvind_sel95_f 55.1 // added by cole
   srv10ind_q_f 0.999 // added by cole
+  Mmult_imat 1.9999
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
@@ -399,7 +400,9 @@ PARAMETER_SECTION
    init_bounded_vector selsmo09ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
 
 //model 5 estimate M
-    init_bounded_number Mmult_imat(0.2000,2.000001,natM_phase)
+// Cole turned this off since stuck at upper bound, see inits above
+    init_bounded_number Mmult_imat(0.2000,2.000001,-1)
+  // init_bounded_number Mmult_imat(0.2000,2.000001,natM_phase)
     init_bounded_number Mmult(0.20000,2.0000001,natM_phase)
     init_bounded_number Mmultf(1.0000,1.000001,-5)
 
@@ -1108,6 +1111,15 @@ PROCEDURE_SECTION
   f+=dnorm(deltaf, 34, 2);
   f+=dnorm(bm, 1.5, .2);
   f+=dnorm(am, -5.7, 1);
+ // These ones are tricky since part of a vector so cant fix them. Trying
+ // to add priors that keeps them off bounds a bit
+  f+=dnorm(selsmo10ind(5), -.1, .03);
+  f+=dnorm(selsmo10ind(6), -.1, .03);
+  f+=dnorm(selsmo10ind(22), -.1, .03);
+  f+=dnorm(selsmo09ind(1), -3.9, .03);
+  f+=dnorm(selsmo09ind(2), -3.9, .03);
+  f+=dnorm(selsmo09ind(22), -.1, .03);
+
   // Cole defined these here to get SD report values
   OFL_main=OFL;
   SSB_2015=pred_bio(2015);
