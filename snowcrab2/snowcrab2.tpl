@@ -85,7 +85,7 @@ DATA_SECTION
 
   // End of reading normal data file 
  // Open control file....
- !! ad_comm::change_datafile_name("snowcrab.ctl");
+ !! ad_comm::change_datafile_name("snowcrab2.ctl");
 
   init_int styr_fut   																							  //start year of future projections
   init_int endyr_fut   																							  //end year of future projections
@@ -254,7 +254,8 @@ INITIALIZATION_SECTION
   moltp_ammat 0.05
   moltp_bmmat 105.0
   srv1_q 1.0
-  srv2_q 1.0
+  srv1_q 1.0
+  srv2_q_f 1.0 // added by cole
   srv3_q 1.0
   srv1_sel95 60
   srv1_sel50 40 
@@ -266,6 +267,8 @@ INITIALIZATION_SECTION
   matestfe -0.7
   cpueq 0.001
   fish_disc_sel50_f 4.2
+  srvind_sel95_f 55.0 // added by cole
+  srv10ind_q_f 1.0 // added by cole
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
@@ -350,8 +353,11 @@ PARAMETER_SECTION
   //Survey selectivity parameters
  // three survey eras:
   //srv1: 1978-1982
-   init_bounded_number srv1_q(0.2,1.000,survsel1_phase+1)
-   init_bounded_number srv1_q_f(0.2,1.000,survsel1_phase+1)
+  // Both of these hitting upper bound of 1 so cole fixed them there (see inits above)
+   init_bounded_number srv1_q(0.2,1.000,-1)
+   init_bounded_number srv1_q_f(0.2,1.000,-1)
+   // init_bounded_number srv1_q(0.2,1.000,survsel1_phase+1)
+   // init_bounded_number srv1_q_f(0.2,1.000,survsel1_phase+1)
    init_bounded_number srv1_sel95(30.0,150.0,survsel1_phase)
    init_bounded_number srv1_sel50(0.0,150.0,survsel1_phase)
    
@@ -374,13 +380,17 @@ PARAMETER_SECTION
   //industry
    init_bounded_number srvind_q(0.10,1.000,survsel1_phase+2)
    init_bounded_number srvind_q_f(0.01,1.000,survsel1_phase+2)
-   init_bounded_number srvind_sel95_f(55.0,120.0,survsel1_phase)
+  // Cole fixed this at lower bound since stuck there (see init above)
+   init_bounded_number srvind_sel95_f(55.0,120.0,-1)
+  // init_bounded_number srvind_sel95_f(55.0,120.0,survsel1_phase)
    init_bounded_number srvind_sel50_f(-50.0,55.0,survsel1_phase)
 
  //2010 bsfrf study area double logistic
   //industry
    init_bounded_number srv10ind_q(0.1,1.000,survsel1_phase+2)
-   init_bounded_number srv10ind_q_f(0.01,1.00,survsel1_phase+2)
+   // Cole fixed this at upper bound ( see init above)
+  init_bounded_number srv10ind_q_f(0.01,1.00,-1)
+   // init_bounded_number srv10ind_q_f(0.01,1.00,survsel1_phase+2)
    init_bounded_number srv10ind_sel95_f(0.05,50.0,-survsel1_phase)
    init_bounded_number srv10ind_sel50_f(0.0,50.0,-survsel1_phase)
    
@@ -1093,6 +1103,11 @@ PROCEDURE_SECTION
 
    evaluate_the_objective_function();
 
+  // Cole added some specific priors here to regularize.
+  f+=dnorm(deltam, 32, 2);
+  f+=dnorm(deltaf, 34, 2);
+  f+=dnorm(bm, 1.5, .2);
+  f+=dnorm(am, -5.7, 1);
   // Cole defined these here to get SD report values
   OFL_main=OFL;
   SSB_2015=pred_bio(2015);
@@ -4002,6 +4017,7 @@ GLOBALS_SECTION
  #include <math.h>
  #include <admodel.h>
   #include <time.h>
+  #include "statsLib.h"
  ofstream CheckFile;
   time_t start,finish;
   long hour,minute,second;
