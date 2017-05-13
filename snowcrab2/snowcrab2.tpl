@@ -255,7 +255,7 @@ INITIALIZATION_SECTION
   moltp_bmmat 105.0
   srv1_q 1.0
   srv2_q 1.0
-  srv2_q_f 1.0 // added by cole
+  srv1_q_f 1.0 // added by cole
   srv3_q 1.0
   srv1_sel95 60
   srv1_sel50 40
