@@ -66,7 +66,8 @@
    0      0.4    0.088113 -1    0   0     0    0 0 1912  2100  0.5  #13 Maturity  slope
    -1     2      1        -1    0   0     0    0 0 1913  2100  0.5  #14 Maturity  asymptote
 ##  Female
-   -1.00   1.00   0         5   0  -0.30 0.100 0 0 1915  2100  0.05 #15 natural mortality (female offs)
+  #BiolPars(15): coled fixed at upper bound =1
+-1.00   1.00   .999         -5   0  -0.30 0.100 0 0 1915  2100  0.05 #15 natural mortality (female offs)
    -2.00   2.00   0         5   0  0.00  0.001 0 0 1916  2100  0.05 #16 natural mortality (female imature)
     2.00   182    27       -3   0  0     0     0 0 1917  2100  0.5 #17 length  1 (female)
     2.00   182    92       -3   0  0     0     0 0 1918  2100  0.5 #18 length  2 (female)
@@ -86,7 +87,8 @@
 #### B.3 Stock and Recruitment ####
 # SR Parameters
 #  min      max        init     phase
-   1.50000  30.00000  19.00000   1     # R0
+# stock_recruitPars(1):  cole fixed at lower bound
+   1.50000  30.00000  14.999   1     # R0
    -5.0000  5.00000    0        -2     # R1 offset ##CIA: Added, Andre's Dec. 2016 Update *
     .20000   1.00000   1.00000  -1     # Steepness
     .00000  10.00000   1.00000  -3     # SigmaR
@@ -194,9 +196,11 @@
   -2  2 0 3 # Male  Inflection  point offset
   -2  2 0 3 # Male  Inflection  point offset
   #fleet  1,  sex 2,  parameter 1 of  2
-  80  150 117 2 0 117 10 0 0 1900  2100  0.05  # Female  Inflection  point
+  # SelexLPars[25]: cole fixed at upper bound 
+80  150 149.999 -2 0 117 10 0 0 1900  2100  0.05  # Female  Inflection  point
   #fleet  1,  sex 2,  parameter 2 of  2
-  0.1 0.4 0.14  2 0 0.14  0.1 0 0 1900  2100  0.05  # Female  Slope
+  # SelexLPars[26]: cole fixed at lower bound
+  0.1 0.4 0.1001  -2 0 0.14  0.1 0 0 1900  2100  0.05  # Female  Slope
 
 # Selectivity - fleet 2
   40  250 140 2 0 140 20  2 0 1900  2100  0.05  # Male  Inflection  point
@@ -205,24 +209,29 @@
   0.01  0.5 0.08  2 0 0.08  0.04  2 0 1900  2100  0.05  # Male  Slope
   -2  2 0 3 # Male  Slope offset
   -2  2 0 3 # Male  Slope offset
-  40  120 70  2 0 70  10  2 0 1900  2100  0.05  # Female  Inflection  point
+# SelexLPars[33]: cole fixed at lower bound
+  40  120 40.001  -2 0 70  10  2 0 1900  2100  0.05  # Female  Inflection  point
   -2  2 0 3 # Female  Inflection  point offset
   -2  2 0 3 # Female  Inflection  point offset
-  0.005 0.5 0.03  2 0 0.03  0.02  2 0 1900  2100  0.05  # Female  Slope
+  # SelexLPars[36]: cole fixed at upper bound 
+0.005 0.5 0.4999  -2 0 0.03  0.02  2 0 1900  2100  0.05  # Female  Slope
   -2  2 0 3 # Female  Slope offset
   -2  2 0 3 # Female  Slope offset
 
 # Selectivity - fleet 3
-  95  200 150 2 0 150 20  3 0 1900  2100  0.05  # Male  Inflection  point
+# SelexLPars[39]: cole fixed at lower bound
+  95  200 95.001 -2 0 150 20  3 0 1900  2100  0.05  # Male  Inflection  point
   -2  2 0 3 # Male  Inflection  point offset
   -2  2 0 3 # Male  Inflection  point offset
-  0.01  0.5 0.09  2 0 0.09  0.01  3 0 1900  2100  0.05  # Male  Slope
+# SelexLPars[42]: cole fixed at upper bound
+0.01  0.5 0.499  -2 0 0.09  0.01  3 0 1900  2100  0.05  # Male  Slope
   -2  2 0 3 # Male  Slope offset
   -2  2 0 3 # Male  Slope offset
   50  170 100 2 0 125 30  3 0 1900  2100  0.05  # Female  Inflection  point
   -2  2 0 3 # Female  Inflection  point offset
   -2  2 0 3 # Female  Inflection  point offset
-  0.05  0.5 0.2 2 0 0.2 0.04  3 0 1900  2100  0.05  # Female  Slope
+# SelexLPars[48]: cole fixed at lower bound 
+0.05  0.5 0.05001 -2 0 0.2 0.04  3 0 1900  2100  0.05  # Female  Slope
   -2  2 0 3 # Female  Slope offset
   -2  2 0 3 # Female  Slope offset
 
@@ -242,17 +251,18 @@
   -2.00   10.00  9.00  2 0 5  5  4 0 1900  2100  0.05  # 4th parameter of  double-L
   -2  2 0 3 # Male  Inflection  point offset
   -2  2 0 3 # Male  Inflection  point offset
- -10.00  100.00 -0.50  2 0 0  0.5  4 0 1900  2100  0.05  # 5th parameter of  double-L
+
+-10.00  100.00 -0.50  2 0 0  0.5  4 0 1900  2100  0.05  # 5th parameter of  double-L
   -2  2 0 3 # Male  Inflection  point offset
   -2  2 0 3 # Male  Inflection  point offset
   -10.0  100.00  0.50  2 0 0  0.5  4 0 1900  2100  0.05  # 6th parameter of  double-L
   -2  2 0 3 # Male  Inflection  point offset
   -2  2 0 3 # Male  Inflection  point offset
-
   50  170 125 2 0 125 30  3 0 1900  2100  0.05  # Female  Inflection  point
   -2  2 0 3 # Female  Inflection  point offset
   -2  2 0 3 # Female  Inflection  point offset
-  0.05  0.5 0.2 2 0 0.2 0.1  3 0 1900  2100  0.05  # Female  Slope
+ # SelexLPars[72]: cole fixed at upper bound
+0.05  0.5 0.499 -2 0 0.2 0.1  3 0 1900  2100  0.05  # Female  Slope
   -2  2 0 3 # Female  Slope offset
   -2  2 0 3 # Female  Slope offset
 
@@ -282,7 +292,8 @@
 # Retention parameters
 # Min      Max        Init       Phase
 # Fleet 1
- 10.00000 200.00000 140.00000     1                  #Male inflection point
+# RetainLPars[1]: cole fixed at lower bound
+10.00000 200.00000 10.0001     -1                  #Male inflection point
    .00000   5.00000    0.5000     1                             #Male slope
    .00000   5.00000   1.00000    -1                        #Male proportion
  10.00000 100.00000  10.00000    -1                #Female inflection point
