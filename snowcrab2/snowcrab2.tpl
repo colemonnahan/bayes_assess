@@ -253,9 +253,9 @@ INITIALIZATION_SECTION
   moltp_bm 300.
   moltp_ammat 0.05
   moltp_bmmat 105.0
-  srv1_q 1.0
+  srv1_q .999  // added by cole
+  srv1_q_f .999 // added by cole
   srv2_q 1.0
-  srv1_q_f 1.0 // added by cole
   srv3_q 1.0
   srv1_sel95 60
   srv1_sel50 40
@@ -269,7 +269,7 @@ INITIALIZATION_SECTION
   fish_disc_sel50_f 4.2
   srvind_sel95_f 55.1 // added by cole
   srv10ind_q_f 0.999 // added by cole
-  Mmult_imat 1.9999
+  Mmult_imat 1.9999 // added by cole
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
@@ -396,8 +396,11 @@ PARAMETER_SECTION
    init_bounded_number srv10ind_sel50_f(0.0,50.0,-survsel1_phase)
 
    //smooth selectivity for the industry survey
-   init_bounded_vector selsmo10ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
-   init_bounded_vector selsmo09ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
+   // init_bounded_vector selsmo10ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
+   // init_bounded_vector selsmo09ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
+  //  // Cole test on whether these bounds should be widened
+  init_bounded_vector selsmo10ind(1,nlenm,0,1,survsel1_phase)
+   init_bounded_vector selsmo09ind(1,nlenm,0,1,survsel1_phase)
 
 //model 5 estimate M
 // Cole turned this off since stuck at upper bound, see inits above
@@ -1111,14 +1114,14 @@ PROCEDURE_SECTION
   f+=dnorm(deltaf, 34, 2);
   f+=dnorm(bm, 1.5, .2);
   f+=dnorm(am, -5.7, 1);
- // These ones are tricky since part of a vector so cant fix them. Trying
- // to add priors that keeps them off bounds a bit
-  f+=dnorm(selsmo10ind(5), -.1, .03);
-  f+=dnorm(selsmo10ind(6), -.1, .03);
-  f+=dnorm(selsmo10ind(22), -.1, .03);
-  f+=dnorm(selsmo09ind(1), -3.9, .03);
-  f+=dnorm(selsmo09ind(2), -3.9, .03);
-  f+=dnorm(selsmo09ind(22), -.1, .03);
+ // // These ones are tricky since part of a vector so cant fix them. Trying
+ // // to add priors that keeps them off bounds a bit. Doesnt seem to work
+//  f+=dnorm(selsmo10ind(5), -.1, .03);
+ //  f+=dnorm(selsmo10ind(6), -.1, .03);
+ //  f+=dnorm(selsmo10ind(22), -.1, .03);
+ //  f+=dnorm(selsmo09ind(1), -3.9, .03);
+ //  f+=dnorm(selsmo09ind(2), -3.9, .03);
+ //  f+=dnorm(selsmo09ind(22), -.1, .03);
 
   // Cole defined these here to get SD report values
   OFL_main=OFL;
@@ -1587,13 +1590,15 @@ FUNCTION get_selectivity
     }
 
 // surv sel 2009 study area
-   sel_srvind(2,j)=srvind_q*mfexp(selsmo09ind(j));
+   sel_srvind(2,j)=srvind_q*(selsmo09ind(j));
+ //  sel_srvind(2,j)=srvind_q*mfexp(selsmo09ind(j));
    sel_srvind(1,j)= srvind_q_f* 1./(1.+mfexp(-1.*log(19.)*(length_bins(j)-srvind_sel50_f)/(srvind_sel95_f-srvind_sel50_f)));
    sel_srvnmfs(1,j)= sel_srvind(1,j)*sel_srv3(1,j);
    sel_srvnmfs(2,j)= sel_srvind(2,j)*sel_srv3(2,j);
 
    // surv sel 2010 study area
-   sel_srv10ind(2,j)=srv10ind_q*mfexp(selsmo10ind(j));
+   //sel_srv10ind(2,j)=srv10ind_q*mfexp(selsmo10ind(j));
+      sel_srv10ind(2,j)=srv10ind_q*(selsmo10ind(j));
    sel_srv10ind(1,j)= srv10ind_q_f* 1./(1.+mfexp(-1.*log(19.)*(length_bins(j)-srv10ind_sel50_f)/(srv10ind_sel95_f-srv10ind_sel50_f)));
    sel_srv10nmfs(1,j)=sel_srv10ind(1,j)*sel_srv3(1,j);
    sel_srv10nmfs(2,j)=sel_srv10ind(2,j)*sel_srv3(2,j);
