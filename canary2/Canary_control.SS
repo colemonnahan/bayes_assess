@@ -93,8 +93,9 @@
 #-4	4	-1.6094 1	-1	50 -1	0	0 0 0 0	0	0	# Area 1
 #-4	4	-2.3026 1	-1	50 -1	0	0 0 0 0	0	0	# Area 1
 -7	7	0 1	-1	50 -1	0	0 0 0 0	0	0	# Area 1
--7	7	0 1	-1	50 1	0	1	1933	2014	0.25	0	0	# Area 1
--7	7	0 1	-1	50 1	0	1	1933	2014	0.25	0	0	# Area 1
+# Cole changed the SD devs
+-7	7	0 1	-1	50 1	0	1	1933	2014	0.4	0	0	# Area 1
+-7	7	0 1	-1	50 1	0	1	1933	2014	0.4	0	0	# Area 1
 0	999	1	1	0	50	-50	0	0	0	0	0.5	0	0	# Season 1
 # Cohort growth (K) deviation parameter
 -1	1	1	1	0	50	-50	0	0	1980	1983	0.5	0	0
@@ -335,7 +336,8 @@
 #0			0			0			0			-1				99		-3			0				0				0				0				0				0				0	          #Male offset To inflection
 
 # 4_CA_NTWL double normal
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	1 2	# PEAK
+# selparm[7]: cole added informative prior N(43, 3)  (mle is 43.1100718751)
+13.001 65	   40	    43	  0	3	  4	  0	0	0	0	0	1 2	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	1 2	# Asc WIDTH exp
 0.0	   9.0	 9.0	  2.6	  -1	50	  5	  0	0	0	0	0	1 2	# Desc WIDTH exp
