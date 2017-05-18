@@ -60,7 +60,7 @@ plot.ess(rwm=hake.rwm, nuts=hake.nuts)
 n.slow <- 10
 canary.rwm <- readRDS('results/pilot_rwm_canary.RDS')
 canary.post <- extract_samples(canary.rwm, inc_lp=TRUE)
-#canary.post <- cbind(canary.post, canary.rwm$dq.post)
+canary.post <- cbind(canary.post, canary.rwm$dq.post)
 mle <- canary.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary.rwm$samples)[2], each=dim(canary.rwm$samples)[1]-canary.rwm$warmup)
@@ -81,7 +81,7 @@ ggsave(paste0('plots/vars.canary.png'), g, width=7, height=5)
 ## plot.uncertainties(canary.rwm, xlims=xlims, ylims=ylims)
 canary2.rwm <- readRDS('results/pilot_rwm_canary2.RDS')
 canary2.post <- extract_samples(canary2.rwm, inc_lp=TRUE)
-#canary2.post <- cbind(canary2.post, canary2.rwm$dq.post)
+canary2.post <- cbind(canary2.post, canary2.rwm$dq.post)
 mle <- canary2.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary2.rwm$samples)[2], each=dim(canary2.rwm$samples)[1]-canary2.rwm$warmup)
@@ -98,9 +98,8 @@ g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
 ggsave(paste0('plots/vars.canary2.png'), g, width=7, height=5)
 plot.improvement(canary.rwm, canary2.rwm)
 ## ## Compare estimates of DQs
-## xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
-## ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
-## plot.uncertainties(canary2.rwm, xlims=xlims, ylims=ylims)
+## canary.rwm$dq
+## canary2.rwm$dq
 
 
 halibut.rwm <- readRDS('results/long_rwm_halibut.RDS')
@@ -143,9 +142,9 @@ hitbounds <- sort(c(293,309, 310:312, 323, 324,331,6,268, 269, 284, 286, 287))
 png('plots/pairs.snowcrab.hitbounds.png', width=7, height=5, units='in', res=500)
 pairs_admb(snowcrab.post, mle=snowcrab.rwm$mle, chain=chain, diag='trace', pars=hitbounds);dev.off()
 snowcrab2.rwm <- readRDS('results/pilot_rwm_snowcrab2.RDS')
-snowcrab2.post <- extract_samples(snowcrab2.rwm, inc_lp=TRUE)
+snowcrab2.post <- extract_samples(snowcrab2.rwm, TRUE, inc_lp=TRUE)
 chain <- rep(1:dim(snowcrab2.rwm$samples)[2], each=dim(snowcrab2.rwm$samples)[1]-snowcrab2.rwm$warmup)
-#slow <- names(sort(snowcrab2.rwm$ess, FALSE))[1:n.slow]
+slow <- names(sort(snowcrab2.rwm$ess, FALSE))[1:n.slow]
 png('plots/pairs.snowcrab2.slow.png', width=7, height=5, units='in', res=500)
 pairs_admb(snowcrab2.post, mle=snowcrab2.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
 plot.improvement(snowcrab.rwm, snowcrab2.rwm)

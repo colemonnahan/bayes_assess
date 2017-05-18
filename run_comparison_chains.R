@@ -3,13 +3,20 @@ library(shinystan)
 library(rstan)
 library(adnuts)
 library(snowfall)
-td <- 12
+td <- 10
+
 ## Investigate performance differences between algorithms and settings
+reps <- 3                        # chains/reps to run
+iter <- 1000; warmup <- (iter/10)
+m <- d <- 'cod'
+ad <- .9                                # adapt_delta
+td <- 12
+source('template.R')
 
 reps <- 3                        # chains/reps to run
 iter <- 1000; warmup <- (iter/10)
 m <- d <- 'halibut2'
-ad <- .9                                # adapt_delta
+ad <- .8                                # adapt_delta
 source('template.R')
 
 reps <- 3                        # chains/reps to run
@@ -17,6 +24,20 @@ iter <- 1000; warmup <- (iter/10)
 m <- d <- 'hake'
 ad <- .8                                # adapt_delta
 td <- 12
+source('template.R')
+
+reps <- 3                        # chains/reps to run
+iter <- 500; warmup <- (iter/10)
+m <- d <- 'canary2'
+ad <- .8                                # adapt_delta
+td <- 10
+source('template.R')
+
+reps <- 3                        # chains/reps to run
+iter <- 1000; warmup <- (iter/10)
+m <- d <- 'tanner2'
+ad <- .8                                # adapt_delta
+td <- 10
 source('template.R')
 
 ## Old code to look at unbounded space

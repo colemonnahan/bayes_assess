@@ -5,7 +5,6 @@ library(shinystan)
 library(adnuts)
 library(snowfall)
 library(r4ss)
-
 reps <- 3 # chains to run in parallel
 
 sfStop()
@@ -55,8 +54,8 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
 sfStop()
-d <- m <- 'tanner2'
 d <- m <- 'tanner'
+d <- m <- 'tanner2'
 thin <- 100
 iter <- 1000
 warmup <- iter/4
@@ -124,9 +123,9 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
 sfStop()
-d <- m <- 'canary'
 d <- m <- 'canary2'
-thin <- 1000
+d <- m <- 'canary'
+thin <- 100
 iter <- 1000
 warmup <- iter/10
 inits <- NULL
@@ -144,5 +143,6 @@ dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
+
 launch_shinyadmb(fit.rwm)
 
