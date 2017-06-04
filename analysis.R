@@ -60,7 +60,7 @@ plot.ess(rwm=hake.rwm, nuts=hake.nuts)
 n.slow <- 10
 canary.rwm <- readRDS('results/pilot_rwm_canary.RDS')
 canary.post <- extract_samples(canary.rwm, inc_lp=TRUE)
-canary.post <- cbind(canary.post, canary.rwm$dq.post)
+canary.post <- cbind(canary.post[-1,], canary.rwm$dq.post)
 mle <- canary.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary.rwm$samples)[2], each=dim(canary.rwm$samples)[1]-canary.rwm$warmup)
@@ -81,7 +81,7 @@ ggsave(paste0('plots/vars.canary.png'), g, width=7, height=5)
 ## plot.uncertainties(canary.rwm, xlims=xlims, ylims=ylims)
 canary2.rwm <- readRDS('results/pilot_rwm_canary2.RDS')
 canary2.post <- extract_samples(canary2.rwm, inc_lp=TRUE)
-canary2.post <- cbind(canary2.post, canary2.rwm$dq.post)
+canary2.post <- cbind(canary2.post[-1,], canary2.rwm$dq.post)
 mle <- canary2.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary2.rwm$samples)[2], each=dim(canary2.rwm$samples)[1]-canary2.rwm$warmup)
