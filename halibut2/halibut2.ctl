@@ -91,7 +91,7 @@
 
 # Recruitment deviation section
 2		# Deviation type do_recdev:  0=none; 1=devvector; 2=simple deviations
-1977 	# Start main rec devs
+1987 	# Start main rec devs
 2007 	# End main rec devs
 2		# Phase for main rec devs
 1		# Read advanced options
@@ -217,7 +217,8 @@
   -4  	5    0		9      -1    99     5       0   0   0       0     0 	0		0       # Additive to ascending width
   -10	0    0      9      -1    99     -50     0   0   0 	    0 	  0		0 	    0       # Additive to descending width
   -1	1    0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
-  0.1	1.00 0.7    9      -1    99 	5       0   3   1997 	2014  0.03	0 	    0       # Asymptote for males
+# selparm[19]: cole fixed at lower bound of .1
+  0.1	1.00 0.1001    9      -1    99 	-5       0   3   1997 	2014  0.03	0 	    0       # Asymptote for males
 #############################################################################################################################
 ### Discards: double normal ###
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
@@ -228,12 +229,13 @@
   -4  	5    3		9      -1    99     5 	    0   0   0 	    0 	  0		0       0    	# Descending width
   -1003	0	 -1002  100    -1    99 	-50 	0   0   0 	    0 	  0	    0	 	0       # Init (-999 to ignore)
 # selparm[25]: cole added prior N(-2.2372,1 )
--8	8	 4		-2.2372    1    1     5	 	0   0   0 	    0 	  0     0       0    	# Final
+-8	8	 4		-2.2372    0    1     5	 	0   0   0 	    0 	  0     0       0    	# Final
 # Discards: female parameter offset to males
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
   -8	8    -1		10     -1    99     6       0   0   0       0     0 	0 	    0		# Additive to male peak
-  -5  	5    -1		9      -1    99     6       0   0   0 	    0 	  0		0		0       # Additive to ascending width
+# selparm[27]: cole added priors N(-2,1)
+  -5  	5    -1		-2      0    1     6       0   0   0 	    0 	  0		0		0       # Additive to ascending width
   -10	0    0      9      -1    99     -50     0   0   0 	    0 	  0		0 	    0       # Additive to descending width
   -1	1    0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
   0.1	1.0  0.8    9      -1    99 	6       0   0   0 	    0 	  0		0 	    0       # Asymptote for females
@@ -282,7 +284,8 @@
   -1  	5    0      9      -1    99     5       0   0   0       0     0 	0  	   	0       # Additive to ascending width
   -10	0	 0      9      -1    99     -50     0   0   0 	    0 	  0	   	0 	    0       # Additive to descending width
   -1	1	 0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
-  0.1	1.00 0.8    9      -1    99 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
+# selparm[53]: cole fixed at upper bound of 1
+ 0.1	1.00 0.99    9      -1    99 	-5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
 #############################################################################################################################
 
 ### Extra parameters for selectivity deviations
