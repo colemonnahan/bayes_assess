@@ -410,19 +410,22 @@
 1	# Selex block setup: 0=Read one line apply all, 1=read one line each parameter
 
 # 1CA_TWL double normal
+# selparm[43]; cole added N(44,3) prior
+13.001 65	   40	    43	  1	3	  4	  	# PEAK
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
-13.001 65	   40	    50	  -1	50	  4	  	# PEAK
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
+# selparm[45]; cole fixed at 4.3
+0.0	   9.0	 4.3	  4.2	  -1	50	  -5	  	# Asc WIDTH exp
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 # selparm[47]; cole added N(1.548458, 1)
 0.0	   9.0	 0.001  1.548458	 0	1	  5	  	# Desc WIDTH exp
 0.0	   9.0	 0.001  2.6	  -1	50	  5	  	# Desc WIDTH exp
 # selparm[49]; cole added N(0,1) prior
--5.0	 5.0	-1.0	  0	    0	1   	5	    # FINAL (logistic)
+-5.0	 5.0	0	  0	    1	1   	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal
-13.001 65	   40	    50	  -1	50	  4	  	# PEAK
+# selparm[51]; cole added N(40,10)
+13.001 65	   40	    40	  1	10	  4	  	# PEAK
 # selparm[52]; cole added N(4.5,1.5) prior
 0.0	   9.0	 4.3	  4.5	  0	1.5	  5	  	# Asc WIDTH exp
 0.0	   9.0	 9.0    2.6	  -1	50	  5	  	# Desc WIDTH exp
