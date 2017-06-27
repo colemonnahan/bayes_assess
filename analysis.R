@@ -102,32 +102,51 @@ plot.improvement(canary.rwm, canary2.rwm)
 ## canary2.rwm$dq
 
 
-halibut.rwm <- readRDS('results/long_rwm_halibut.RDS')
+n.slow <- 6
+halibut.rwm <- readRDS('results/pilot_rwm_halibut.RDS')
 halibut.post <- extract_samples(halibut.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut.rwm$ess))[1:n.slow]
 png('plots/pairs.halibut.rwm.png', width=7, height=5, units='in', res=500)
 pairs_admb(halibut.post, mle=halibut.rwm$mle, pars=slow);dev.off()
-halibut2.rwm <- readRDS('results/long_rwm_halibut2.RDS')
+halibut2.rwm <- readRDS('results/pilot_rwm_halibut2.RDS')
 chain <- rep(1:dim(halibut.rwm$samples)[2], each=dim(halibut.rwm$samples)[1]-halibut.rwm$warmup)
 halibut2.post <- extract_samples(halibut2.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut2.rwm$ess))[1:n.slow]
 png('plots/pairs.halibut2.rwm.png', width=7, height=5, units='in', res=500)
 pairs_admb(halibut2.post, mle=halibut2.rwm$mle, diag='trace', pars=slow);dev.off()
-recdev2 <- names(halibut2.post)[4:34][1:15]
+recdev2 <- names(halibut2.post)[4:34][1:7]
 png('plots/pairs.halibut2.rwm.recdev2.png', width=7, height=5, units='in', res=500)
 pairs_admb(halibut2.post, mle=halibut2.rwm$mle, diag='trace',chain=chain, pars=recdev2);dev.off()
-halibut2.nuts <- readRDS('results/halibut2_fits.RDS')[[2]]
-chain <- rep(1:dim(halibut2.nuts$samples)[2], each=dim(halibut2.nuts$samples)[1]-halibut2.nuts$warmup)
-halibut2.post <- extract_samples(halibut2.nuts, inc_lp=TRUE)
-#slow <- names(sort(halibut2.nuts$ess))[1:n.slow]
-png('plots/pairs.halibut2.nuts.png', width=7, height=5, units='in', res=500)
-divs <- extract_sampler_params(halibut2.nuts)$divergent__
-pairs_admb(halibut2.post, mle=halibut2.nuts$mle, diag='trace',
-           divergences=divs, pars=slow);dev.off()
+var.post <- apply(extract_samples(halibut2.rwm),2, sd)
+var.mle <- halibut2.rwm$mle$se[1:halibut2.rwm$mle$nopar]
+vars <- data.frame(post=var.post, mle=var.mle)
+g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
+  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
+ggsave(paste0('plots/vars.halibut2.png'), g, width=7, height=5)
+halibut3.rwm <- readRDS('results/pilot_rwm_halibut3.RDS')
+chain <- rep(1:dim(halibut.rwm$samples)[2], each=dim(halibut.rwm$samples)[1]-halibut.rwm$warmup)
+halibut3.post <- extract_samples(halibut3.rwm, inc_lp=TRUE)
+slow <- names(sort(halibut3.rwm$ess))[1:n.slow]
+png('plots/pairs.halibut3.rwm.png', width=7, height=5, units='in', res=500)
+pairs_admb(halibut3.post, mle=halibut3.rwm$mle, diag='trace', pars=slow);dev.off()
+recdev2 <- names(halibut3.post)[4:34][1:7]
+png('plots/pairs.halibut3.rwm.recdev2.png', width=7, height=5, units='in', res=500)
+pairs_admb(halibut3.post, mle=halibut3.rwm$mle, diag='trace',chain=chain, pars=recdev2);dev.off()
+var.post <- apply(extract_samples(halibut3.rwm),2, sd)
+var.mle <- halibut3.rwm$mle$se[1:halibut3.rwm$mle$nopar]
+vars <- data.frame(post=var.post, mle=var.mle)
+g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
+  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
+ggsave(paste0('plots/vars.halibut3.png'), g, width=7, height=5)
+library(vioplot)
 
-plot.improvement(halibut.rwm, halibut2.rwm)
-## launch_shinyadmb(halibut2.rwm)
-## launch_shinyadmb(halibut2.nuts)
+png(paste0('plots/ess_improvement_halibut.png'), width=5, height=5,
+    units='in', res=500)
+vioplot(log10(halibut.rwm$ess), log10(halibut2.rwm$ess),
+        log10(halibut3.rwm$ess), names=c("Original", "Fixed", "SigmaR Small"))
+mtext('halibut', line=1, cex=1.5)
+mtext("log10(ESS)", side=2, line=2.5, cex=1.25)
+dev.off()
 
 
 n.slow <- 16
