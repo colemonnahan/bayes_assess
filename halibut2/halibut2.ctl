@@ -206,7 +206,8 @@
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
   0	    25	 15     100    -1	 99		4 	    0   3   1997 	2014  0.06	0		0		# Age at peak selectivity
   1  	30   25     9      -1    99 	-50   	0   0   0 	    0 	  0 	0		0    	# Top width
-  0	    25	 2.9    100    -1    99 	4 	    0   3   1997 	2014  0.09	0		0    	# Ascending width
+# selparm[11]; cole added N(2.5,.5)
+0	    25	 2.9    2.5    0    .5 	4 	    0   3   1997 	2014  0.09	0		0    	# Ascending width
   0.1  	100  99     9      -1    99 	-50 	0   0   0 	    0 	  0     0		0    	# Descending width
   -1000	0	 -999   100    -1    99 	-50 	0   0   0 	    0 	  0		0 	    0       # Initial (-999 to ignore)
   -1000 25   -999   9      -1    99     -50 	0   0   0 	    0 	  0     0		0    	# Final
@@ -214,7 +215,8 @@
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
   -8	8    0		10     -1    99     5       0   0   0       0     0 	0 	    0		# Additive to female peak
-  -4  	5    0		9      -1    99     5       0   0   0       0     0 	0		0       # Additive to ascending width
+# selparm[16]; cole added N(-1.5, .5)
+-4  	5    0		-1.5      0    .5     5       0   0   0       0     0 	0		0       # Additive to ascending width
   -10	0    0      9      -1    99     -50     0   0   0 	    0 	  0		0 	    0       # Additive to descending width
   -1	1    0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
 # selparm[19]: cole fixed at lower bound of .1
@@ -226,7 +228,8 @@
   7	    14	 12		100    -1    99 	5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
   -8    8	 -2     9      -1    99 	-5   	0   0   0 	    0     0 	0  	    0       # Top width
   -4	5	 2		100    -1    99 	5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
-  -4  	5    3		9      -1    99     5 	    0   0   0 	    0 	  0		0       0    	# Descending width
+# selparm[23]; coled added N(0,1)
+-4  	5    3		0      0    1     5 	    0   0   0 	    0 	  0		0       0    	# Descending width
   -1003	0	 -1002  100    -1    99 	-50 	0   0   0 	    0 	  0	    0	 	0       # Init (-999 to ignore)
 # selparm[25]: cole added prior N(-2.2372,1 )
 -8	8	 4		-2.2372    0    1     5	 	0   0   0 	    0 	  0     0       0    	# Final
