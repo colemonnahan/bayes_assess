@@ -77,8 +77,9 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
 sfStop()
-d <- m <- 'halibut2'
 d <- m <- 'halibut'
+d <- m <- 'halibut3'
+d <- m <- 'halibut2'
 thin <- 100
 iter <- 1000
 warmup <- iter/4

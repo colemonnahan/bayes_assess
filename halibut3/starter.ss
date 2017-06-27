@@ -4,8 +4,8 @@
 ############################
 
 # Input file names
-halibut2.dat
-halibut2.ctl
+halibut3.dat
+halibut3.ctl
 
 1 		# Initial values: 0 = control file, 1 = ss3.par
 0 		# Run display detail (0,1,2)
