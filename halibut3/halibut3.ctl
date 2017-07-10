@@ -81,7 +81,8 @@
 # LO	HI	INIT	PRIOR	PR_type	SD		PHASE
   8     15  12.96   10.3    -1      99      1		# Log(R0)
   0.2   1.0 0.75    0.9     1       0.05    -50     # Steepness
-  0.05  1.1 0.5     0.6     -1      0.8     -50     # SigmaR
+# Cole set sigmaR from 0.9 to 0.4
+0.05  1.1 0.4     0.6     -1      0.8     -50     # SigmaR
   -5    5   0.1     0       -1      1       -50     # Environmental link coefficient
   -1    1   0       0       -1      1       6       # R1 offset
   0     0   0       0       -1      0       -99     # Autocorrelation
