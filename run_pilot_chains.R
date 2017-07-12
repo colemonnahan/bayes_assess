@@ -59,12 +59,13 @@ d <- m <- 'tanner'
 thin <- 100
 iter <- 1000
 warmup <- iter/4
+seeds <- c(3697251, 8281044, 9006332, 3354978, 5079273)
 inits <- NULL
 sfInit(parallel=TRUE, cpus=reps)
 sfExportAll()
 fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              dir=d, cores=reps, algorithm='RWM')
+              dir=d, cores=reps, algorithm='RWM', seeds=seeds)
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_2015", "depletion_2015", "OFL_main")
 post <- read.csv(file.path(m, 'posterior.csv'), header=FALSE)

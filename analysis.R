@@ -60,11 +60,11 @@ plot.ess(rwm=hake.rwm, nuts=hake.nuts)
 n.slow <- 10
 canary.rwm <- readRDS('results/pilot_rwm_canary.RDS')
 canary.post <- extract_samples(canary.rwm, inc_lp=TRUE)
-canary.post <- cbind(canary.post[-1,], canary.rwm$dq.post)
+#canary.post <- cbind(canary.post[-1,], canary.rwm$dq.post)
 mle <- canary.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary.rwm$samples)[2], each=dim(canary.rwm$samples)[1]-canary.rwm$warmup)
-slow <- c(names(sort(canary.rwm$ess))[1:n.slow], names(canary.rwm$dq.post), 'lp__')
+slow <- c(names(sort(canary.rwm$ess))[1:n.slow])
 png('plots/pairs.canary.slow.png', width=7, height=5, units='in', res=500)
 pairs_admb(canary.post, mle=mle, chains=chain, pars=slow, diag='acf')
 dev.off()
@@ -80,12 +80,12 @@ ggsave(paste0('plots/vars.canary.png'), g, width=7, height=5)
 ## ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
 ## plot.uncertainties(canary.rwm, xlims=xlims, ylims=ylims)
 canary2.rwm <- readRDS('results/pilot_rwm_canary2.RDS')
-canary2.post <- extract_samples(canary2.rwm, inc_lp=TRUE)
-canary2.post <- cbind(canary2.post[-1,], canary2.rwm$dq.post)
+canary2.post <- extract_samples(canary2.rwm, inc_lp=F)
+#canary2.post <- cbind(canary2.post[-1,], canary2.rwm$dq.post)
 mle <- canary2.rwm$mle
 ## Run mcsave and get generated quantities
 chain <- rep(1:dim(canary2.rwm$samples)[2], each=dim(canary2.rwm$samples)[1]-canary2.rwm$warmup)
-slow <- c(names(sort(canary2.rwm$ess))[1:n.slow], names(canary2.rwm$dq.post), 'lp__')
+slow <- c(names(sort(canary2.rwm$ess))[1:n.slow])
 png('plots/pairs.canary2.slow.png', width=7, height=5, units='in', res=500)
 pairs_admb(canary2.post, mle=mle, chains=chain, pars=slow, diag='trace')
 dev.off()
@@ -139,7 +139,6 @@ g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
   geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
 ggsave(paste0('plots/vars.halibut3.png'), g, width=7, height=5)
 library(vioplot)
-
 png(paste0('plots/ess_improvement_halibut.png'), width=5, height=5,
     units='in', res=500)
 vioplot(log10(halibut.rwm$ess), log10(halibut2.rwm$ess),
