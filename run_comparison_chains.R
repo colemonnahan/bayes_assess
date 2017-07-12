@@ -13,10 +13,11 @@ ad <- .9                                # adapt_delta
 td <- 12
 source('template.R')
 
-reps <- 3                        # chains/reps to run
-iter <- 1000; warmup <- (iter/10)
-m <- d <- 'halibut2'
+reps <- 5                        # chains/reps to run
+iter <- 500; warmup <- (iter/10)
+m <- d <- 'halibut3'
 ad <- .8                                # adapt_delta
+td <- 12
 source('template.R')
 
 reps <- 3                        # chains/reps to run
@@ -26,7 +27,7 @@ ad <- .8                                # adapt_delta
 td <- 12
 source('template.R')
 
-reps <- 3                        # chains/reps to run
+reps <- 5                        # chains/reps to run
 iter <- 500; warmup <- (iter/10)
 m <- d <- 'canary2'
 ad <- .8                                # adapt_delta
