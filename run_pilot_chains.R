@@ -93,7 +93,7 @@ fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
               parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               dir=d, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_MSY", "SPB_2015", "Bratio_2015")
+dq.names <- c("SPB_2010", "SPB_2015", "SPB_2000")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
 xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
 ## Get estimates for derived quantitiesd
