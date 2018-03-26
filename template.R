@@ -5,38 +5,33 @@ library(shinystan)
 library(plyr)
 source("functions.R")
 
-## Run model with hbf=1 to get right covariance matrix and MLEs
+
+## Run model with hbf=1 to get right covariance matrix and MLEs for NUTS
 setwd(d)
-## system(paste('admb', m))
-system(paste(m, '-hbf 1 -nox'))
+system(paste('admb', m))
+system(paste(m, '-hbf 1 '))
 setwd('..')
 
-sfStop()
-## Draw inits from MVT using MLE and covar
-inits <- NULL
-eps <- NULL
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-
-
-## Run NUTS for different mass matrices
+### Run NUTS for different mass matrices
+## ## Adaptation of diagonal mass matrix (default). This is horribly slow
+## ## during warmup and thus not really usable so skipping.
+## fit.nuts.adapt <-
+##   sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
+##               parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
+##               control=list(max_treedepth=td, adapt_delta=ad))
+## Mass matrix is MLE covariance
 fit.nuts.mle <-
   sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
-               parallel=TRUE, chains=reps, warmup=warmup, dir=d, cores=reps,
-              control=list(max_treedepth=td, stepsize=eps, metric=NULL,
-                           adapt_delta=ad))
+               parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
+              control=list(max_treedepth=td, metric="mle", adapt_delta=ad))
+
 ## covar.diag <- diag(x=diag(fit.nuts.mle$covar.est))
-## fit.nuts.diag <-
-##   sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
-##               parallel=TRUE, chains=reps, warmup=warmup, dir=d, cores=reps,
-##               control=list(max_treedepth=td, stepsize=eps,
-##                            metric=covar.diag, adapt_delta=ad))
+## Mass matrix is dense one estimated from previous run
 covar.dense <- fit.nuts.mle$covar.est
 fit.nuts.dense <-
   sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
-               parallel=TRUE, chains=reps, warmup=warmup, dir=d, cores=reps,
-              control=list(max_treedepth=td, stepsize=eps, extra.args='-noest',
-                           metric=covar.dense, adapt_delta=ad))
+               parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
+              control=list(max_treedepth=td, metric=covar.dense, adapt_delta=ad))
 
 ## Now run RWM but using a thinning rate similar to NUTS so the time is
 ## roughly equivalent.
@@ -49,19 +44,13 @@ setwd('..')
 fit.rwm.mle <-
   sample_admb(m, iter=tt*iter, init=inits, thin=tt,
               parallel=TRUE, chains=reps, warmup=tt*warmup,
-              dir=d, cores=reps, control=list(metric=NULL),
+              path=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
-covar.diag <- diag(x=diag(fit.rwm.mle$covar.est))
-## fit.rwm.diag <-
-##   sample_admb(m, iter=tt*iter, init=inits,  thin=tt,
-##               parallel=TRUE, chains=reps, warmup=tt*warmup,
-##               dir=d, cores=reps, control=list(metric=covar.diag),
-##               algorithm='RWM')
 covar.dense <- fit.rwm.mle$covar.est
 fit.rwm.dense <-
   sample_admb(m, iter=tt*iter, init=inits, thin=tt,
               parallel=TRUE, chains=reps, warmup=tt*warmup,
-              dir=d, cores=reps, control=list(metric=covar.dense),
+              path=d, cores=reps, control=list(metric=covar.dense),
               algorithm='RWM')
 
 ## Gather adaptation and performance metrics
@@ -113,8 +102,8 @@ ggsave(paste0('plots/', d, '_perf.png'),g, width=ggwidth, height=ggheight, units
 plot.ess(rwm=fit.rwm.mle, nuts=fit.nuts.dense)
 
 ## Save fits
-saveRDS(list(fit.nuts.mle=fit.nuts.mle, #fit.nuts.diag=fit.nuts.diag,
-             fit.nuts.dense=fit.nuts.dense, fit.rwm.mle=fit.rwm.mle,
-             #fit.rwm.diag=fit.rwm.diag,
+saveRDS(list(fit.nuts.mle=fit.nuts.mle,
+             fit.nuts.dense=fit.nuts.dense,
+             fit.rwm.mle=fit.rwm.mle,
              fit.rwm.dense=fit.rwm.dense),
         file=paste0('results/', d,'_fits.RDS'))
