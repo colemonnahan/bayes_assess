@@ -16,8 +16,8 @@ plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
 }
 plot.ess <- function(rwm, nuts){
   model <- rwm$model
-  x <- rwm$ess/sum(rwm$time.total);
-  y <- nuts$ess/sum(nuts$time.total)
+  x <- monitor(rwm$samples, print=FALSE)[,'n_eff']/sum(rwm$time.total);
+  y <-  monitor(nuts$samples, print=FALSE)[,'n_eff']/sum(nuts$time.total)
   temp <- range(c(x, y,0))
   png(paste0('plots/ess_comparison_',model, '.png'), width=7, height=3,
       units='in', res=500)
