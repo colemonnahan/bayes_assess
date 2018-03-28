@@ -9,7 +9,7 @@ source("functions.R")
 ## Run model with hbf=1 to get right covariance matrix and MLEs for NUTS
 setwd(d)
 system(paste('admb', m))
-system(paste(m, '-hbf 1 '))
+system(paste(m, '-hbf 1 -mcmc 15 '))
 setwd('..')
 
 ### Run NUTS for different mass matrices
