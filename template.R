@@ -8,7 +8,9 @@ source("functions.R")
 
 ## Run model with hbf=1 to get right covariance matrix and MLEs for NUTS
 setwd(d)
-system(paste('admb', m))
+system(paste('admb', m, '-f'))
+## Add the -mcmc so SS turns off bias adjustment and we get a covariance
+## that matches this to use for sampling. Otherwise there is a mismatch.
 system(paste(m, '-hbf 1 -mcmc 15 '))
 setwd('..')
 
@@ -38,7 +40,7 @@ fit.nuts.dense <-
 tt <- 4*floor(mean(extract_sampler_params( fit.nuts.mle)$n_leapfrog__))
 ## Rerun model with hbf=0
 setwd(d)
-system(paste(m, '-nox'))
+system(paste(m, '-nox -mcmc 15'))
 setwd('..')
 
 fit.rwm.mle <-
