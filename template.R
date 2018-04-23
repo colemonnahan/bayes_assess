@@ -105,7 +105,7 @@ ggsave(paste0('plots/', d, '_stats.png'),g, width=ggwidth, height=ggheight, unit
 g <- ggplot(perf.all, aes(m, efficiency, color=alg)) + geom_point() + scale_y_log10()
 ggsave(paste0('plots/', d, '_perf.png'),g, width=ggwidth, height=ggheight, units='in')
 
-plot.ess(rwm=fit.rwm.mle, nuts=fit.nuts.dense)
+plot.ess(rwm=fit.rwm.mle, nuts=fit.nuts.mle)
 
 ## Save fits
 saveRDS(list(fit.nuts.mle=fit.nuts.mle,
