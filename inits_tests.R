@@ -18,12 +18,9 @@ inits <- lapply(1:reps, function(i)
 setwd('halibut3')
 file.copy('halibut3.par', 'halibut3.parold', overwrite=TRUE)
 
-temp <- r4ss::SS_parlines('halibut3/halibut3.ctl')
 ff <- function(n)
   boxplot(post[,n], sapply(1:1000, function(i) inits()[n]))
-ff(62)
-
-inits.fn <- function(i)
+inits.fn <- function()
   c(runif(1, .1, .2),
     runif(1, 10, 11),
     runif(1, -.5,.5),
@@ -43,12 +40,13 @@ inits.fn <- function(i)
     runif(1, -4,5), #64
     runif(1, -4, 0),
     runif(1, .1,1),
-    runif(1, -4,6), #67
+    runif(1, 0,25), #67
     runif(1, 0,4),
     runif(1, 0, 3),
     runif(1, 0,1),
     runif(105, -1,1))
 set.seed(2352)
+
 for(i in 1:3){
   ## overwrite par file
   i0 <- c(0,inits.fn())
@@ -56,7 +54,12 @@ for(i in 1:3){
   ## run model
   system('halibut3 -nohess -ainp init.pin')
   out <- SSget
+}
 
+
+set.seed(325)
+inits <- lapply(1:5, function(i) inits.fn())
+post <- sample_admb('halibut3', iter=2000, algorithm='RWM', init=inits, chains=5)
 
 
 ## hake

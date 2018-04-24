@@ -1,7 +1,9 @@
+//// Cole modified this file from the version sent by Cody on 4/24/2018. DO NOT USE IT!!!
+
+
 DATA_SECTION
 //Bering Sea snow crab model
   !!CLASS ofstream post("eval.csv")
-  !! posterior << "SSB_2015,depletion_2015,OFL_main" << endl;
   int call_no;
   !! call_no = 0;
   number spmo																						// spawning month
@@ -83,6 +85,13 @@ DATA_SECTION
   init_vector malegrowdatx(1,nobs_growm)
   init_vector malegrowdaty(1,nobs_growm)
 
+  
+     !!cout<<cv_mean_length_obs<<endl;  	 
+     !!cout<<" "<<endl;  	 
+     !!cout<<catch_fracmature<<endl;  	 
+     !!cout<<" "<<endl;  	 
+     !!cout<<malegrowdaty<<endl;  	 
+	 
   // End of reading normal data file 
  // Open control file....
  !! ad_comm::change_datafile_name("snowcrab.ctl");
@@ -230,13 +239,14 @@ DATA_SECTION
  //==============================================================================  
  LOCAL_CALCS
    cout<<"to local calcs"<<endl;
+
    styr_rec=styr-nirec; 																									  //year to start estimating recruits to get initial age comp
    if(nsellen>nlenm) nsellen=nlenm; 																				 //make sure nselages not greater than nages
    if(nsellen_srv1>nlenm) nsellen_srv1=nlenm; 															 //same as above for survey
    obs_srv1=obs_srv1*1000000;              																		 //survey numbers read in are millions of crab
    obs_srv2=obs_srv2*1000000;              																		  //survey numbers read in are millions of crab
    catch_ret=catch_ret/2204.6; 
-   //   cout<<"end of local calcs"<<endl;
+   cout<<"end of local calcs"<<endl;
  END_CALCS
 
 //==============================================================================
@@ -266,6 +276,15 @@ INITIALIZATION_SECTION
   matestfe -0.7
   cpueq 0.001
   fish_disc_sel50_f 4.2
+  af -5
+  am -5 
+  bf 1.5
+  bm 1.5 
+  b1 1.1
+  bf1 1 
+  deltam 32
+  deltaf 34
+  
  //==============================================================================
 PARAMETER_SECTION
  //growth pars
@@ -324,9 +343,9 @@ PARAMETER_SECTION
   //Fishing selectivity parameters 
   //fish_slope, fish_fit, fish_disc, mn vs. mo, mo vs. mo2????
   init_bounded_number log_avg_sel50_mn(4,5.0,phase_logistic_sel)
-  init_bounded_dev_vector log_sel50_dev_mn(1978,endyr,-5,5,-phase_logistic_sel+2)
+  init_bounded_dev_vector log_sel50_dev_mn(styr,endyr,-5,5,-phase_logistic_sel+2)
   init_bounded_number log_avg_sel50_mo(4,5.0,-phase_logistic_sel)
-  init_bounded_dev_vector log_sel50_dev_mo(1978,endyr,-5,5,-phase_logistic_sel+2)
+  init_bounded_dev_vector log_sel50_dev_mo(styr,endyr,-5,5,-phase_logistic_sel+2)
   init_bounded_number fish_slope_mn(0.1,0.5,phase_logistic_sel)
   init_bounded_number fish_slope_mo(0.1,0.8,-phase_logistic_sel)
 
@@ -350,10 +369,10 @@ PARAMETER_SECTION
   //Survey selectivity parameters
  // three survey eras:
   //srv1: 1978-1982
-   init_bounded_number srv1_q(0.2,1.000,survsel1_phase+1)
-   init_bounded_number srv1_q_f(0.2,1.000,survsel1_phase+1)
-   init_bounded_number srv1_sel95(30.0,150.0,survsel1_phase)
-   init_bounded_number srv1_sel50(0.0,150.0,survsel1_phase)
+   init_bounded_number srv1_q(0.2,1.000,-survsel1_phase+1)
+   init_bounded_number srv1_q_f(0.2,1.000,-survsel1_phase+1)
+   init_bounded_number srv1_sel95(30.0,150.0,-survsel1_phase)
+   init_bounded_number srv1_sel50(0.0,150.0,-survsel1_phase)
    
    //srv2: 1983-1988
    init_bounded_number srv2_q(0.2,1.000,survsel1_phase+1)
@@ -385,13 +404,13 @@ PARAMETER_SECTION
    init_bounded_number srv10ind_sel50_f(0.0,50.0,-survsel1_phase)
    
    //smooth selectivity for the industry survey 
-   init_bounded_vector selsmo10ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
-   init_bounded_vector selsmo09ind(1,nlenm,-4.0,-0.0010,survsel1_phase)
+   init_bounded_vector selsmo10ind(1,nlenm,-20,20,survsel1_phase)
+   init_bounded_vector selsmo09ind(1,nlenm,-20,20,survsel1_phase)
 
 //model 5 estimate M
     init_bounded_number Mmult_imat(0.2000,2.000001,natM_phase)
     init_bounded_number Mmult(0.20000,2.0000001,natM_phase)
-    init_bounded_number Mmultf(1.0000,1.000001,-5)
+    init_bounded_number Mmultf(0.20000,2.0000001,natM_phase)
     
 //pot fishery cpue q
     // init_bounded_number cpueq(0.000877,0.000877,-5)
@@ -555,18 +574,13 @@ PARAMETER_SECTION
     
   
   //quantities to report in SD file
-  // Cole commented out the vectors since some werent used and take time
-  // sdreport_vector fspbios(styr,endyr+Nproj)
-  // sdreport_vector mspbios(styr,endyr+Nproj)
-  // sdreport_vector legal_malesd(styr,endyr+Nproj)
-  // sdreport_vector recf_sd(styr,endyr+Nproj-1)
- //  sdreport_vector recm_sd(styr,endyr+Nproj-1)
+  sdreport_vector fspbios(styr,endyr+Nproj)
+  sdreport_vector mspbios(styr,endyr+Nproj)
+  sdreport_vector legal_malesd(styr,endyr+Nproj)
+  sdreport_vector recf_sd(styr,endyr+Nproj-1)
+  sdreport_vector recm_sd(styr,endyr+Nproj-1)
   sdreport_number depletion
-
- // Cole added these two:
- sdreport_number SSB_2015
- sdreport_number depletion_2015
- sdreport_number OFL_main
+  
   objective_function_value f
   
   number tmp
@@ -793,7 +807,7 @@ PARAMETER_SECTION
 PRELIMINARY_CALCS_SECTION
    int mat;
    int m;
-
+   
   // Calculate weight at length
   for(i=1;i<=nlenm;i++)
   {
@@ -819,7 +833,7 @@ PRELIMINARY_CALCS_SECTION
    fnatlen_styr(1,j) = log(10*(obs_p_srv1_lend(1,1,1,1,j)+obs_p_srv1_lend(2,1,1,1,j)+1e-02));
    fnatlen_styr(2,j) = log(10*(obs_p_srv1_lend(1,2,1,1,j)+obs_p_srv1_lend(2,2,1,1,j)+1e-02));
    }
-
+   cout<<1<<endl;
 //use logistic maturity curve for new shell males instead of fractions by year if switch>0
 //this would be for initial population not probability of moving to mature
    if(maturity_switch>0){
@@ -866,7 +880,7 @@ PRELIMINARY_CALCS_SECTION
       sumtrawl(i)+=sum(obs_p_trawld(k,i));
     }
   }
-
+   cout<<2 <<endl;
 //length obs sex ratio in survey
   for(i=1; i<=nobs_srv1_length;i++)
   {
@@ -909,7 +923,7 @@ PRELIMINARY_CALCS_SECTION
                offset(1)-=nsamples_fish(1,i)*(obs_p_fish_ret(1,i,j)+obs_p_fish_ret(2,i,j))*log(obs_p_fish_ret(1,i,j)+obs_p_fish_ret(2,i,j)+p_const);
         }
 	}
-
+   cout<<3<<endl;
    for(k=1; k<=2; k++)
     {
        for (i=1; i <= nobs_fish_discm; i++)
@@ -918,7 +932,7 @@ PRELIMINARY_CALCS_SECTION
          //fishery offset
            for (j=1; j<=nlenm; j++)
            {
-               obs_p_fish_tot(k,i,j)=((obs_p_fish_ret(k,i+yrs_fish_discm(1)-1978,j)*catch_numbers(yrs_fish_discm(i)))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
+               obs_p_fish_tot(k,i,j)=((obs_p_fish_ret(k,i+yrs_fish_discm(1)-styr,j)*catch_numbers(yrs_fish_discm(i)))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
              //old and new shell together
              if (k<2)
                 offset(2)-=nsamples_fish(k,i)*(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j) )*log(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j)+p_const);
@@ -926,7 +940,7 @@ PRELIMINARY_CALCS_SECTION
 
        }
     }
-  
+     cout<<3<<endl;
   //make observations proportions by year      
         //fishery offset
   for (i=1; i <= nobs_fish_discf; i++)
@@ -935,7 +949,7 @@ PRELIMINARY_CALCS_SECTION
         obs_p_fish_discf(i,j)=((obs_p_fish_discfd(i,j))/sumfishdiscf(i));
         offset(3)-=nsamples_fish_discf(i)*obs_p_fish_discf(i,j)*log(obs_p_fish_discf(i,j)+p_const);
 	}        
-
+   cout<<3<<endl;
 //trawl length freq
   for(k=1; k<=2; k++)
    for (i=1; i <= nobs_trawl; i++)
@@ -949,7 +963,7 @@ PRELIMINARY_CALCS_SECTION
       }
       obs_catcht_biom(yrs_trawl(i))=(obs_p_trawl(1,i)*catch_trawl(yrs_trawl(i)))*wtf(2)+(obs_p_trawl(2,i)*catch_trawl(yrs_trawl(i)))*wtm;
     }
-
+   cout<<4<<endl;
   sumsrv.initialize();
 //survey length offset
  for(ll=1; ll<=nobs_srv1_length; ll++)
@@ -1093,15 +1107,12 @@ PROCEDURE_SECTION
 
    evaluate_the_objective_function();
 
-  // Cole defined these here to get SD report values
-  OFL_main=OFL;
-  SSB_2015=pred_bio(2015);
-  depletion_2015=pred_bio(2015)/pred_bio(styr);
-     if(mceval_phase())
+   
+   if(mceval_phase())
    {
 	   Find_F35();
 	   Find_OFL();
-    posterior << SSB_2015 << "," << depletion_2015 << "," <<  OFL << endl;   
+	   
 	   post<<f<<" "<<Bmsy<<" "<< F35 << " " << FOFL << " " << OFL << endl;
 	   post<<fspbio_srv1<<endl;
 	   post<<mspbio_srv1<<endl;
@@ -1215,7 +1226,7 @@ FUNCTION get_catch_tot
     for (i=1; i <= nobs_fish_discm; i++)
     for (j=1; j<=nlenm; j++)
     {
-        obs_p_fish_tot(k,i,j)=(obs_p_fish_retd(k,i+yrs_fish_discm(1)-1978,j)/sumfishret(i+yrs_fish_discm(1)-1978))*(catch_numbers(yrs_fish_discm(i))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
+        obs_p_fish_tot(k,i,j)=(obs_p_fish_retd(k,i+yrs_fish_discm(1)-styr,j)/sumfishret(i+yrs_fish_discm(1)-styr))*(catch_numbers(yrs_fish_discm(i))/catch_tot(yrs_fish_discm(i)))+obs_p_fish_discm(k,i,j);
    //old and new shell together
        if (k<2){
          offset(2)-=nsamples_fish(k,i)*(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j) )*log(obs_p_fish_tot(1,i,j)+obs_p_fish_tot(2,i,j)+p_const);
@@ -1560,13 +1571,13 @@ FUNCTION get_selectivity
     }
 
 // surv sel 2009 study area                
-   sel_srvind(2,j)=srvind_q*mfexp(selsmo09ind(j));
+   sel_srvind(2,j)=srvind_q*1/(1+mfexp(-selsmo09ind(j)));
    sel_srvind(1,j)= srvind_q_f* 1./(1.+mfexp(-1.*log(19.)*(length_bins(j)-srvind_sel50_f)/(srvind_sel95_f-srvind_sel50_f)));
    sel_srvnmfs(1,j)= sel_srvind(1,j)*sel_srv3(1,j);
    sel_srvnmfs(2,j)= sel_srvind(2,j)*sel_srv3(2,j);
 
    // surv sel 2010 study area
-   sel_srv10ind(2,j)=srv10ind_q*mfexp(selsmo10ind(j));
+   sel_srv10ind(2,j)=srv10ind_q*1/(1+mfexp(-selsmo10ind(j)));
    sel_srv10ind(1,j)= srv10ind_q_f* 1./(1.+mfexp(-1.*log(19.)*(length_bins(j)-srv10ind_sel50_f)/(srv10ind_sel95_f-srv10ind_sel50_f)));
    sel_srv10nmfs(1,j)=sel_srv10ind(1,j)*sel_srv3(1,j);
    sel_srv10nmfs(2,j)=sel_srv10ind(2,j)*sel_srv3(2,j); 
@@ -1929,10 +1940,10 @@ FUNCTION get_num_at_len_yr
        if(i<1982){
         totn_srv1(k,i)=(natlength(k,i)*sel_srv1(k));
         }
-       if(i>1981 && i<1989){
+       if(i>1981 && i<1988){
         totn_srv1(k,i)=(natlength(k,i)*sel_srv2(k));
         }
-       if(i>1988){
+       if(i>1987){
         totn_srv1(k,i)=(natlength(k,i)*sel_srv3(k));
         if(i==2009){
 	        		totn_srv2(1,k)=(natlength(k,i)*sel_srvind(k));
@@ -1960,7 +1971,7 @@ FUNCTION get_num_at_len_yr
      fspbio_srv1_num(2,i) = q1*natlength_mold(1,i)*sel_srv1(1);
      mspbio_srv1_num(2,i) = q1*natlength_mold(2,i)*sel_srv1(2);
     }
-    if(i>1981 && i<1989)
+    if(i>1981 && i<1988)
 	{
      fspbio_srv1(i) = q1*natlength_mat(1,i)*elem_prod(wtf(2),sel_srv2(1));
      mspbio_srv1(i) = q1*natlength_mat(2,i)*elem_prod(wtm,sel_srv2(2));
@@ -1969,7 +1980,7 @@ FUNCTION get_num_at_len_yr
      fspbio_srv1_num(2,i) = q1*natlength_mold(1,i)*sel_srv2(1);
      mspbio_srv1_num(2,i) = q1*natlength_mold(2,i)*sel_srv2(2);
     }
-    if(i>1988)
+    if(i>1987)
 	{
      fspbio_srv1(i) = q1*natlength_mat(1,i)*elem_prod(wtf(2),sel_srv3(1));
      mspbio_srv1(i) = q1*natlength_mat(2,i)*elem_prod(wtm,sel_srv3(2));
@@ -2026,7 +2037,7 @@ FUNCTION get_num_at_len_yr
 
     }
 
-  if(i>1981 && i<1989)
+  if(i>1981 && i<1988)
   {
       pred_srv1(k,i) = q1*elem_prod(natlength(k,i),sel_srv2(k));
 
@@ -2045,7 +2056,7 @@ FUNCTION get_num_at_len_yr
       pred_p_srv1_len_old(2,k,i)=elem_prod(sel_srv2(k),natlength_mold(k,i))/(totn_srv1(1,i)+totn_srv1(2,i));
     }
 	
-   if(i>1988)
+   if(i>1987)
    {
       pred_srv1(k,i) = q1*elem_prod(natlength(k,i),sel_srv3(k));
      if(k<2)
@@ -2073,8 +2084,8 @@ FUNCTION get_num_at_len_yr
 
  
   depletion = pred_bio(endyr) / pred_bio(styr);
-  // fspbios=fspbio;
-  // mspbios=mspbio_matetime;
+  fspbios=fspbio;
+  mspbios=mspbio_matetime;
 
     legal_males(i)=0.;
     legal_srv_males(i)=0.;
@@ -2092,13 +2103,13 @@ FUNCTION get_num_at_len_yr
         legal_srv_males_n(i)=0.5*natlength_new(2,i,16)*sel_srv1(2,16);
         legal_srv_males_o(i)=0.5*natlength_old(2,i,16)*sel_srv1(2,16);
         }
-        if(i>1981 && i<1989)
+        if(i>1981 && i<1988)
 		{
          legal_srv_males(i)=0.5*natlength(2,i,16)*sel_srv2(2,16);
          legal_srv_males_n(i)=0.5*natlength_new(2,i,16)*sel_srv2(2,16);
          legal_srv_males_o(i)=0.5*natlength_old(2,i,16)*sel_srv2(2,16);
         }
-        if(i>1988)
+        if(i>1987)
 		{
          legal_srv_males(i)=0.5*natlength(2,i,16)*sel_srv3(2,16);
          legal_srv_males_n(i)=0.5*natlength_new(2,i,16)*sel_srv3(2,16);
@@ -2118,14 +2129,14 @@ FUNCTION get_num_at_len_yr
           legal_srv_males_o(i)+=natlength_old(2,i,j)*sel_srv1(2,j);
           legal_srv_males_bio(i)+=natlength(2,i,j)*sel_srv1(2,j)*wtm(j);
          }
-        if(i>1981 && i<1989)
+        if(i>1981 && i<1988)
 		{
           legal_srv_males(i)+=natlength(2,i,j)*sel_srv2(2,j);
           legal_srv_males_n(i)+=natlength_new(2,i,j)*sel_srv2(2,j);
           legal_srv_males_o(i)+=natlength_old(2,i,j)*sel_srv2(2,j);
           legal_srv_males_bio(i)+=natlength(2,i,j)*sel_srv2(2,j)*wtm(j);
           }
-        if(i>1988)
+        if(i>1987)
 		{
           legal_srv_males(i)+=natlength(2,i,j)*sel_srv3(2,j);
           legal_srv_males_n(i)+=natlength_new(2,i,j)*sel_srv3(2,j);
@@ -2488,6 +2499,13 @@ FUNCTION evaluate_the_objective_function
   Fout(10)+=like_natm;
  }
 
+  if(active(Mmultf))
+ {  
+  like_natm   += natm_mult_wght  * square((Mmultf    - 1.0)    / natm_mult_var);
+  f += like_natm;
+  Fout(10)+=like_natm;
+ }
+ 
    like_mat=0.0;
   if(active(mateste))
    {
@@ -2652,9 +2670,10 @@ FUNCTION evaluate_the_objective_function
   Fout(22)= fpen;
   f+=fpen;
 
+  
   call_no += 1;
-  //cout <<"Likes = "<< Fout << endl;
-  //cout <<"phase = "<< current_phase() << " call = " << call_no << " Total Like = " << f << endl;
+  // cout <<"Likes = "<< Fout << endl;
+  // cout <<"phase = "<< current_phase() << " call = " << call_no << " Total Like = " << f << endl;
 
 // ========================y==================================================   
 FUNCTION get_fut_mortality  
@@ -2751,7 +2770,7 @@ FUNCTION Find_OFL
   int BMSY_Yr1, BMSY_Yr2,ii,Iyr,kk,jj;
   
  //Define time period for BMSY  
-  BMSY_Yr1 = 1979;BMSY_Yr2 = endyr-1;
+  BMSY_Yr1 = styr;BMSY_Yr2 = endyr-1;
   alpha = 0.1;
   beta = 0.25;
   Fmsy = F35;
@@ -3771,10 +3790,10 @@ REPORT_SECTION
   R_out <<moltp_mat(2)<<endl;
   //  R_out << "observed pot fishery cpue 1979 fishery to endyr fishery: seq(1979,"<<endyr<<")" << endl;
   R_out << "$observed pot fishery cpue" << endl;
-  R_out <<cpue(1979,endyr)<<endl;
+  R_out <<cpue(styr,endyr)<<endl;
   //  R_out << "predicted pot fishery cpue 1978 to endyr-1 survey: seq(1978,"<<endyr-1<<")" << endl;
   R_out << "$predicted pot fishery cpue" << endl;
-  R_out <<cpue_pred(1978,endyr-1)<<endl;
+  R_out <<cpue_pred(styr,endyr-1)<<endl;
   //  R_out << "observed retained catch biomass: seq(1979,"<<endyr<<")" << endl;
   R_out << "$Observed retained catch biomass" << endl;
   R_out << catch_ret(styr,endyr-1) << endl;
@@ -4007,8 +4026,6 @@ GLOBALS_SECTION
   long hour,minute,second;
   double elapsed_time;
  ofstream R_out;
-  // Cole added new mcmc output file 
- ofstream posterior("posterior.csv");
 
 // EVALUATE THE GAMMA FUNCTION
  dvariable gammln(dvariable& xx)
@@ -4046,10 +4063,7 @@ TOP_OF_MAIN_SECTION
   R_out.open("R_input.txt");
 
 FINAL_SECTION
- // cole added to try to get SE for OFL values
- Find_F35();
-  Find_OFL();
-  time(&finish); 
+ time(&finish); 
  elapsed_time = difftime(finish,start);
  hour = long(elapsed_time)/3600;
  minute = long(elapsed_time)%3600/60;

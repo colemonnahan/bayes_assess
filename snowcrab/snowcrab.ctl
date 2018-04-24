@@ -191,7 +191,7 @@
 # natm_Immult_wght : weighting on the multiplier for M for immature
 0.5
 # natm_Immult_var : variance for prior estimated M multiplier for immature (was 1)
-0.15
+0.054
 # smooth_mat_wght : smoothing for estimated maturity (2)
 50
 # mat_est_wght : weighting for the maturity estimates
