@@ -8,7 +8,7 @@ recompile <- TRUE # recomile .tpl files?
 
 ## Investigate performance differences between algorithms and settings
 reps <- 3                        # chains/reps to run
-iter <- 1000; warmup <- (iter/10)
+iter <- 2000; warmup <- (iter/2)
 m <- d <- 'cod'
 ad <- .8                                # adapt_delt
 td <- 12
@@ -35,7 +35,38 @@ iter <- 1000; warmup <- (iter/10)
 m <- d <- 'halibut3'
 ad <- .8                                # adapt_delta
 td <- 12
-inits <- NULL
+set.seed(23525)
+temp <- r4ss::SS_parlines('halibut3/halibut3.ctl')
+
+ff <- function(n)
+  boxplot(post[,n], sapply(1:1000, function(i) inits()[n]))
+ff(62)
+
+inits <- function(i)
+  c(runif(1, .1, .2),
+    runif(1, 10, 11),
+    runif(1, -.5,.5),
+    runif(21, -3,3),
+    runif(12,-3,3),
+    runif(1, -7, -4),
+    runif(18, -.1,.1), #55
+    runif(1, 12,18),
+    runif(1, 0,5),
+    runif(1, -6,0), #58
+    runif(1, -4,5),
+    runif(1, 7, 14),
+    runif(1, -4,5),
+    runif(1, -4,5), #62
+    runif(1, -4,5),
+    runif(1, -4,5), #65
+    runif(1, -4, 0),
+    runif(1, .1,1),
+    runif(1, 10,15),
+    runif(1, 0,4),
+    runif(1, 0, 3),
+    runif(1, 0,1),
+    runif(105, -3,3))
+inits <- lapply(1:50, function(i) inits())
 source('template.R')
 
 reps <- 4                        # chains/reps to run
@@ -44,6 +75,16 @@ m <- d <- 'hake'
 ad <- .9                                # adapt_delta
 td <- 10
 inits <- NULL
+inits <- lapply(1:reps, function(i)
+  c(runif(1, .1, .4),
+    runif(1, 15, 17),
+    runif(1, .1, 1),
+    runif(24, -4,4),
+    runif(45, -4,4),
+    runif(5, -6,6),
+    runif(1, .03, 2),
+    runif(9, -2, 6),
+    runif(130, -1,1)))
 source('template.R')
 
 reps <- 5                        # chains/reps to run
