@@ -1,11 +1,6 @@
 
 
-library(ggplot2)
-library(adnuts)
-library(snowfall)
-library(shinystan)
-library(plyr)
-source("functions.R")
+source("startup.R")
 iter <- 1000
 warmup <- iter/4
 td <- 12

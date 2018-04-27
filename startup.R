@@ -1,3 +1,9 @@
+library(adnuts)
+library(shinystan)
+library(rstan)
+library(plyr)
+library(snowfall)
+
 plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
   n <- NROW(fit1$dq)
   png(paste0('plots/uncertainties_', fit1$model, '.png'), units='in', width=7,

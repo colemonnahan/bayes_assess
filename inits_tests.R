@@ -1,3 +1,4 @@
+source("startup.R")
 
 # cod
 inits <- lapply(1:reps, function(i)

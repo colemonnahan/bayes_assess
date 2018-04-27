@@ -1,9 +1,4 @@
-library(ggplot2)
-library(adnuts)
-library(snowfall)
-library(shinystan)
-library(plyr)
-source("functions.R")
+
 d <- m
 
 ## Run model with hbf=1 to get right covariance matrix and MLEs for NUTS
