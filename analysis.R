@@ -101,6 +101,18 @@ plot.improvement(canary.rwm, canary2.rwm)
 ## canary.rwm$dq
 ## canary2.rwm$dq
 
+## Look at NUTS fit
+n.slow <- 10
+fit.nuts <- readRDS('results/canary2_fits.RDS')[[1]]
+fit.nuts$ess <- monitor(fit.nuts$samples, warmup=fit.nuts$warmup, print=FALSE)[,'n_eff']
+slow <- names(sort(fit.nuts$ess))[1:n.slow]
+pairs_admb(fit.nuts, diag='acf', pars=slow)
+fit.rwm <- readRDS('results/canary2_fits.RDS')[[2]]
+fit.rwm$ess <- monitor(fit.rwm$samples, warmup=fit.rwm$warmup, print=FALSE)[,'n_eff']
+#slow <- names(sort(fit.rwm$ess))[1:n.slow]
+pairs_admb(fit.rwm, diag='acf', pars=slow)
+
+
 
 n.slow <- 6
 halibut.rwm <- readRDS('results/pilot_rwm_halibut.RDS')
