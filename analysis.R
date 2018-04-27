@@ -149,24 +149,24 @@ dev.off()
 
 
 n.slow <- 16
-snowcrab.rwm <- readRDS('results/pilot_rwm_snowcrab.RDS')
-snowcrab.post <- extract_samples(snowcrab.rwm, inc_lp=TRUE)
-chain <- rep(1:dim(snowcrab.rwm$samples)[2], each=dim(snowcrab.rwm$samples)[1]-snowcrab.rwm$warmup)
-slow <- names(sort(snowcrab.rwm$ess, FALSE))[1:n.slow]
+fit <- readRDS('results/pilot_rwm_snowcrab.RDS')
+fit$ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
+slow <- names(sort(fit$ess, FALSE))[1:n.slow]
 png('plots/pairs.snowcrab.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(snowcrab.post, mle=snowcrab.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
+pairs_admb(fit,  diag='trace', pars=slow)
+dev.off()
 ## I found this manually by looking at par file
 hitbounds <- sort(c(293,309, 310:312, 323, 324,331,6,268, 269, 284, 286, 287))
 png('plots/pairs.snowcrab.hitbounds.png', width=7, height=5, units='in', res=500)
-pairs_admb(snowcrab.post, mle=snowcrab.rwm$mle, chain=chain, diag='trace', pars=hitbounds);dev.off()
+pairs_admb(snowcrab.post, mle=fit$mle, chain=chain, diag='trace', pars=hitbounds);dev.off()
 snowcrab2.rwm <- readRDS('results/pilot_rwm_snowcrab2.RDS')
 snowcrab2.post <- extract_samples(snowcrab2.rwm, TRUE, inc_lp=TRUE)
 chain <- rep(1:dim(snowcrab2.rwm$samples)[2], each=dim(snowcrab2.rwm$samples)[1]-snowcrab2.rwm$warmup)
 slow <- names(sort(snowcrab2.rwm$ess, FALSE))[1:n.slow]
 png('plots/pairs.snowcrab2.slow.png', width=7, height=5, units='in', res=500)
 pairs_admb(snowcrab2.post, mle=snowcrab2.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
-plot.improvement(snowcrab.rwm, snowcrab2.rwm)
-## launch_shinyadmb(snowcrab.rwm)
+plot.improvement(fit, snowcrab2.rwm)
+## launch_shinyadmb(fit)
 ## launch_shinyadmb(snowcrab.nuts)
 
 n.slow <- 15
