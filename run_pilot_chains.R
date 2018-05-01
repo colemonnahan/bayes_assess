@@ -105,11 +105,11 @@ write.table(mle, file='snowcrab/init.pin', row.names=FALSE, col.names=FALSE)
 
 m <- 'snowcrab';
 m <- 'snowcrab2';
-thin <- 1
+thin <- 100
 iter <- 1000
 warmup <- iter/4
 fit.rwm <- sample_admb(m, iter=iter*thin, init=NULL,  thin=thin,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_2015", "F35sd", "OFL_main")
