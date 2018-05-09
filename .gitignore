@@ -79,3 +79,4 @@ admb_models/hake/plots
 cod2.tpl
 *_chain_*
 posterior.csv
+results/*.RDS
