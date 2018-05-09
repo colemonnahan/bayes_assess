@@ -126,7 +126,7 @@
  0 	2 	0 	1 	0 	50 	-50    	# Autocorrelation in rec devs
 0 # index of environmental variable to be used
 0 # env target parameter: 1=rec devs, 2=R0, 3=steepness
-1 # rec dev type: 0=none, 1=devvector (zero-sum), 2=simple deviations (no sum constraint)
+2 # rec dev type: 0=none, 1=devvector (zero-sum), 2=simple deviations (no sum constraint)
 
 # Recruitment residuals
 1960	# Start year recruitment residuals
