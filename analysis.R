@@ -1,10 +1,6 @@
 ## This file is where I do the analysis and explore the MCMC fits from the
 ## already run models
-library(adnuts)
-library(shinystan)
-library(rstan)
-library(plyr)
-source("functions.R")
+source("startup.R")
 
 n.slow <- 5 # number of parameters to show in pairs plot
 cod.rwm <- readRDS('results/pilot_rwm_cod.RDS')

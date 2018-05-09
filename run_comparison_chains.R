@@ -1,8 +1,7 @@
-## devtools::install('C:/Users/Cole/adnuts')
-library(shinystan)
-library(rstan)
-library(adnuts)
-library(snowfall)
+## This file runs longer chains for comparing efficiency (speed) between
+## RWM and NUTS.
+source("startup.R")
+
 recompile <- TRUE # recomile .tpl files?
 
 ## I'm using a smaller warmup since we're not using mass matrix adaptation,
