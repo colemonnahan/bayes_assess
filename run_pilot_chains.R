@@ -1,114 +1,67 @@
 ## Run pilot chains for individual models using RWM, and then the "fixed"
-## version of the model
-## devtools::install('C:/Users/Cole/adnuts')
-library(shinystan)
+## version of the model. Each model saves a few key management parameters
+## in MLE and MCMC estimates, for both versions of models if they exist.
+
+## This file assumes the models have already been run and produced .hes
+## files (which contain the MLEs from which the chains start). Note that SS
+## turns off the bias adjustment for recdevs during MCMC which can cause
+## big problems if starting from the MLE. So make sure to optimize the
+## model with the -mcmc flag so that SS turns it off for both.
+
 library(adnuts)
 library(snowfall)
 library(r4ss)
 reps <- 5 # chains to run in parallel
+set.seed(352)
+seeds <- sample(1:1e4, size=reps)
 
-sfStop()
-d <- m <- 'cod'
-d <- m <- 'cod2'
-thin <- 100
+m <- 'hake'
+## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+thin <- 10
 iter <- 1000
 warmup <- iter/4
-inits <- NULL
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-fit.rwm <-
-  sample_admb(m, iter=iter*thin, init=inits, thin=thin, mceval=TRUE,
-              parallel=TRUE, chains=reps, warmup=warmup*thin,
-              dir=d, cores=reps, algorithm='RWM')
-## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_MSY", "SPB_50", "Bratio_50")
-fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]] [,dq.names]
-xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
-## Get estimates for derived quantitiesd
-dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
-names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
-fit.rwm$dq <- dq
-saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-
-
-d <- m <- 'hake'
-thin <- 1000
-iter <- 1000
-warmup <- iter/4
-inits <- NULL
-sfStop()
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-fit.rwm <- sample_admb(m, iter=iter*thin, init=inits,  thin=thin,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              dir=d, cores=reps, algorithm='RWM')
-## Get posterior draws of dqs to cbind onto parameter draws later
+fit.rwm <- sample_admb(model=m, iter=iter*thin, thin=thin, seeds=seeds,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+              path=m, cores=reps, algorithm='RWM')
+## Get posterior draws of dqs to cbind onto parameter draws later. Need to
+## rerun model so r4ss works right
+setwd(m);system(m); system(paste(m, '-mceval')); setwd('..')
 dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-xx <- SS_output(m, model=m, verbose=F, covar=T)
+xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
 ## Get estimates for derived quantitiesd
 dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
-
-sfStop()
-d <- m <- 'tanner2'
-d <- m <- 'tanner'
-thin <- 100
+m <- 'halibut'
+## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+thin <- 10
 iter <- 1000
 warmup <- iter/4
-seeds <- c(3697251, 8281044, 9006332, 3354978, 5079273)
-inits <- NULL
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
-             parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              dir=d, cores=reps, algorithm='RWM', seeds=seeds)
-## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_2015", "depletion_2015", "OFL_main")
-post <- read.csv(file.path(m, 'posterior.csv'), header=FALSE)
-names(post) <- dq.names
-fit.rwm$dq.post <- post
-## Get estimates for derived quantitiesd
-ind <- which(fit.rwm$mle$names.all %in% dq.names)
-fit.rwm$dq <- data.frame(dq=fit.rwm$mle$names.all[ind], mle=fit.rwm$mle$est[ind], se=fit.rwm$mle$se[ind])
-saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-
-
-sfStop()
-d <- m <- 'halibut'
-d <- m <- 'halibut2'
-d <- m <- 'halibut3'
-thin <- 100
-iter <- 1000
-warmup <- iter/4
-mle <- r4ss::read.admbFit(paste0(d,'/',m))
-N <- mle$nopar
-inits <- lapply(1:reps, function(i) mle$est[1:N])
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              dir=d, cores=reps, algorithm='RWM')
-## Get posterior draws of dqs to cbind onto parameter draws later
+fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+              path=m, cores=reps, algorithm='RWM')
+## Get posterior draws of dqs to cbind onto parameter draws later. Need to
+## rerun model so r4ss works right
+setwd(m);system(m); system(paste(m, '-mceval')); setwd('..')
 dq.names <- c("SPB_2010", "SPB_2015", "SPB_2000")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-xx <- SS_output(m, model=m, verbose=TRUE, covar=T)
+xx <- SS_output(m, model=m, verbose=FALSE, covar=TRUE)
 ## Get estimates for derived quantitiesd
 dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-write.table(mle, file='snowcrab/init.pin', row.names=FALSE, col.names=FALSE)
+
 
 m <- 'snowcrab';
-m <- 'snowcrab2';
-thin <- 100
+## setwd(m); system(m); setwd('..')
+thin <- 10
 iter <- 1000
 warmup <- iter/4
-fit.rwm <- sample_admb(m, iter=iter*thin, init=NULL,  thin=thin,
+fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
               parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
@@ -119,27 +72,21 @@ xx <- R2admb::read_admb('snowcrab/snowcrab')
 fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
-sfStop()
-d <- m <- 'canary'
-d <- m <- 'canary2'
-thin <- 100
+m <- 'canary'
+## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+thin <- 10
 iter <- 1000
 warmup <- iter/4
-inits <- NULL
-sfInit(parallel=TRUE, cpus=reps)
-sfExportAll()
-fit.rwm <- sample_admb(m, iter=iter*thin, init=inits, thin=thin,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              dir=d, cores=reps, algorithm='RWM')
+fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+              path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
+setwd(m);system(m); system(paste(m, '-mceval')); setwd('..')
 dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-xx <- SS_output(m, model=m, verbose=TRUE, covar=T, ncols=500)
+xx <- SS_output(m, model=m, verbose=FALSE, covar=T, ncols=500)
 ## Get estimates for derived quantitiesd
 dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-
-launch_shinyadmb(fit.rwm)
-
