@@ -14,25 +14,25 @@ recompile <- TRUE # recomile .tpl files?
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/10)
 m <- 'halibut3'
-ad <- .8; td <- 12
+ad <- .9; td <- 12
 inits <- NULL
 source('template.R')
 
 reps <- 5                        # chains/reps to run
-iter <- 2000; warmup <- (iter/10)
+iter <- 4000; warmup <- (iter/10)
 m <- 'hake'
-ad <- .8; td <- 12
+ad <- .98; td <- 12
 inits <- NULL
 source('template.R')
 
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/10)
 m <- 'canary2'
-ad <- .8; td <- 12
+ad <- .9; td <- 12
 source('template.R')
 
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/10)
 m <- 'tanner2'
-ad <- .8; td <- 10
+ad <- .9; td <- 10
 source('template.R')
