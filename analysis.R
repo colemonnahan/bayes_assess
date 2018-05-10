@@ -1,30 +1,7 @@
 ## This file is where I do the analysis and explore the MCMC fits from the
 ## already run models
 source("startup.R")
-
-n.slow <- 5 # number of parameters to show in pairs plot
-cod.rwm <- readRDS('results/pilot_rwm_cod.RDS')
-cod.post <- extract_samples(cod.rwm, inc_lp=TRUE)
-cod.post <- cbind(cod.post, cod.rwm$dq.post)
-mle <- cod.rwm$mle
-## Run mcsave and get generated quantities
-chain <- rep(1:dim(cod.rwm$samples)[2], each=dim(cod.rwm$samples)[1]-cod.rwm$warmup)
-slow <- c(names(sort(cod.rwm$ess))[1:n.slow], names(cod.rwm$dq.post), 'lp__')
-png('plots/pairs.cod.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(cod.post, mle=mle, chains=chain, pars=slow, diag='trace')
-dev.off()
-## Look at which parameter MLE vs posterior variances are different
-var.post <- apply(extract_samples(cod.rwm),2, var)
-var.mle <- diag(cod.rwm$mle$cov)[1:cod.rwm$mle$nopar]
-vars <- data.frame(post=var.post, mle=var.mle)
-g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
-  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
-ggsave(paste0('plots/vars.', m, '.png'), g, width=7, height=5)
-## Compare estimates of DQs
-xlims <- list(c(0, 2e9), c(0, 1.5e09))
-ylims <- list(c(0, 2.5e-9), c(0, 3.5e-08))
-plot.uncertainties(cod.rwm, xlims=xlims, ylims=ylims)
-
+library(adnuts)
 
 hake.rwm <- readRDS('results/pilot_rwm_hake.RDS')
 hake.post <- extract_samples(hake.rwm, inc_lp=TRUE)
