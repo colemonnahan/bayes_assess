@@ -22,7 +22,7 @@ plot.sds <- function(fit){
   sd.mle <- fit$mle$se[1:fit$mle$nopar]
   sds <- data.frame(post=sd.post, mle=sd.mle)
   g <- ggplot(sds, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
-    geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
+    geom_abline(slope=1) + xlab("log10 MLE SE") + ylab("log10 Posterior SD")
   ggsave(paste0('plots/sds.', m, '.png'), g, width=7, height=5)
 }
 
@@ -35,10 +35,16 @@ plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
     ii <- fit1$dq$dq[i]
     xx <- fit1$dq.post[,ii]
     hist(xx, freq=FALSE, xlim=xlims[[i]], ylim=ylims[[i]], col=gray(.8),
-  border=gray(.8), breaks=50, xlab=fit1$dq$dq[i], main=NA, ylab=NA)
+  border=gray(.8), breaks=50, xlab=ii, main=NA, ylab=NA)
     abline(v=mean(xx), col=2)
-    lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=10000), y=dnorm(x, fit1$dq[i, 'mle'], fit1$dq[i,'se']))
+    lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
+          y=dnorm(x, fit1$dq[i, 'mle'], fit1$dq[i,'se']))
     abline(v=fit1$dq[i, 'mle'], col=1)
+    if(!is.null(fit2)){
+      lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
+            y=dnorm(x, fit2$dq[i, 'mle'], fit2$dq[i,'se']), col='blue')
+      abline(v=fit2$dq[i, 'mle'], col='blue')
+    }
   }
   dev.off()
 }

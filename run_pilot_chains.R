@@ -50,7 +50,7 @@ dq.names <- c("SPB_2010", "SPB_2015", "SPB_2000")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
 xx <- SS_output(m, model=m, verbose=FALSE, covar=TRUE)
 ## Get estimates for derived quantitiesd
-dq <- subset(xx$derived_quants, Label %in% dq.names)[,1:3]
+dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))

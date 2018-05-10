@@ -2,7 +2,7 @@
 ## already run models
 source("startup.R")
 
-## The slowest mixing parameters
+### Make plots for each model to examine what's going on.
 hake <- readRDS('results/pilot_rwm_hake.RDS')
 plot.slow(hake)
 ## Look at which parameter MLE vs posterior variances are different
@@ -12,52 +12,43 @@ xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
 ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
 plot.uncertainties(hake, xlims=xlims, ylims=ylims)
 
-n.slow <- 10
-canary.rwm <- readRDS('results/pilot_rwm_canary.RDS')
-canary.post <- extract_samples(canary.rwm, inc_lp=TRUE)
-#canary.post <- cbind(canary.post[-1,], canary.rwm$dq.post)
-mle <- canary.rwm$mle
-## Run mcsave and get generated quantities
-chain <- rep(1:dim(canary.rwm$samples)[2], each=dim(canary.rwm$samples)[1]-canary.rwm$warmup)
-slow <- c(names(sort(canary.rwm$ess))[1:n.slow])
-png('plots/pairs.canary.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(canary.post, mle=mle, chains=chain, pars=slow, diag='acf')
-dev.off()
-## Look at which parameter MLE vs posterior variances are different
-var.post <- apply(extract_samples(canary.rwm),2, var)
-var.mle <- canary.rwm$mle$se[1:canary.rwm$mle$nopar]
-vars <- data.frame(post=var.post, mle=var.mle)
-g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
-  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
-ggsave(paste0('plots/vars.canary.png'), g, width=7, height=5)
-## ## Compare estimates of DQs
-## xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
-## ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
-## plot.uncertainties(canary.rwm, xlims=xlims, ylims=ylims)
-canary2.rwm <- readRDS('results/pilot_rwm_canary2.RDS')
-canary2.post <- extract_samples(canary2.rwm, inc_lp=F)
-#canary2.post <- cbind(canary2.post[-1,], canary2.rwm$dq.post)
-mle <- canary2.rwm$mle
-## Run mcsave and get generated quantities
-chain <- rep(1:dim(canary2.rwm$samples)[2], each=dim(canary2.rwm$samples)[1]-canary2.rwm$warmup)
-slow <- c(names(sort(canary2.rwm$ess))[1:n.slow])
-png('plots/pairs.canary2.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(canary2.post, mle=mle, chains=chain, pars=slow, diag='trace')
-dev.off()
-## Look at which parameter MLE vs posterior variances are different
-var.post <- apply(extract_samples(canary2.rwm),2, sd)
-var.mle <- canary2.rwm$mle$se[1:canary2.rwm$mle$nopar]
-vars <- data.frame(post=var.post, mle=var.mle)
-g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
-  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
-ggsave(paste0('plots/vars.canary2.png'), g, width=7, height=5)
-plot.improvement(canary.rwm, canary2.rwm)
-## ## Compare estimates of DQs
-## canary.rwm$dq
-## canary2.rwm$dq
+## For models which need regularization (all but hake), only make the SD
+## and management plots for the regularized version
+canary <- readRDS('results/pilot_rwm_canary.RDS')
+plot.slow(canary)
+canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
+plot.slow(canary2)
+plot.sds(canary2)
+xlims <- list(c(0, 1.5), c(2000, 5000), c(0, 3500))
+ylims <- list(c(0, 5), c(0, 0.002),c(0, 2e-03))
+plot.uncertainties(canary, canary2, xlims=xlims, ylims=ylims)
 
-## Look at NUTS fit
+halibut <- readRDS('results/pilot_rwm_halibut.RDS')
+plot.slow(halibut)
+halibut2 <- readRDS('results/pilot_rwm_halibut2.RDS')
+plot.slow(halibut2)
+plot.sds(halibut2)
+xlims <- list(c(300000, 600000), c(150000, 220000), c(150000, 220000))
+ylims <- list(c(0, 1.5e-5), c(0, 1e-4),c(0, 1e-4))
+plot.uncertainties(halibut, halibut2, xlims=xlims, ylims=ylims)
+
+snowcrab <- readRDS('results/pilot_rwm_snowcrab.RDS')
+plot.slow(snowcrab)
+snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+plot.slow(snowcrab2)
+plot.sds(snowcrab2)
+xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
+ylims <- list(c(0, .03), c(0, 4),c(0, .2))
+plot.uncertainties(snowcrab, snowcrab2, xlims=xlims, ylims=ylims)
+
+### End of looking at the pilot chains
+
+
+### Examine other things ( in development)
+
+## maybe look at NUTS vs RWM from the comparison chains?
 n.slow <- 10
+## Look at NUTS fit
 fit.nuts <- readRDS('results/canary2_fits.RDS')[[1]]
 fit.nuts$ess <- monitor(fit.nuts$samples, warmup=fit.nuts$warmup, print=FALSE)[,'n_eff']
 slow <- names(sort(fit.nuts$ess))[1:n.slow]
@@ -67,10 +58,13 @@ fit.rwm$ess <- monitor(fit.rwm$samples, warmup=fit.rwm$warmup, print=FALSE)[,'n_
 #slow <- names(sort(fit.rwm$ess))[1:n.slow]
 pairs_admb(fit.rwm, diag='acf', pars=slow)
 
-
-
 n.slow <- 6
-halibut.rwm <- readRDS('results/pilot_rwm_halibut.RDS')
+
+halibut <- readRDS('results/pilot_rwm_halibut.RDS')
+plot.slow(halibut)
+
+## This is old  code to look at specfic halibut parameters, which now can
+## be down with plot.slow.
 halibut.post <- extract_samples(halibut.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut.rwm$ess))[1:n.slow]
 png('plots/pairs.halibut.rwm.png', width=7, height=5, units='in', res=500)
@@ -136,31 +130,8 @@ plot.improvement(fit, snowcrab2.rwm)
 ## launch_shinyadmb(fit)
 ## launch_shinyadmb(snowcrab.nuts)
 
-n.slow <- 15
-tanner.rwm <- readRDS('results/pilot_rwm_tanner.RDS')
-tanner.post <- extract_samples(tanner.rwm, inc_lp=TRUE)
-chain <- rep(1:dim(tanner.rwm$samples)[2], each=dim(tanner.rwm$samples)[1]-tanner.rwm$warmup)
-slow <- names(sort(tanner.rwm$ess, FALSE))[1:n.slow]
-png('plots/pairs.tanner.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
-## I found this manually by looking at par file
-hitbounds <- c(1,7,33, 67,70)
-png('plots/pairs.tanner.rwm.hitbounds.png', width=7, height=5, units='in', res=500)
-pairs_admb(tanner.post, mle=tanner.rwm$mle, chain=chain, diag='trace',
-           pars=hitbounds)
-tanner2.rwm <- readRDS('results/pilot_rwm_tanner2.RDS')
-tanner2.post <- extract_samples(tanner2.rwm, inc_lp=TRUE)
-chain <- rep(1:dim(tanner2.rwm$samples)[2], each=dim(tanner2.rwm$samples)[1]-tanner2.rwm$warmup)
-slow <- names(sort(tanner2.rwm$ess, FALSE))[1:n.slow]
-png('plots/pairs.tanner2.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(tanner2.post, mle=tanner2.rwm$mle, chain=chain, diag='trace', pars=slow);dev.off()
-plot.improvement(tanner.rwm, tanner2.rwm)
 
 
-## Look at which parameter MLE vs posterior variances are different
-var.poster <- apply(extract_samples(snowcrab.rwm),2, var)
-var.mle <- diag(snowcrab.rwm$mle$cov)[1:snowcrab.rwm$mle$nopar]
-plot(log10(var.mle), log10(var.poster)); abline(0,1)
 
 all.fits <- list(cod.rwm, cod.nuts, halibut.rwm, halibut.nuts, hake.rwm,
                  hake.nuts)
