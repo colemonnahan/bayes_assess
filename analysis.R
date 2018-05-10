@@ -1,34 +1,16 @@
 ## This file is where I do the analysis and explore the MCMC fits from the
 ## already run models
 source("startup.R")
-library(adnuts)
 
-hake.rwm <- readRDS('results/pilot_rwm_hake.RDS')
-hake.post <- extract_samples(hake.rwm, inc_lp=TRUE)
-hake.post <- cbind(hake.post, hake.rwm$dq.post)
-mle <- hake.rwm$mle
-## Run mcsave and get generated quantities
-chain <- rep(1:dim(hake.rwm$samples)[2], each=dim(hake.rwm$samples)[1]-hake.rwm$warmup)
-slow <- c(names(sort(hake.rwm$ess))[1:n.slow], names(hake.rwm$dq.post), 'lp__')
-png('plots/pairs.hake.slow.png', width=7, height=5, units='in', res=500)
-pairs_admb(hake.post, mle=mle, chains=chain, pars=slow, diag='acf')
-dev.off()
+## The slowest mixing parameters
+hake <- readRDS('results/pilot_rwm_hake.RDS')
+plot.slow(hake)
 ## Look at which parameter MLE vs posterior variances are different
-var.post <- apply(extract_samples(hake.rwm),2, var)
-var.mle <- diag(hake.rwm$mle$cov)[1:hake.rwm$mle$nopar]
-vars <- data.frame(post=var.post, mle=var.mle)
-g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
-  geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
-ggsave(paste0('plots/vars.', m, '.png'), g, width=7, height=5)
+plot.sds(hake)
 ## Compare estimates of DQs
 xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
 ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
-plot.uncertainties(hake.rwm, xlims=xlims, ylims=ylims)
-hake.nuts <- readRDS('results/pilot_nuts_hake.RDS')
-divs <- extract_sampler_params(hake.nuts)$divergent__
-hake.post <- extract_samples(hake.nuts, inc_lp=TRUE)
-pairs_admb(hake.post, mle=mle, chains=chain, pars=slow, diag='acf', divergences=divs)
-plot.ess(rwm=hake.rwm, nuts=hake.nuts)
+plot.uncertainties(hake, xlims=xlims, ylims=ylims)
 
 n.slow <- 10
 canary.rwm <- readRDS('results/pilot_rwm_canary.RDS')

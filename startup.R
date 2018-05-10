@@ -4,6 +4,28 @@ library(rstan)
 library(plyr)
 library(snowfall)
 
+plot.slow <- function(fit, n.slow=10, pars=NULL){
+  if(is.null(pars)){
+    ## if pars nott specified use slowest mixing parameters
+    n.slow <- 10
+    ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
+    pars <- names(sort(ess))[1:n.slow]
+  }
+  png(paste0('plots/pairs.', fit$model,'.fit.slow.png'), width=7, height=5, units='in', res=500)
+  pairs_admb(fit, pars=pars, diag='trace')
+  dev.off()
+}
+
+plot.sds <- function(fit){
+  m <- fit$model
+  sd.post <- apply(extract_samples(fit),2, sd)
+  sd.mle <- fit$mle$se[1:fit$mle$nopar]
+  sds <- data.frame(post=sd.post, mle=sd.mle)
+  g <- ggplot(sds, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
+    geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
+  ggsave(paste0('plots/sds.', m, '.png'), g, width=7, height=5)
+}
+
 plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
   n <- NROW(fit1$dq)
   png(paste0('plots/uncertainties_', fit1$model, '.png'), units='in', width=7,
