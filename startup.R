@@ -30,12 +30,12 @@ plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
   n <- NROW(fit1$dq)
   png(paste0('plots/uncertainties_', fit1$model, '.png'), units='in', width=7,
              height=3, res=300)
-  par(mfrow=c(1,n), mar=c(5,1,1,1 ), oma=c(0,0, 0, 0))
+  par(mfrow=c(1,n), mar=c(5,2,1,1 ), oma=c(0,0, 0, 0))
   for(i in 1:n){
-    ii <- fit1$dq$dq[i]
+    ii <- as.character(fit1$dq$dq[i])
     xx <- fit1$dq.post[,ii]
     hist(xx, freq=FALSE, xlim=xlims[[i]], ylim=ylims[[i]], col=gray(.8),
-  border=gray(.8), breaks=50, xlab=ii, main=NA, ylab=NA)
+         border=gray(.8), breaks=50, xlab=ii, main=NA, ylab=NA)
     abline(v=mean(xx), col=2)
     lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
           y=dnorm(x, fit1$dq[i, 'mle'], fit1$dq[i,'se']))
