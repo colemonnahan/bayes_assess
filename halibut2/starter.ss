@@ -17,7 +17,7 @@ halibut2.ctl
 0 		# Use "soft bounds" to aid convergence (0,1)
 0 		# Number datafiles to produce: 1st is input, 2nd is estimates, 3rd and higher are bootstrap
 50     	# Turn off estimation for parameters entering after this phase
-1		# MCeval burn interval
+0		# MCeval burn interval
 1 		# MCeval thin interval
 0 		# Jitter initial parm value by this fraction
 -1 		# min yr for sdreport outputs (-1 for styr)
