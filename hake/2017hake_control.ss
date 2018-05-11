@@ -59,7 +59,7 @@
  0      2       0       1       -1      99      -50     # Autocorrelation in rec devs
 0 # index of environmental variable to be used
 0 # SR environmental target: 0=none;1=devs;_2=R0;_3=steepness
-1 # Recruitment deviation type: 0=none; 1=devvector; 2=simple deviations
+2 # Recruitment deviation type: 0=none; 1=devvector; 2=simple deviations
 
 # Recruitment deviations
 1970    # Start year standard recruitment devs
