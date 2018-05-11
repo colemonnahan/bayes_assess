@@ -4,16 +4,18 @@ library(rstan)
 library(plyr)
 library(snowfall)
 
-plot.slow <- function(fit, n.slow=10, pars=NULL){
+plot.slow <- function(fit, n.slow=10, pars=NULL, save=TRUE){
   if(is.null(pars)){
     ## if pars nott specified use slowest mixing parameters
     n.slow <- 10
     ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
     pars <- names(sort(ess))[1:n.slow]
   }
-  png(paste0('plots/pairs.', fit$model,'.fit.slow.png'), width=7, height=5, units='in', res=500)
+  if(save)
+    png(paste0('plots/pairs.', fit$model,'.fit.slow.png'), width=7, height=5, units='in', res=500)
   pairs_admb(fit, pars=pars, diag='trace')
-  dev.off()
+  if(save)
+    dev.off()
 }
 
 plot.sds <- function(fit){

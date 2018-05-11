@@ -14,15 +14,6 @@ plot.uncertainties(hake, xlims=xlims, ylims=ylims)
 
 ## For models which need regularization (all but hake), only make the SD
 ## and management plots for the regularized version
-canary <- readRDS('results/pilot_rwm_canary.RDS')
-plot.slow(canary)
-canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
-plot.slow(canary2)
-plot.sds(canary2)
-xlims <- list(c(0, 1.5), c(2000, 5000), c(0, 3500))
-ylims <- list(c(0, 5), c(0, 0.002),c(0, 2e-03))
-plot.uncertainties(canary, canary2, xlims=xlims, ylims=ylims)
-
 halibut <- readRDS('results/pilot_rwm_halibut.RDS')
 plot.slow(halibut)
 halibut2 <- readRDS('results/pilot_rwm_halibut2.RDS')
@@ -30,22 +21,80 @@ plot.slow(halibut2)
 plot.sds(halibut2)
 xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
 ylims <- list(c(0, 2.5e-5), c(0, 5e-5),c(0, 4e-5))
-plot.uncertainties(halibut2, halibut, xlims=xlims, ylims=ylims)
+plot.uncertainties(regularized=halibut2, original=halibut, xlims=xlims, ylims=ylims)
 plot.improvement(halibut, halibut2)
+
+
+canary <- readRDS('results/pilot_rwm_canary.RDS')
+plot.slow(canary)
+canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
+plot.slow(canary2)
+plot.sds(canary2)
+xlims <- list(c(0, 1.5), c(2000, 5000), c(0, 3500))
+ylims <- list(c(0, 5), c(0, 0.002),c(0, 2e-03))
+plot.uncertainties(original=canary, regularized=canary2,
+                   xlims=xlims, ylims=ylims)
+plot.improvement(canary, canary2)
 
 snowcrab <- readRDS('results/pilot_rwm_snowcrab.RDS')
 plot.slow(snowcrab)
-snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+snowcrab2 <- snowcrab
+##snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
 plot.slow(snowcrab2)
 plot.sds(snowcrab2)
 xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
 ylims <- list(c(0, .06), c(0, 4),c(0, .2))
 plot.uncertainties(snowcrab, snowcrab2, xlims=xlims, ylims=ylims)
+plot.improvement(snowcrab, snowcrab2)
 
 ### End of looking at the pilot chains
 
 
 ### Examine other things ( in development)
+## get all the single variables, I manually found the bad ones
+## ind <- grep('\\[', xx, invert=TRUE)
+## plot.slow(snowcrab, pars=pars, save=FALSE)
+## pars <- xx[ind[c(1,2,3,4, 12,13, 29,34,37)]]
+xx <- dimnames(snowcrab$samples)[3][[1]]
+post <- extract_samples(snowcrab)
+plot(post$Fem_F_prop_constant)
+
+pars <- c("af", "am", "bf", "bm", "log_avg_fmortt", "Fem_F_prop_constant",
+"srv3_q_f", "srvind_sel95_f", "srv10ind_q_f")
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+
+pars <- grep('matestfe', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('mateste', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+
+pars <- grep('recdev2', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('rec_devf', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('fmort_dev', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('fmortdf_dev', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+pars <- grep('fmortt_dev_era1', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('fmortt_dev_era2', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+pars <- grep('log_sel50_dev_mo', x=xx)
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+pars <- grep('selsmo10ind', x=xx)[15:22]
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- grep('selsmo09ind', x=xx)[15:22]
+plot.slow(snowcrab, pars=pars, save=FALSE)
+pars <- xx[1:35]
+plot.slow(snowcrab, pars=pars, save=FALSE)
+
+
 
 ## maybe look at NUTS vs RWM from the comparison chains?
 n.slow <- 10
