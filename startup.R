@@ -26,7 +26,8 @@ plot.sds <- function(fit){
   ggsave(paste0('plots/sds.', m, '.png'), g, width=7, height=5)
 }
 
-plot.uncertainties <- function(fit1, fit2=NULL, xlims, ylims){
+plot.uncertainties <- function(regularized, original=NULL, xlims, ylims){
+  fit2 <- original; fit1 <- regularized
   n <- NROW(fit1$dq)
   png(paste0('plots/uncertainties_', fit1$model, '.png'), units='in', width=7,
              height=3, res=300)
@@ -72,9 +73,11 @@ plot.improvement <- function(fit1, fit2){
   ## levels(xx$model) <- c("Original", "Fixed")
   ## ggplot(xx, aes(x=model, y=ess)) +geom_violin() + scale_y_log10()
   library(vioplot)
+  x <- monitor(fit1$samples, print=FALSE)[,'n_eff'];
+  y <- monitor(fit2$samples, print=FALSE)[,'n_eff'];
   png(paste0('plots/ess_improvement_',fit1$model, '.png'), width=3, height=5,
       units='in', res=500)
-  vioplot(log10(fit1$ess), log10(fit2$ess), names=c("Original", "Fixed"))
+  vioplot(log10(x), log10(y), names=c("Original", "Fixed"))
   mtext(fit1$model, line=1, cex=1.5)
   mtext("log10(ESS)", side=2, line=2.5, cex=1.25)
   dev.off()

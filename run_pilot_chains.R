@@ -36,7 +36,8 @@ fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'halibut'
- setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+m <- 'halibut2'
+setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
 thin <- 10
 iter <- 2000
 warmup <- iter/4
@@ -72,6 +73,7 @@ fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'canary'
+m <- 'canary2'
 ## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
 thin <- 10
 iter <- 2000
