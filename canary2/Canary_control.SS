@@ -121,14 +121,13 @@
 # bnd	bnd	value	mean	type	SD	phase
  7	11	8.5	8.5	-1	50	1	# Ln(R0)
  0.21	0.99	0.773	0.4	-1	50	-6	# Steepness
-# Cole tried lowering this from 0.5 to 0.4
- 0	2	0.4	0.4	0	50	-50	# Sigma R
+ 0	2	0.5	0.4	0	50	-50	# Sigma R
  -5	5	0	0	0	50	-50	# Environmental link coefficient
  -5	5	0	0	0	50	-50	# Initial equilibrium offset to virgin
  0 	2 	0 	1 	0 	50 	-50    	# Autocorrelation in rec devs
 0 # index of environmental variable to be used
 0 # env target parameter: 1=rec devs, 2=R0, 3=steepness
-1 # rec dev type: 0=none, 1=devvector (zero-sum), 2=simple deviations (no sum constraint)
+2 # rec dev type: 0=none, 1=devvector (zero-sum), 2=simple deviations (no sum constraint)
 
 # Recruitment residuals
 1960	# Start year recruitment residuals
