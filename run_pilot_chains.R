@@ -57,6 +57,7 @@ fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'snowcrab';
+m <- 'snowcrab2';
 ## setwd(m); system(m); setwd('..')
 thin <- 10
 iter <- 2000
