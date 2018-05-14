@@ -4,12 +4,12 @@ library(rstan)
 library(plyr)
 library(snowfall)
 
-plot.slow <- function(fit, n.slow=10, pars=NULL, save=TRUE){
+plot.slow <- function(fit, n.slow=10, pars=NULL, fast=FALSE, save=TRUE){
   if(is.null(pars)){
     ## if pars nott specified use slowest mixing parameters
     n.slow <- 10
     ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
-    pars <- names(sort(ess))[1:n.slow]
+    pars <- names(sort(ess, decreasing=fast))[1:n.slow]
   }
   if(save)
     png(paste0('plots/pairs.', fit$model,'.fit.slow.png'), width=7, height=5, units='in', res=500)
