@@ -11,6 +11,7 @@ plot.sds(hake)
 xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
 ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
 plot.uncertainties(hake, xlims=xlims, ylims=ylims)
+plot.marginal(hake, save=TRUE)
 
 ## For models which need regularization (all but hake), only make the SD
 ## and management plots for the regularized version
@@ -23,10 +24,11 @@ xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
 ylims <- list(c(0, 2.5e-5), c(0, 5e-5),c(0, 4e-5))
 plot.uncertainties(regularized=halibut2, original=halibut, xlims=xlims, ylims=ylims)
 plot.improvement(halibut, halibut2)
-
+plot.marginal(halibut2, save=TRUE)
 
 canary <- readRDS('results/pilot_rwm_canary.RDS')
 plot.slow(canary)
+plot.marginal(canary, save=TRUE)
 canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
 plot.slow(canary2)
 plot.sds(canary2)

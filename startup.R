@@ -4,6 +4,36 @@ library(rstan)
 library(plyr)
 library(snowfall)
 
+plot.marginal <- function(fit, nrow=5, ncol=5, save=FALSE){
+  post <- extract_samples(fit=fit)
+  stds <- fit$mle$se[1:ncol(post)]
+  mles <- fit$mle$est[1:ncol(post)]
+  par.names <- names(post)
+  names(mles) <- names(stds) <- par.names
+  if(save)
+    ## png(paste0('plots/marginal_fits_', fit$model,'_%02d.png'), units='in', res=500,
+    ##     width=7,height=5)
+    pdf(paste0('plots/marginal_fits_', fit$model,'.pdf'),
+        width=7,height=5)
+  par(mfrow=c(nrow,ncol), mar=c(1.5,0,0,0), mgp=c(1,.01, 0), tck=-.01)
+  for(pp in par.names){
+    temp <- hist(post[,pp], plot=FALSE)
+    std <- stds[pp]
+    est <- mles[pp]
+    x <- seq(-3*std+est, to=3*std+est, len=1000)
+    y <- dnorm(x, mean=est, sd=std)
+    xlim <- range(c(x, temp$mids))
+    ylim <- c(0, 1.3*max(c(y, temp$density)))
+    plot(x,y, xlim=xlim, ylim=ylim, type='n', ann=FALSE, axes=FALSE)
+    hist(post[,pp], col=gray(.8), plot=TRUE, add=TRUE, freq=FALSE)
+    lines(x,y, lwd=2, col='red')
+    axis(1, col=gray(.5))
+    box(col=gray(.5))
+    mtext(pp, line=-1.5)
+  }
+  if(save) dev.off()
+}
+
 plot.slow <- function(fit, n.slow=10, pars=NULL, fast=FALSE, save=TRUE){
   if(is.null(pars)){
     ## if pars nott specified use slowest mixing parameters
