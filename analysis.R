@@ -18,7 +18,6 @@ plot.marginal(hake, save=TRUE)
 halibut <- readRDS('results/pilot_rwm_halibut.RDS')
 plot.slow(halibut)
 halibut2 <- readRDS('results/pilot_rwm_halibut2.RDS')
-plot.slow(halibut2)
 plot.sds(halibut2)
 xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
 ylims <- list(c(0, 2.5e-5), c(0, 5e-5),c(0, 4e-5))
@@ -40,8 +39,7 @@ plot.improvement(canary, canary2)
 
 snowcrab <- readRDS('results/pilot_rwm_snowcrab.RDS')
 plot.slow(snowcrab)
-snowcrab2 <- snowcrab
-##snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
 plot.slow(snowcrab2)
 plot.sds(snowcrab2)
 xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
@@ -61,10 +59,11 @@ xx <- dimnames(snowcrab$samples)[3][[1]]
 post <- extract_samples(snowcrab)
 plot(post$Fem_F_prop_constant)
 
-pars <- c("af", "am", "bf", "bm", "log_avg_fmortt", "Fem_F_prop_constant",
+plot.slow(snowcrab2, fast=FALSE, save=FALSE)
+pars <- c("af", "am", "bf", "bm", "log_avg_fmortdf", "log_avg_fmortf", "Fem_F_prop_constant",
 "srv3_q_f", "srvind_sel95_f", "srv10ind_q_f")
 plot.slow(snowcrab, pars=pars, save=FALSE)
-
+plot.slow(snowcrab2, pars=pars, save=FALSE)
 
 pars <- grep('matestfe', x=xx)
 plot.slow(snowcrab, pars=pars, save=FALSE)
@@ -78,7 +77,7 @@ pars <- grep('rec_devf', x=xx)
 plot.slow(snowcrab, pars=pars, save=FALSE)
 pars <- grep('fmort_dev', x=xx)
 plot.slow(snowcrab, pars=pars, save=FALSE)
-pars <- grep('fmortdf_dev', x=xx)
+pars <- grep('fmortdf_dev', x=xx)[1:15]
 plot.slow(snowcrab, pars=pars, save=FALSE)
 
 pars <- grep('fmortt_dev_era1', x=xx)
