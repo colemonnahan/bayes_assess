@@ -91,7 +91,7 @@
 
 # Recruitment deviation section
 2		# Deviation type do_recdev:  0=none; 1=devvector; 2=simple deviations
-1987 	# Start main rec devs
+1977 	# Start main rec devs
 2007 	# End main rec devs
 2		# Phase for main rec devs
 1		# Read advanced options
