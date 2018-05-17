@@ -251,10 +251,10 @@
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
   2	    8	 3.6354	10	   -1    99 	-5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
   -8    8	 -4     9      -1    99 	-5   	0   0   0 	    0     0 	0  	    0       # Top width
-  -8	8	 0		100    -1    99 	-5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
--6  	6    2.5805	9      -1    99     -5 	    0   0   0 	    0 	  0		0       0    	# Descending width
+  -8	8	 0		100    -1    99 -5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
+-6  	6    2.5805	9      -1    99         -5 	    0   0   0 	    0 	  0		0       0    	# Descending width
   -1003	0	 -1002  100    -1    99 	-50 	0   0   0 	    0 	  0	    0	 	0       # Init (-999 to ignore)
-  -8	8	-0.2808 9      -1    99     -5	 	0   0   0 	    0 	  0     0       0    	# Final
+  -8	8	-0.2808 9      -1    99         -5 	0   0   0 	    0 	  0     0       0    	# Final
 #############################################################################################################################
 ### Sport: Double normal ###
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
@@ -262,9 +262,9 @@
   2	    14	 8.485	10	   -1    99 	-5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
   -8    8	 -4     9      -1    99 	-5   	0   0   0 	    0     0 	0  	    0       # Top width
   -8	8	 1.6645	100    -1    99 	-5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
-  -6  	6   1.40205 9      -1    99     -5 	    0   0   0 	    0 	  0		0       0    	# Descending width
+  -6  	6   1.40205 9      -1    99             -5 	    0   0   0 	    0 	  0		0       0    	# Descending width
   -1003	0	 -1002  100    -1    99 	-50 	0   0   0 	    0 	  0	    0	 	0       # Init (-999 to ignore)
-  -8	8	0.2571	9      -1    99     -5	 	0   0   0 	    0 	  0     0       0    	# Final
+  -8	8	0.2571	9      -1    99         -5	 	0   0   0 	    0 	  0     0       0    	# Final
 #############################################################################################################################
 ## END of changes by Cole
 
@@ -288,7 +288,7 @@
   -10	0	 0      9      -1    99     -50     0   0   0 	    0 	  0	   	0 	    0       # Additive to descending width
   -1	1	 0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
 # selparm[53]: cole fixed at upper bound of 1
- 0.1	1.00 0.99    9      -1    99 	-5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
+ 0.1	1.00 0.7    9      -1    99 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
 #############################################################################################################################
 
 ### Extra parameters for selectivity deviations
