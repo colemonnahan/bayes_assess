@@ -56,31 +56,8 @@ names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
-m <- 'snowcrab';
-m <- 'snowcrab2';
-## setwd(m); system(m); setwd('..')
-thin <- 10
-iter <- 2000
-warmup <- iter/4
-fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
-              path=m, cores=reps, algorithm='RWM')
-## Get posterior draws of dqs to cbind onto parameter draws later
-dq.names <- c("SSB_2015", "F35sd", "OFL_main")
-fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
-## Get estimates for derived quantities
-xx <- R2admb::read_admb('snowcrab/snowcrab')
-fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
-saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-
-setwd(m);system("admb snowcrab2");system('snowcrab2 -hbf 1'); setwd('..')
-fit.rwm <- sample_admb(m, iter=500, thin=thin, seeds=10,
-              parallel=TRUE, chains=10, warmup=100, mceval=FALSE,
-              path=m, cores=10, algorithm='NUTS', control=list(metric='diag)
-
-
-m <- 'canary'
 m <- 'canary2'
+m <- 'canary'
 ## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
 thin <- 10
 iter <- 2000
@@ -98,3 +75,22 @@ dq <- subset(xx$derived_quants, Label %in% dq.names)[,1:3]
 names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
+
+
+m <- 'snowcrab';
+m <- 'snowcrab2';
+## setwd(m); system(m); setwd('..')
+thin <- 10
+iter <- 2000
+warmup <- iter/4
+fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
+              path=m, cores=reps, algorithm='RWM')
+## Get posterior draws of dqs to cbind onto parameter draws later
+dq.names <- c("SSB_2015", "F35sd", "OFL_main")
+fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
+## Get estimates for derived quantities
+xx <- R2admb::read_admb('snowcrab/snowcrab')
+fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
+saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
+
