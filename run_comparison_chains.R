@@ -12,7 +12,7 @@ recompile <- TRUE # recomile .tpl files?
 
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/10)
-m <- 'halibut3'
+m <- 'halibut2'
 ad <- .9; td <- 12
 inits <- NULL
 source('template.R')

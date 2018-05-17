@@ -38,7 +38,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 m <- 'halibut'
 m <- 'halibut2'
 setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
-thin <- 10
+thin <- 100
 iter <- 2000
 warmup <- iter/4
 fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
@@ -73,10 +73,10 @@ xx <- R2admb::read_admb('snowcrab/snowcrab')
 fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
-setwd(m);system("admb snowcrcrab2");system('snowcrab2 -hbf 1'); setwd('..')
+setwd(m);system("admb snowcrab2");system('snowcrab2 -hbf 1'); setwd('..')
 fit.rwm <- sample_admb(m, iter=500, thin=thin, seeds=10,
               parallel=TRUE, chains=10, warmup=100, mceval=FALSE,
-              path=m, cores=10, algorithm='NUTS')
+              path=m, cores=10, algorithm='NUTS', control=list(metric='diag)
 
 
 m <- 'canary'
