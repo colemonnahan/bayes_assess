@@ -58,8 +58,8 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'canary2'
 m <- 'canary'
-## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
-thin <- 10
+setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+thin <- 100
 iter <- 2000
 warmup <- iter/4
 fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,

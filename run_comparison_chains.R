@@ -2,7 +2,7 @@
 ## RWM and NUTS.
 source("startup.R")
 
-recompile <- TRUE # recomile .tpl files?
+recompile <- FALSE # recomile .tpl files?
 
 ## I'm using a smaller warmup since we're not using mass matrix adaptation,
 ## and starting from the mode so the chains need less warmup time.
