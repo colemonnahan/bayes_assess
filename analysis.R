@@ -52,6 +52,36 @@ plot.improvement(snowcrab, snowcrab2)
 
 
 ### Examine other things ( in development)
+
+## halibut2 NUTs chains having issues with some pars
+fit <- readRDS(file='results/halibut2_fits.RDS')[[1]]
+
+pars <- c("SR_parm[1]", "SR_parm[5]", paste0("recdev2[",22:26, "]"), "selparm[53]")
+png('plots/halibut2_divergences.png', width=5, height=5, units='in', res=500)
+pairs_admb(fit, pars=pars)
+dev.off()
+
+## look at what divergent trajectories SSB look like
+post <- extract_samples(fit)
+divs <- extract_sampler_params(fit)$divergent__
+## psv and .sso files probably overwritten so ready them
+adnuts:::.write_psv('halibut2', post, 'halibut2')
+## setwd('halibut2');system('halibut2 -mceval');setwd('..')
+library(r4ss)
+xx <- SSgetMCMC(dir='halibut2')[[1]]
+ssb <- xx[,grep("SPB_", x=names(xx))[-(1:2)]]
+years <- 1996:2019
+png("plots/halibut2_divergences_ssb.png", width=7, height=5, units='in', res=500)
+plot(0,0, xlim=range(years), ylim=c(0, 1.1*max(ssb)), type='n',
+     xlab='year', ylab='SSB')
+ssb2 <- ssb[order(divs),]
+divs2 <- sort(divs)
+for(i in 1:nrow(ssb2)){
+  lines(years, ssb2[i,], col=ifelse(divs2[i]==0, rgb(0,0,0,.1),2),
+        lwd=ifelse(divs2[i]==0, 1, 3))
+}
+dev.off()
+
 ## get all the single variables, I manually found the bad ones
 ## ind <- grep('\\[', xx, invert=TRUE)
 ## plot.slow(snowcrab, pars=pars, save=FALSE)
