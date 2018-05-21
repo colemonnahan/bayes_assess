@@ -83,7 +83,8 @@
   0.2   1.0 0.75    0.9     1       0.05    -50     # Steepness
   0.05  1.1 0.9     0.6     -1      0.8     -50     # SigmaR
   -5    5   0.1     0       -1      1       -50     # Environmental link coefficient
-  -1    1   0       0       -1      1       6       # R1 offset
+## cole added N(-.4, .15)
+ -1    1   0       -0.4       0      0.15       6       # R1 offset
   0     0   0       0       -1      0       -99     # Autocorrelation
 
 0 # Environmental index for S-R parameters
