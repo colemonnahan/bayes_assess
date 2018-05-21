@@ -317,9 +317,11 @@
 13.1   65	   40	    50	  -1	50	  4	  0	0	0	0	0	2	2	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	2	2	# Asc WIDTH exp
-0.0	   9.0	 0.001  2.6	  -1	50	  5	  0	0	0	0	0	2 2	# Desc WIDTH exp
+# selparm[4]; cole fixed at lower bound
+0.0	   9.0	 0.001  2.6	  -1	50	  -5	  0	0	0	0	0	2 2	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	-1.0	  5	    -1	50  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
+# selparm[6]:  cole put N(1,.5) prior
+-5.0	 5.0	-1.0	  1	    0	0.5  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
 
 #TWL retention  (i.e., 1-discard_rate)			                                  			    		                      	      	      	  					
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn
@@ -332,9 +334,11 @@
 13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	1 2	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	1 2	# Asc WIDTH exp
-0.0	   9.0	 9.0	  2.6	  -1	50	  5	  0	0	0	0	0	1 2	# Desc WIDTH exp
+# selparm[10]; cole fixed at mle 7.31872111286
+0.0	   9.0	 7.318	  2.6	  -1	50	  -5	  0	0	0	0	0	1 2	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	 5.0	  5	    -1	50    5	  0	0	0	0	0	1 2	# FINAL (logistic)
+# selparm[12]; cole fixed at mle 4.19613195484
+-5.0	 5.0	 4.1	  5	    -1	50    -5	  0	0	0	0	0	1 2	# FINAL (logistic)
 
 # NONTWL retention curve (i.e., 1-discard_rate)			                                  			    		                      	      	      	  					
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn

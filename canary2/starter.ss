@@ -1,4 +1,5 @@
 # 2011 Canary update starter file
+# This is the regularized version by Cole. DO NOT USE IT!
 
 Canary2_data.SS 		# Data file
 Canary2_control.SS	# Control file
@@ -16,17 +17,16 @@ Canary2_control.SS	# Control file
 0 	# MCMC burn-in
 1 	# MCMC thinning interval
 0 	# Jitter initial parameter values by this fraction
-## Cole turned off some SD reporting to speed up the runs
-2012	# Min year for spbio sd_report (neg val = styr-2, virgin state)
-2016	# Max year for spbio sd_report (-1=endyr+1, -2=entire forecast)
+-1	# Min year for spbio sd_report (neg val = styr-2, virgin state)
+-2	# Max year for spbio sd_report (-1=endyr+1, -2=entire forecast)
 0 	# N individual SD years
 0.0001 	# Ending convergence criteria
 0 	# Retrospective year relative to end year
 5	# Min age for summary biomass
 1 	# Depletion basis: denom is: 0=skip; 1=rel X*B0; 2=rel X*Bmsy; 3=rel X*B_styr
 1.0 	# Fraction (X) for Depletion denominator (e.g. 0.4)
-0 	# (1-SPR)_reporting:  0=skip; 1=rel(1-SPR); 2=rel(1-SPR_MSY); 3=rel(1-SPR_Btarget); 4=notrel
-0 	# F_report_units: 0=skip; 1=exploitation(Bio); 2=exploitation(Num); 3=sum(Frates); 4=true F for range of ages
+1 	# (1-SPR)_reporting:  0=skip; 1=rel(1-SPR); 2=rel(1-SPR_MSY); 3=rel(1-SPR_Btarget); 4=notrel
+1 	# F_report_units: 0=skip; 1=exploitation(Bio); 2=exploitation(Num); 3=sum(Frates); 4=true F for range of ages
 0 	# F_report_basis: 0=raw; 1=rel Fspr; 2=rel Fmsy ; 3=rel Fbtgt
 
 999 # end of file marker
