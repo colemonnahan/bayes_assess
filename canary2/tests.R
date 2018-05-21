@@ -12,7 +12,7 @@ names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
 
 dq.original <- dq
 
-getdq <- function(){
+getdq <- function(covar=TRUE){
   m <- 'canary2'
   xx <- SS_output(getwd(), model=m, verbose=FALSE, covar=TRUE, ncols=300)
   ## Get estimates for derived quantitiesd
@@ -21,19 +21,11 @@ getdq <- function(){
   return(dq)
 }
 
-## This is the base canary2 I left off with.. seems too big of changes
+## canary2 with no control file changes; ensure matches canary
+system('canary2')
 dq0 <- getdq()
-
-## turn back up the sd devs from .25 back to .5
+## regularize selparms 4,6, 10, 12
 system('canary2')
 dq1 <- getdq()
-## turn back on a bunch of stuff and turn off priors
-system('canary2')
-dq2 <- getdq() ## MSY has no SE??
-## undo selparm[10] and selparm[12] changes
-system('canary2')
-dq3 <- getdq()
-## no ch ange so putting back on, also udno changes to selparm[30]
-system('canary2')
-dq3 <- getdq()
+
 
