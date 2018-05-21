@@ -124,7 +124,8 @@
 # matest_n : number of parameters (one per length bin) to estimate for maturity estimation females
  8
 # matestm_n : number of parameters (one per length bin) to estimate for maturity estimation males
- 17
+ # cole changd this from 17 to 16:
+17
 
 #===============weighting===========================
 # wt_like : weights for smooth sel - not used
