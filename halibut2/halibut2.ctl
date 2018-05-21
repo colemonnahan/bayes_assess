@@ -313,10 +313,13 @@
 1 # Maximum phase for lambda implementation
 1 # Include SD offset in likelihoods: 0=no, 1=yes
 
-0 # Number of changes to make to default (value=1.0) Lambdas
+1 # Number of changes to make to default (value=1.0) Lambdas
 # Type: 1=index, 2=discard, 3=mnwt, 4=length, 5=age, 6=SizeFreq, 7=sizeage, 8=catch, 9=init_equ_catch,
 #       10=recrdev, 11=parm_prior, 12=parm_dev, 13=CrashPen, 14=Morphcomp, 15=Tag-comp, 16=Tag-negbin.
 # Type  Fleet  Phase  Lambda  Sizemthd
+
+# cole added change to lambda for crash penalty
+13 1 1 .01 1
 
 # Extra SD reporting section
 0 # 0=none, 1=read specs below
