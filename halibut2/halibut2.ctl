@@ -83,8 +83,8 @@
   0.2   1.0 0.75    0.9     1       0.05    -50     # Steepness
   0.05  1.1 0.9     0.6     -1      0.8     -50     # SigmaR
   -5    5   0.1     0       -1      1       -50     # Environmental link coefficient
-## cole added N(-.4, .15)
- -1    1   0       -0.4       0      0.15       6       # R1 offset
+## cole added N(-.4, .05) to MG_parm[5]
+ -1    1   0       -0.4       0      0.05       6       # R1 offset
   0     0   0       0       -1      0       -99     # Autocorrelation
 
 0 # Environmental index for S-R parameters
@@ -226,7 +226,8 @@
 ### Discards: double normal ###
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
-  7	    14	 12		100    -1    99 	5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
+## selparm[20]; cole added N(12,2)
+7	    14	 12		12    0    2 	5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
   -8    8	 -2     9      -1    99 	-5   	0   0   0 	    0     0 	0  	    0       # Top width
   -4	5	 2		100    -1    99 	5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
 # selparm[23]; coled added N(0,1)
@@ -288,8 +289,8 @@
   -1  	5    0      9      -1    99     5       0   0   0       0     0 	0  	   	0       # Additive to ascending width
   -10	0	 0      9      -1    99     -50     0   0   0 	    0 	  0	   	0 	    0       # Additive to descending width
   -1	1	 0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
-# selparm[53]: cole fixed at upper bound of 1
- 0.1	1.00 0.7    9      -1    99 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
+# selparm[53]: cole fixed at upper bound of 1; NOPE, widened bound
+ 0.1	2.00 0.7    9      -1    99 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
 #############################################################################################################################
 
 ### Extra parameters for selectivity deviations
