@@ -49,6 +49,7 @@ fit.rwm.RDS
 *.rep
 snowcrab2/snowcrab2.tpl
 snowcrab2/snowcrab2_old.tpl
+snowcrab2/*.tpl
 snowcrab/snowcrab.tpl
 snowcrab/gradient*
 snowcrab/eval.csv
