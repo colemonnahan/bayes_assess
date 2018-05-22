@@ -32,5 +32,25 @@ dq0 <- getdq()
 ## regularize selparms 4,6, 10, 12
 system('canary2')
 dq1 <- getdq()
+save.image()
 
+## regularize selparms 22, 24, 25, 27, 28, 30
+system('canary2')
+dq2 <- getdq()
+save.image()
+
+## regularize selparms selparms 31,33,34,36
+system('canary2')
+dq3 <- getdq()
+save.image()
+
+## regularize selparms selparms 37, 39, 40, 42
+system('canary2')
+dq4 <- getdq()
+save.image()
+
+## regularize selparms selparms 47,48,53, 54
+system('canary2')
+dq5 <- getdq()
+save.image()
 

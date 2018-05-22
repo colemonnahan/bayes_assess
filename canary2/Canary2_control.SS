@@ -359,9 +359,11 @@
 13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
-0.0	   9.0	 0.001  2.6	  -1	50	  5	  0	0	0	0	0	0	0	# Desc WIDTH exp
+## selparm[22]; cole fixed at lower bound 0
+0.0	   9.0	 0.001  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	 5.0	  5	    -1	50    5	  0	0	0	0	0	0	0	# FINAL (logistic)
+# selparm[24]; cole added N(1,.5) prior
+-5.0	 5.0	 1.0	  1	    0	0.5    5	  0	0	0	0	0	0	0	# FINAL (logistic)
 
 # 13_CA_FOR double normal
 #20	   80	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
@@ -372,28 +374,40 @@
 #-5.0	 5.0	-1.0	  5	    -1	50  	5	  0	0	0	0	0	0	0	# FINAL (logistic)
 #
 # 16_CA_NWFSC double normal
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
+## selparm[25]; cole fixed at lower bound
+13.001 65	   13.01	    50	  -1	50	  -4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
-0.0	   9.0	 8.99	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
-0.0	   9.0	 9.0	  2.6	  -1	50	  5	  0	0	0	0	0	0	0	# Desc WIDTH exp
+# selparm[27]; cole fixed at upper bound
+0.0	   9.0	 8.99	  4.2	  -1	50	  -5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+# selparm[28]; coled fixed at upper bound
+0.0	   9.0	 8.999	  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	 5.0	  5	    -1	50    5	  0	0	0	0	0	0	0	# FINAL (logistic)
+# selparm[30]; cole fixd at upper bound
+-5.0	 5.0	 4.99	  5	    -1	50    -5	  0	0	0	0	0	0	0	# FINAL (logistic)
 
 # 19_CA_Tri_early double normal
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
+## selparm[31]; coled added N(54,5) prior
+13.001 65	   40	    54	  0	5	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
-0.0	   9.0	 0.01	  2.6	  -1	50	  5	  0	0	0	0	0	0	0	# Desc WIDTH exp
+## selparm[33]; cole added N(7,.5)
+0.0	   9.0	 4.3	  7	  0	50	  0.5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+## selparm[34]; coled fixed at lower bound
+0.0	   9.0	 0.01	  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	-1.0	  5	    -1	50  	5	  0	0	0	0	0	0	0	# FINAL (logistic)
+## selparm[36]; coled added N(0,1.5)
+-5.0	 5.0	-1.0	  0	    0	1.5  	5	  0	0	0	0	0	0	0	# FINAL (logistic)
 
 # 22_CA_Tri_late double normal
+## selparm[37]; cole added N(50,4)
 13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
+## selparm[39]; cole added N(6,1);
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
-0.0	   9.0	 0.0	  2.6	  -1	50	  5	  0	0	0	0	0	0	0	# Desc WIDTH exp
--9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
--5.0	 5.0	 4.99	  5	    -1	50    5	  0	0	0	0	0	0	0	# FINAL (logistic)
+## selparm[40]; cole fixed at MLE 4.00910911871
+0.0	   9.0	 4.01	  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
+-9.0	 5.0	-8.999	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
+## selparm[42]; cole fixed at MLE 0.153190739503
+-5.0	 5.0	 0.15	  5	    -1	50    -5	  0	0	0	0	0	0	0	# FINAL (logistic)
 
 ############################
 
@@ -404,15 +418,19 @@
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
-0.0	   9.0	 0.001  2.6	  -1	50	  5	  	# Desc WIDTH exp
-0.0	   9.0	 0.001  2.6	  -1	50	  5	  	# Desc WIDTH exp
+## selparm[47]; cole added N(3,1)
+0.0	   9.0	 0.001  3	  0	1	  5	  	# Desc WIDTH exp
+## selparm[48]; cole added N(2,.5)
+0.0	   9.0	 0.001  2	  0	0.5	  5	  	# Desc WIDTH exp
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
-0.0	   9.0	 9.0    2.6	  -1	50	  5	  	# Desc WIDTH exp
+## selparm[53]; cole fixed at MLE 6.61121363210
+0.0	   9.0	 6.61	  4.2	  -1	50	  -5	  	# Asc WIDTH exp
+## selparm[54]; cole fixed at MLE 4.19820071604
+0.0	   9.0	 4.2    2.6	  -1	50	  -5	  	# Desc WIDTH exp
 -5.0	 5.0	 5.0	  5	    -1	50    5	    # FINAL (logistic)
 
 # 7CA_Rec double normal
