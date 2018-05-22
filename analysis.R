@@ -17,6 +17,7 @@ plot.marginal(hake, save=TRUE)
 ## and management plots for the regularized version
 halibut <- readRDS('results/pilot_rwm_halibut.RDS')
 plot.slow(halibut)
+plot.marginal(halibut, save=TRUE)
 halibut2 <- readRDS('results/pilot_rwm_halibut2.RDS')
 plot.slow(halibut2)
 plot.sds(halibut2)
