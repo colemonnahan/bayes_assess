@@ -1,10 +1,7 @@
 #V3.24V
 # for all year entries except rebuilder; enter either: actual year, -999 for styr, 0 for endyr, neg number for rel. endyr
-
-# cole turned off forecasting !!!!
-
-0 # Benchmarks: 0=skip; 1=calc F_spr,F_btgt,F_msy 
-0 # MSY: 1= set to F(SPR); 2=calc F(MSY); 3=set to F(Btgt); 4=set to F(endyr) 
+1 # Benchmarks: 0=skip; 1=calc F_spr,F_btgt,F_msy 
+1 # MSY: 1= set to F(SPR); 2=calc F(MSY); 3=set to F(Btgt); 4=set to F(endyr) 
 0.5 # SPR target (e.g. 0.40)
 0.4 # Biomass target (e.g. 0.40)
 #_Bmark_years: beg_bio, end_bio, beg_selex, end_selex, beg_relF, end_relF (enter actual year, or values of 0 or -integer to be rel. endyr)
