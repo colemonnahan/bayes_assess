@@ -97,7 +97,7 @@ ggsave(paste0('plots/', d, '_adaptation.png'),g, width=ggwidth, height=ggheight,
 g <- ggplot(stats.long, aes(y=value, x=m, color=alg)) + geom_jitter(alpha=.5) +
   facet_wrap('variable', scales='free')
 ggsave(paste0('plots/', d, '_stats.png'),g, width=ggwidth, height=ggheight, units='in')
-g <- ggplot(perf.all, aes(m, efficiency, color=alg)) + geom_point() + scale_y_log10()
+g <- ggplot(perf.all, aes(m, efficiency, color=alg)) + geom_point()
 ggsave(paste0('plots/', d, '_perf.png'),g, width=ggwidth, height=ggheight, units='in')
 
 plot.ess(rwm=fit.rwm.mle, nuts=fit.nuts.mle)
