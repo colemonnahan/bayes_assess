@@ -38,17 +38,17 @@
 1	# M setup: 0=single Par,1=N_breakpoints,2=Lorenzen,3=agespecific;_4=agespec_withseasinterpolate
 2	# Number of M breakpoints
 6 14	# Ages at M breakpoints
-1 	# Growth model: 1=VB with L1 and L2, 2=VB with A0 and Linf, 3=Richards, 4=Read vector of L@A 
+1 	# Growth model: 1=VB with L1 and L2, 2=VB with A0 and Linf, 3=Richards, 4=Read vector of L@A
 1	# Age for growth Lmin
 30	# Age for growth Lmax
-0.0 	# SD constant added to LAA (0.1 mimics v1.xx for compatibility only) 
+0.0 	# SD constant added to LAA (0.1 mimics v1.xx for compatibility only)
 0 	# Variability about growth: 0=CV~f(LAA) [mimic v1.xx], 1=CV~f(A), 2=SD~f(LAA), 3=SD~f(A)
 6 	# maturity option: 1=length logistic, 2=age logistic, 3=read maturity at age for each growth pattern
 6.80E-06	1.39E-05	2.85E-05	5.83E-05	0.000119295	0.000244164	0.000499664	0.001022235	0.002090105	0.004268391	0.008695585	0.01762724	0.035380676	0.069649514	0.132204702	0.235558822	0.381109289	0.54588792	0.692065911	0.796225088	0.859413184	0.894075434	0.912045701	0.921089804	0.925573571	0.927779894	0.928861558	0.929390891	0.929649701	0.929776188
 2 	# First age allowed to mature
 1   # fecundity option (1=linear eggs/kg relationship; EJ recommendation)
 0  	# hermaphro
-3	# mg parm offset option: 
+3	# mg parm offset option:
 1	# mg parm adjust method 1=do V1.23 approach, 2=use logistic transform between bounds approach
 
 # Mortality and growth parameters
@@ -113,7 +113,7 @@
  0 0 0 0 0 0 0 0 0 0
 
 5 # Phase for MG_devs (only needed if some MG is time-varying)
- 
+
 # Spawner-recruit parameters
 3	# S-R function: 1=null, 2=Ricker, 3=standard B-H, 4=no steepness or bias adjustment; 5=Hockey stock; 6=flat-top BH
 # Lo	Hi	Init	Prior	Prior	Prior	Param
@@ -138,10 +138,10 @@
 5 	# phase for early rec devs
 5	# Phase for forecast recruit deviations
 1 	# Lambda for forecast recr devs before endyr+1
- 1965.7575 #_last_early_yr_nobias_adj_in_MPD                   
- 1978.0000 #_first_yr_fullbias_adj_in_MPD                      
- 2012 #_last_yr_fullbias_adj_in_MPD                       
- 2014 #_first_recent_yr_nobias_adj_in_MPD                 
+ 1965.7575 #_last_early_yr_nobias_adj_in_MPD
+ 1978.0000 #_first_yr_fullbias_adj_in_MPD
+ 2012 #_last_yr_fullbias_adj_in_MPD
+ 2014 #_first_recent_yr_nobias_adj_in_MPD
     0.8025 #_max_bias_adj_in_MPD (1.0 to mimic pre-2009 models)
 0	# placeholder
 -5	# Lower bound rec devs
@@ -156,31 +156,31 @@
 
 # Initial F setup by fishing fleet
 # Lo	Hi	Init	Prior	P_type	SD	Phase
-0	1	0	0.01	-1	50	-50 # 1_CA_TWL       
-0	1	0	0.01	-1	50	-50 # 2_OR_TWL       
-0	1	0	0.01	-1	50	-50 # 3_WA_TWL       
-0	1	0	0.01	-1	50	-50 # 4_CA_NTWL      
-0	1	0	0.01	-1	50	-50 # 5_OR_NTWL      
-0	1	0	0.01	-1	50	-50 # 6_WA_NTWL      
-0	1	0	0.01	-1	50	-50 # 7_CA_REC       
-0	1	0	0.01	-1	50	-50 # 8_OR_REC       
-0	1	0	0.01	-1	50	-50 # 9_WA_REC       
-0	1	0	0.01	-1	50	-50 # 10_CA_AHSOP    
-0	1	0	0.01	-1	50	-50 # 11_OR_ASHOP    
-0	1	0	0.01	-1	50	-50 # 12_WA_ASHOP    
-0	1	0	0.01	-1	50	-50 # 13_CA_FOR      
-0	1	0	0.01	-1	50	-50 # 14_OR_FOR      
-0	1	0	0.01	-1	50	-50 # 15_WA_FOR      
-0	1	0	0.01	-1	50	-50 # 16_CA_NWFSC    
-0	1	0	0.01	-1	50	-50 # 17_OR_NWFSC    
-0	1	0	0.01	-1	50	-50 # 18_WA_NWFSC    
+0	1	0	0.01	-1	50	-50 # 1_CA_TWL
+0	1	0	0.01	-1	50	-50 # 2_OR_TWL
+0	1	0	0.01	-1	50	-50 # 3_WA_TWL
+0	1	0	0.01	-1	50	-50 # 4_CA_NTWL
+0	1	0	0.01	-1	50	-50 # 5_OR_NTWL
+0	1	0	0.01	-1	50	-50 # 6_WA_NTWL
+0	1	0	0.01	-1	50	-50 # 7_CA_REC
+0	1	0	0.01	-1	50	-50 # 8_OR_REC
+0	1	0	0.01	-1	50	-50 # 9_WA_REC
+0	1	0	0.01	-1	50	-50 # 10_CA_AHSOP
+0	1	0	0.01	-1	50	-50 # 11_OR_ASHOP
+0	1	0	0.01	-1	50	-50 # 12_WA_ASHOP
+0	1	0	0.01	-1	50	-50 # 13_CA_FOR
+0	1	0	0.01	-1	50	-50 # 14_OR_FOR
+0	1	0	0.01	-1	50	-50 # 15_WA_FOR
+0	1	0	0.01	-1	50	-50 # 16_CA_NWFSC
+0	1	0	0.01	-1	50	-50 # 17_OR_NWFSC
+0	1	0	0.01	-1	50	-50 # 18_WA_NWFSC
 0	1	0	0.01	-1	50	-50 # 19_CA_Tri_early
 0	1	0	0.01	-1	50	-50 # 20_OR_Tri_early
 0	1	0	0.01	-1	50	-50 # 21_WA_Tri_early
-0	1	0	0.01	-1	50	-50 # 22_CA_Tri_late 
-0	1	0	0.01	-1	50	-50 # 23_OR_Tri_late 
-0	1	0	0.01	-1	50	-50 # 24_WA_Tri_late 
-                    
+0	1	0	0.01	-1	50	-50 # 22_CA_Tri_late
+0	1	0	0.01	-1	50	-50 # 23_OR_Tri_late
+0	1	0	0.01	-1	50	-50 # 24_WA_Tri_late
+
 # Catchability (Q_setup)
 # A=do power: 0=skip, survey is prop. to abundance, 1= add par for non-linearity
 # B=env. link: 0=skip, 1= add par for env. effect on Q
@@ -189,117 +189,117 @@
 # 	   3=ln(Q) + set of devs about ln(Q) for all years. 4=ln(Q) + set of devs about Q for indexyr-1
 # E=Units: 0=numbers, 1=biomass
 # F=err_type 0=lognormal, >0=T-dist. DF=input value
-#Den-dep env-var extra_se Q_type		
-0	0	0	0	# 1_CA_TWL       
-0	0	0	0	# 2_OR_TWL       
-0	0	0	0	# 3_WA_TWL       
-0	0	0	0	# 4_CA_NTWL      
-0	0	0	0	# 5_OR_NTWL      
-0	0	0	0	# 6_WA_NTWL      
-0	0	0	0	# 7_CA_REC       
-0	0	0	0	# 8_OR_REC       
-0	0	0	0	# 9_WA_REC       
-0	0	0	0	# 10_CA_AHSOP    
-0	0	0	0	# 11_OR_ASHOP    
-0	0	0	0	# 12_WA_ASHOP    
-0	0	0	0	# 13_CA_FOR      
-0	0	0	0	# 14_OR_FOR      
-0	0	0	0	# 15_WA_FOR      
-0	0	0	0	# 16_CA_NWFSC    
-0	0	0	0	# 17_OR_NWFSC    
-0	0	0	0	# 18_WA_NWFSC    
+#Den-dep env-var extra_se Q_type
+0	0	0	0	# 1_CA_TWL
+0	0	0	0	# 2_OR_TWL
+0	0	0	0	# 3_WA_TWL
+0	0	0	0	# 4_CA_NTWL
+0	0	0	0	# 5_OR_NTWL
+0	0	0	0	# 6_WA_NTWL
+0	0	0	0	# 7_CA_REC
+0	0	0	0	# 8_OR_REC
+0	0	0	0	# 9_WA_REC
+0	0	0	0	# 10_CA_AHSOP
+0	0	0	0	# 11_OR_ASHOP
+0	0	0	0	# 12_WA_ASHOP
+0	0	0	0	# 13_CA_FOR
+0	0	0	0	# 14_OR_FOR
+0	0	0	0	# 15_WA_FOR
+0	0	0	0	# 16_CA_NWFSC
+0	0	0	0	# 17_OR_NWFSC
+0	0	0	0	# 18_WA_NWFSC
 0	0	0	0	# 19_CA_Tri_early
 0	0	0	0	# 20_OR_Tri_early
 0	0	0	0	# 21_WA_Tri_early
-0	0	0	0	# 22_CA_Tri_late 
-0	0	0	0	# 23_OR_Tri_late 
-0	0	0	0	# 24_WA_Tri_late 
+0	0	0	0	# 22_CA_Tri_late
+0	0	0	0	# 23_OR_Tri_late
+0	0	0	0	# 24_WA_Tri_late
 0	0	1	0	# 25_CA_prerec
 0	0	1	0	# 26_OR_prerec
 0	0	1	0	# 27_WA_prerec
-0	0	0	0	# 28_Coastwide_NWFSC 
-0	0	0	0	# 29_Coastwide_Tri_early 
+0	0	0	0	# 28_Coastwide_NWFSC
+0	0	0	0	# 29_Coastwide_Tri_early
 0	0	0	0	# 30_Coastwide_Tri_late
 0	0	0	0	# 31_Coastwide_prerec
-        
+
 # Catchability parameter lines
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit 
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit 
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit 
+0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
+0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
+0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
 
 # Selectivity section
-# Size-based setup 
+# Size-based setup
 # A=Selex option: 1-24
 # B=Do_retention: 0=no, 1=yes
 # C=Male offset to female: 0=no, 1=yes, 2=Female offset to male
 # D=Mirror selex (#)
 # A   B C D
-  24  0 0 0		# 1_CA_TWL       
-  15  0 0 1		# 2_OR_TWL       
-  15  0 0 1		# 3_WA_TWL       
+  24  0 0 0		# 1_CA_TWL
+  15  0 0 1		# 2_OR_TWL
+  15  0 0 1		# 3_WA_TWL
 
-  24  0 0 0		# 4_CA_NTWL      
-  15  0 0 4		# 5_OR_NTWL      
-  15  0 0 4		# 6_WA_NTWL      
+  24  0 0 0		# 4_CA_NTWL
+  15  0 0 4		# 5_OR_NTWL
+  15  0 0 4		# 6_WA_NTWL
 
-  24  0 0 0		# 7_CA_REC       
-  15  0 0 7		# 8_OR_REC       
-  15  0 0 7		# 9_WA_REC       
+  24  0 0 0		# 7_CA_REC
+  15  0 0 7		# 8_OR_REC
+  15  0 0 7		# 9_WA_REC
 
-  24  0 0 0		# 10_CA_AHSOP    
-  15  0 0 10	# 11_OR_ASHOP    
-  15  0 0 10	# 12_WA_ASHOP    
+  24  0 0 0		# 10_CA_AHSOP
+  15  0 0 10	# 11_OR_ASHOP
+  15  0 0 10	# 12_WA_ASHOP
 
-  15  0 0 1		# 13_CA_FOR      
-  15  0 0 13	# 14_OR_FOR      
-  15  0 0 13	# 15_WA_FOR      
+  15  0 0 1		# 13_CA_FOR
+  15  0 0 13	# 14_OR_FOR
+  15  0 0 13	# 15_WA_FOR
 
-  24  0 0 0		# 16_CA_NWFSC    
-  15  0 0 16	# 17_OR_NWFSC    
-  15  0 0 16	# 18_WA_NWFSC    
+  24  0 0 0		# 16_CA_NWFSC
+  15  0 0 16	# 17_OR_NWFSC
+  15  0 0 16	# 18_WA_NWFSC
 
   24  0 0 0		# 19_CA_Tri_early
   15  0 0 19	# 20_OR_Tri_early
   15  0 0 19	# 21_WA_Tri_early
 
-  24  0 0 0		# 22_CA_Tri_late 
-  15  0 0 22	# 23_OR_Tri_late 
-  15  0 0 22	# 24_WA_Tri_late 
+  24  0 0 0		# 22_CA_Tri_late
+  15  0 0 22	# 23_OR_Tri_late
+  15  0 0 22	# 24_WA_Tri_late
 
-  32  0 0 0		# 25_CA_prerec 
-  32  0 0 0		# 26_OR_prerec 
-  32  0 0 0		# 27_WA_prerec 
+  32  0 0 0		# 25_CA_prerec
+  32  0 0 0		# 26_OR_prerec
+  32  0 0 0		# 27_WA_prerec
 
   15  0 0 16		# 28_Coastwide_NWFSC
   15  0 0 19		# 29_Coastwide_Tri_early
   15  0 0 22		# 30_Coastwide_Tri_late
   32  0 0 0		# 31_Coastwide_prerec
-            
+
 # Age-based setup
-  10 0 0 0	# 1_CA_TWL       
-  10 0 0 0	# 2_OR_TWL       
-  10 0 0 0	# 3_WA_TWL       
-  10 0 0 0	# 4_CA_NTWL      
-  10 0 0 0	# 5_OR_NTWL      
-  10 0 0 0	# 6_WA_NTWL      
-  10 0 0 0	# 7_CA_REC       
-  10 0 0 0	# 8_OR_REC       
-  10 0 0 0	# 9_WA_REC       
-  10 0 0 0	# 10_CA_AHSOP    
-  10 0 0 0	# 11_OR_ASHOP    
-  10 0 0 0	# 12_WA_ASHOP    
-  10 0 0 0	# 13_CA_FOR      
-  10 0 0 0	# 14_OR_FOR      
-  10 0 0 0	# 15_WA_FOR      
-  10 0 0 0	# 16_CA_NWFSC    
-  10 0 0 0	# 17_OR_NWFSC    
-  10 0 0 0	# 18_WA_NWFSC    
+  10 0 0 0	# 1_CA_TWL
+  10 0 0 0	# 2_OR_TWL
+  10 0 0 0	# 3_WA_TWL
+  10 0 0 0	# 4_CA_NTWL
+  10 0 0 0	# 5_OR_NTWL
+  10 0 0 0	# 6_WA_NTWL
+  10 0 0 0	# 7_CA_REC
+  10 0 0 0	# 8_OR_REC
+  10 0 0 0	# 9_WA_REC
+  10 0 0 0	# 10_CA_AHSOP
+  10 0 0 0	# 11_OR_ASHOP
+  10 0 0 0	# 12_WA_ASHOP
+  10 0 0 0	# 13_CA_FOR
+  10 0 0 0	# 14_OR_FOR
+  10 0 0 0	# 15_WA_FOR
+  10 0 0 0	# 16_CA_NWFSC
+  10 0 0 0	# 17_OR_NWFSC
+  10 0 0 0	# 18_WA_NWFSC
   10 0 0 0	# 19_CA_Tri_early
   10 0 0 0	# 20_OR_Tri_early
   10 0 0 0	# 21_WA_Tri_early
-  10 0 0 0	# 22_CA_Tri_late 
-  10 0 0 0	# 23_OR_Tri_late 
-  10 0 0 0	# 24_WA_Tri_late 
+  10 0 0 0	# 22_CA_Tri_late
+  10 0 0 0	# 23_OR_Tri_late
+  10 0 0 0	# 24_WA_Tri_late
   10 0 0 0	# 25_CA_prerec
   10 0 0 0	# 26_CA_prerec
   10 0 0 0	# 27_CA_prerec
@@ -323,9 +323,9 @@
 # selparm[6]:  cole put N(1,.5) prior
 -5.0	 5.0	-1.0	  1	    0	0.5  	5	  0	0	0	0	0	2	2	# FINAL (logistic)
 
-#TWL retention  (i.e., 1-discard_rate)			                                  			    		                      	      	      	  					
+#TWL retention  (i.e., 1-discard_rate)
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn
-#0 		70		27		35		-1				99		 6			0				0				0				0				0				14				2						#Inflection               
+#0 		70		27		35		-1				99		 6			0				0				0				0				0				14				2						#Inflection
 #0.1		10		2			1			-1				99		 6			0				0				0				0				0				14				2						#Slope                    # 1 means that parm’ = baseparm + blockparm
 #0.001	1			0.95	1			-1				99		 6			0				0				0				0				0				14				2						#Asymptotic retention     # 2 means that parm’ = blockparm
 #0			0			0			0			-1				99		-3			0				0				0				0				0				0				0	          #Male offset To inflection
@@ -340,9 +340,9 @@
 # selparm[12]; cole fixed at mle 4.19613195484
 -5.0	 5.0	 4.1	  5	    -1	50    -5	  0	0	0	0	0	1 2	# FINAL (logistic)
 
-# NONTWL retention curve (i.e., 1-discard_rate)			                                  			    		                      	      	      	  					
+# NONTWL retention curve (i.e., 1-discard_rate)
 #_LO  HI    INIT  PRIOR PR_type SD   PHASE   env-var use_dev dev_min dev_max dev_std Block   Block_Fxn
-#0 		70		27		35		-1				99		 6			0				0				0				0				0				15				2						#Inflection               
+#0 		70		27		35		-1				99		 6			0				0				0				0				0				15				2						#Inflection
 #0.1		10		2			1			-1				99		 6			0				0				0				0				0				15				2						#Slope                    # 1 means that parm’ = baseparm + blockparm
 #0.001	1			0.95	1			-1				99		-2			0				0				0				0				0				14				2						#Asymptotic retention     # 2 means that parm’ = blockparm
 #0			0			0			0			-1				99		-3			0				0				0				0				0				0				0	          #Male offset To inflection
@@ -386,11 +386,11 @@
 -5.0	 5.0	 4.99	  5	    -1	50    -5	  0	0	0	0	0	0	0	# FINAL (logistic)
 
 # 19_CA_Tri_early double normal
-## selparm[31]; coled added N(54,5) prior
-13.001 65	   40	    54	  0	5	  4	  0	0	0	0	0	0	0	# PEAK
+## selparm[31]; coled added N(54,3) prior
+13.001 65	   40	    54	  0	3	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
-## selparm[33]; cole added N(7,.5)
-0.0	   9.0	 4.3	  7	  0	50	  0.5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+## selparm[33]; cole added N(6.5,.5)
+0.0	   9.0	 4.3	  6.5	  0	.5	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
 ## selparm[34]; coled fixed at lower bound
 0.0	   9.0	 0.01	  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-9.0	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
@@ -418,20 +418,22 @@
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
-## selparm[47]; cole added N(3,1)
-0.0	   9.0	 0.001  3	  0	1	  5	  	# Desc WIDTH exp
-## selparm[48]; cole added N(2,.5)
-0.0	   9.0	 0.001  2	  0	0.5	  5	  	# Desc WIDTH exp
+## selparm[47]; cole fixed at MLE: 1.52205697993 (not clear why not mixing well)
+0.0	   9.0	 1.522  3	  -1	1	  -5	  	# Desc WIDTH exp
+## selparm[48]; cole fixed at MLE: 1.45789505190 (also not clear why)
+0.0	   9.0	 1.458  2	  -1	0.5	  -5	  	# Desc WIDTH exp
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal
-13.001 65	   40	    50	  -1	50	  4	  	# PEAK
-## selparm[53]; cole fixed at MLE 6.61121363210
-0.0	   9.0	 6.61	  4.2	  -1	50	  -5	  	# Asc WIDTH exp
-## selparm[54]; cole fixed at MLE 4.19820071604
-0.0	   9.0	 4.2    2.6	  -1	50	  -5	  	# Desc WIDTH exp
--5.0	 5.0	 5.0	  5	    -1	50    5	    # FINAL (logistic)
+  ## selparm[51]; cole added N(40,4) prior
+13.001 65	   40	    40	  0	4	  4	  	# PEAK
+## selparm[52]: cole added N(4,1) prior
+0.0	   9.0	 6	  4	  0	1	  5	  	# Asc WIDTH exp
+## selparm[53]; cole fixed at MLE 6.61121505417
+0.0	   9.0	 6.61    2.6	  -1	50	  -5	  	# Desc WIDTH exp
+## selparm[54]; cole fixed at MLE 4.19814902512
+-5.0	 5.0	 4.2	  5	    -1	50        -5	    # FINAL (logistic)
 
 # 7CA_Rec double normal
 #12	   65	   40	    50	  -1	50	  4	  	# PEAK
@@ -440,14 +442,14 @@
 #-5.0	 5.0	-1.0	  5	    -1	50    5	    # FINAL (logistic)
 
 ## ADD Block lines here (7 params per line: LO  HI    INIT  PRIOR PR_type SD   PHASE)
-# TWL retention 
+# TWL retention
 #0 		70		27		35		-1				99		 6   # inflection
 #0 		70		0.001	35		-1				99		-6   # inflection
 #0.1		10		2			1			-1				99     6   # slope
 #0.1		10		2			1			-1				99     6   # slope
-#0.001	1			0.8	  1			-1				99		 6   # asymptote 
-#0.001	1			1.0	  1			-1				99		-6   # asymptote 
-# NONTWL retention 
+#0.001	1			0.8	  1			-1				99		 6   # asymptote
+#0.001	1			1.0	  1			-1				99		-6   # asymptote
+# NONTWL retention
 #0 		70		27		35		-1				99		 6   # inflection
 #0.1		10		2			1			-1				99     6   # slope
 #0.001	1			0.8 	1			-1				99		 6   # asymptote
@@ -458,7 +460,7 @@
 
 ### Likelihood related quantities ###
 # variance/sample size adjustment by fleet
-1 # Do variance adjustments 
+1 # Do variance adjustments
 #1   2    3    4    5    6    7    8    9    10   11   12   13   14   15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30   31   #
 0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000
 0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000
@@ -473,7 +475,7 @@
 1	# SD offset (CPUE, discard, mean body weight, recruitment devs): 0=omit log(s) term, 1=include
 
 37 # N changes to default Lambdas = 1.0
-# Component codes:  
+# Component codes:
 #  1=survey
 #  2=discard
 #  3=mean body weight
