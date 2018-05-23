@@ -1,3 +1,4 @@
+library(r4ss)
 library(adnuts)
 library(shinystan)
 library(rstan)
@@ -37,7 +38,6 @@ plot.marginal <- function(fit, nrow=5, ncol=5, save=FALSE){
 plot.slow <- function(fit, n.slow=10, pars=NULL, fast=FALSE, save=TRUE){
   if(is.null(pars)){
     ## if pars nott specified use slowest mixing parameters
-    n.slow <- 10
     ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
     pars <- names(sort(ess, decreasing=fast))[1:n.slow]
   }
