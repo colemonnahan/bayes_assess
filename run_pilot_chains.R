@@ -8,9 +8,7 @@
 ## big problems if starting from the MLE. So make sure to optimize the
 ## model with the -mcmc flag so that SS turns it off for both.
 
-library(adnuts)
-library(snowfall)
-library(r4ss)
+source('startup.R')
 reps <- 5 # chains to run in parallel
 set.seed(352)
 seeds <- sample(1:1e4, size=reps)
@@ -80,7 +78,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 m <- 'snowcrab';
 m <- 'snowcrab2';
 setwd(m); system(m); setwd('..')
-thin <- 10
+thin <- 100
 iter <- 2000
 warmup <- iter/4
 fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
@@ -90,7 +88,7 @@ fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
 dq.names <- c("SSB_2015", "F35sd", "OFL_main")
 fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
 ## Get estimates for derived quantities
-xx <- R2admb::read_admb('snowcrab/snowcrab')
+xx <- R2admb::read_admb(file.path(m,m))
 fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
