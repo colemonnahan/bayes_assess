@@ -289,8 +289,8 @@
   -1  	5    0      9      -1    99     5       0   0   0       0     0 	0  	   	0       # Additive to ascending width
   -10	0	 0      9      -1    99     -50     0   0   0 	    0 	  0	   	0 	    0       # Additive to descending width
   -1	1	 0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
-# selparm[53]: cole fixed at upper bound of 1; NOPE, widened bound
- 0.1	2.00 0.7    9      -1    99 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
+# selparm[53]: cole added N(.7 .1) prior
+ 0.1	1.00 0.7    .7      0   .19 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
 #############################################################################################################################
 
 ### Extra parameters for selectivity deviations
