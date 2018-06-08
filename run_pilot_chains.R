@@ -64,7 +64,9 @@ fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
               parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
-setwd(m);system(m); system(paste(m, '-mceval')); setwd('..')
+setwd(m);system(m);
+##system(paste(m, '-mceval'));
+setwd('..')
 dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
 fit.rwm$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
 xx <- SS_output(m, model=m, verbose=FALSE, covar=T, ncols=500)
@@ -82,7 +84,7 @@ thin <- 100
 iter <- 2000
 warmup <- iter/4
 fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=TRUE,
+              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_2015", "F35sd", "OFL_main")
