@@ -7,7 +7,11 @@ if(recompile)
   system(paste('admb', m, '-f')) # -f does optimized mode
 ## Add the -mcmc so SS turns off bias adjustment and we get a covariance
 ## that matches this to use for sampling. Otherwise there is a mismatch.
-system(paste(m, '-hbf 1 -mcmc 15 '))
+if(m!='snowcrab2'){
+  system(paste(m, '-hbf 1 -mcmc 15 '))
+} else {
+  system(paste(m, '-hbf 1 -ainp snowcrab2.par -phase 50'))
+}
 setwd('..')
 
 ### Run NUTS for different mass matrices

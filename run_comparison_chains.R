@@ -31,7 +31,8 @@ ad <- .9; td <- 12
 source('template.R')
 
 reps <- 5                        # chains/reps to run
-iter <- 2000; warmup <- (iter/10)
-m <- 'tanner2'
-ad <- .9; td <- 10
+inits <- NULL
+iter <- 1000; warmup <- (iter/4)
+m <- 'snowcrab2'
+ad <- .8; td <- 10
 source('template.R')
