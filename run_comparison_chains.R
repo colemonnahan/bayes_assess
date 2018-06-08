@@ -11,28 +11,29 @@ recompile <- FALSE # recomile .tpl files?
 ## needed to be tweaked. inits NULL means to use the mode.
 
 reps <- 5                        # chains/reps to run
-iter <- 2000; warmup <- (iter/10)
+iter <- 1000; warmup <- (iter/5)
 m <- 'halibut2'
-ad <- .9; td <- 12
-inits <- NULL
+ad <- .8; td <- 10
+inits <- get.inits(m, reps, 12)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
 iter <- 4000; warmup <- (iter/10)
 m <- 'hake'
 ad <- .98; td <- 12
-inits <- NULL
+inits <- get.inits(m, reps, 12)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/10)
 m <- 'canary2'
 ad <- .9; td <- 12
+inits <- get.inits(m, reps, 12)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
-inits <- NULL
 iter <- 1000; warmup <- (iter/4)
 m <- 'snowcrab2'
 ad <- .8; td <- 10
+inits <- get.inits(m, reps, 12)
 source('template.R')

@@ -14,12 +14,14 @@ set.seed(352)
 seeds <- sample(1:1e4, size=reps)
 
 m <- 'hake'
-## setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
-thin <- 10
+setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
+thin <- 100
 iter <- 2000
 warmup <- iter/4
-fit.rwm <- sample_admb(model=m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+inits <- get.inits(m, reps, seed=12)
+fit.rwm <-
+  sample_admb(model=m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
+              parallel=TRUE, chains=reps, warmup=warmup*thin,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later. Need to
 ## rerun model so r4ss works right
@@ -35,12 +37,14 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'halibut'
 m <- 'halibut2'
-setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
 thin <- 100
 iter <- 2000
 warmup <- iter/4
-fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+inits <- get.inits(m, reps, seed=121)
+fit.rwm <-
+  sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
+              parallel=TRUE, chains=reps, warmup=warmup*thin,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later. Need to
 ## rerun model so r4ss works right
@@ -56,12 +60,14 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'canary'
 m <- 'canary2'
-setwd(m); system(paste(m,"-mcmc 100")); setwd('..')
+setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
 thin <- 100
 iter <- 2000
 warmup <- iter/4
-fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+inits <- get.inits(m, reps, seed=12)
+fit.rwm <-
+  sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
+              parallel=TRUE, chains=reps, warmup=warmup*thin,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
 setwd(m);system(m);
@@ -83,8 +89,10 @@ setwd(m); system(m); setwd('..')
 thin <- 100
 iter <- 2000
 warmup <- iter/4
-fit.rwm <- sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds,
-              parallel=TRUE, chains=reps, warmup=warmup*thin, mceval=FALSE,
+inits <- get.inits(m, reps, seed=678)
+fit.rwm <-
+  sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
+              parallel=TRUE, chains=reps, warmup=warmup*thin,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_2015", "F35sd", "OFL_main")

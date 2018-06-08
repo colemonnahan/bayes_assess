@@ -114,3 +114,19 @@ plot.improvement <- function(fit1, fit2){
   mtext("log10(ESS)", side=2, line=2.5, cex=1.25)
   dev.off()
 }
+
+get.inits <- function(model, chains, seed){
+  set.seed(seed)
+  file <- file.path(getwd(),'results', paste0('pilot_rwm_',model, '.RDS'))
+  if(!file.exists(file)) {
+    warning("pilot file not found for inits so using NULL")
+    print(file)
+    return(NULL)
+  }
+  fit <- readRDS(file)
+  post <- extract_samples(fit)
+  ## select random rows
+  ind <- sample(1:nrow(post), size=chains)
+  inits <- lapply(ind, function(i) as.numeric(post[i,]))
+  return(inits)
+}
