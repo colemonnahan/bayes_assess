@@ -33,8 +33,9 @@ plot.marginal(canary, save=TRUE)
 canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
 plot.slow(canary2)
 plot.sds(canary2)
-xlims <- list(c(0, 1.5), c(2000, 5000), c(0, 3500))
-ylims <- list(c(0, 5), c(0, 0.002),c(0, 2e-03))
+plot.marginal(canary2, save=TRUE)
+xlims <- list(c(0, 1.1), c(2000, 5000), c(0, 3500))
+ylims <- list(c(0, 7), c(0, 0.002),c(0, 2e-03))
 plot.uncertainties(original=canary, regularized=canary2,
                    xlims=xlims, ylims=ylims)
 plot.improvement(canary, canary2)
@@ -43,14 +44,13 @@ snowcrab <- readRDS('results/pilot_rwm_snowcrab.RDS')
 plot.slow(snowcrab)
 plot.marginal(snowcrab, save=TRUE)
 snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
-plot.slow(snowcrab2)
+plot.slow(snowcrab2, n.slow=12)
 plot.sds(snowcrab2)
 plot.marginal(snowcrab2, save=TRUE)
 xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
 ylims <- list(c(0, .06), c(0, 4),c(0, .2))
 plot.uncertainties(snowcrab, snowcrab2, xlims=xlims, ylims=ylims)
 plot.improvement(snowcrab, snowcrab2)
-
 ### End of looking at the pilot chains
 
 
@@ -89,45 +89,47 @@ dev.off()
 ## ind <- grep('\\[', xx, invert=TRUE)
 ## plot.slow(snowcrab, pars=pars, save=FALSE)
 ## pars <- xx[ind[c(1,2,3,4, 12,13, 29,34,37)]]
-xx <- dimnames(snowcrab$samples)[3][[1]]
-post <- extract_samples(snowcrab)
+xx <- dimnames(snowcrab2$samples)[3][[1]]
+post <- extract_samples(snowcrab2)
 plot(post$Fem_F_prop_constant)
 
 plot.slow(snowcrab2, fast=FALSE, save=FALSE)
 pars <- c("af", "am", "bf", "bm", "log_avg_fmortdf", "log_avg_fmortf", "Fem_F_prop_constant",
 "srv3_q_f", "srvind_sel95_f", "srv10ind_q_f")
-plot.slow(snowcrab, pars=pars, save=FALSE)
 plot.slow(snowcrab2, pars=pars, save=FALSE)
 
 pars <- grep('matestfe', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars, save=FALSE)
 pars <- grep('mateste', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars, save=FALSE)
 
-
-pars <- grep('recdev2', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+## pars <- grep('recdev', x=xx)
+## plot.slow(snowcrab2, pars=pars, save=FALSE)
 pars <- grep('rec_devf', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars[1:18], save=FALSE)
+plot.slow(snowcrab2, pars=pars[18:36], save=FALSE)
 pars <- grep('fmort_dev', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
-pars <- grep('fmortdf_dev', x=xx)[1:15]
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars[1:18], save=FALSE)
+plot.slow(snowcrab2, pars=pars[18:35], save=FALSE)
+pars <- grep('fmortdf_dev', x=xx)
+plot.slow(snowcrab2, pars=pars[1:18], save=FALSE)
+plot.slow(snowcrab2, pars=pars[18:35], save=FALSE)
 
 pars <- grep('fmortt_dev_era1', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars, save=FALSE)
 pars <- grep('fmortt_dev_era2', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
+plot.slow(snowcrab2, pars=pars[1:13], save=FALSE)
+plot.slow(snowcrab2, pars=pars[13:25], save=FALSE)
 
-pars <- grep('log_sel50_dev_mo', x=xx)
-plot.slow(snowcrab, pars=pars, save=FALSE)
 
-pars <- grep('selsmo10ind', x=xx)[15:22]
-plot.slow(snowcrab, pars=pars, save=FALSE)
-pars <- grep('selsmo09ind', x=xx)[15:22]
-plot.slow(snowcrab, pars=pars, save=FALSE)
-pars <- xx[1:35]
-plot.slow(snowcrab, pars=pars, save=FALSE)
+##pars <- grep('log_sel50_dev_mo', x=xx)
+## plot.slow(snowcrab2, pars=pars, save=FALSE)
+pars <- grep('selsmo10ind', x=xx)
+plot.slow(snowcrab2, pars=pars, save=FALSE)
+pars <- grep('selsmo09ind', x=xx)
+plot.slow(snowcrab2, pars=pars, save=FALSE)
+pars <- xx[1:10]
+plot.slow(snowcrab2, pars=pars, save=FALSE)
 
 
 
