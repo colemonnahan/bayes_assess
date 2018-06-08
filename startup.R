@@ -86,15 +86,15 @@ plot.ess <- function(rwm, nuts){
   x <- monitor(rwm$samples, print=FALSE)[,'n_eff']/sum(rwm$time.total);
   y <-  monitor(nuts$samples, print=FALSE)[,'n_eff']/sum(nuts$time.total)
   temp <- range(c(x, y,0))
-  png(paste0('plots/ess_comparison_',model, '.png'), width=7, height=3,
-      units='in', res=500)
+  ## png(paste0('plots/ess_comparison_',model, '.png'), width=7, height=3,
+  ##     units='in', res=500)
   par(mfrow=c(1,3))
   plot(x=x, y=y, xlim=temp, ylim=temp, xlab='RWM', ylab='NUTS')
   abline(0,1)
   col1 <- gray(.7)
   barplot(sort(x), ylim=temp, main='RWM', col=col1, border=col1)
   barplot(sort(y), ylim=temp, main='NUTS', col=col1, border=col1)
-  dev.off()
+#  dev.off()
 }
 plot.improvement <- function(fit1, fit2){
   ## xx <- rbind(data.frame(model=fit1$model, ess=fit1$ess,
