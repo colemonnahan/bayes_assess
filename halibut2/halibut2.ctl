@@ -226,8 +226,8 @@
 ### Discards: double normal ###
 # Lo	Hi	 Init	Prior  Prior Prior	Param	Env	Use	Dev	  	Dev	  Dev	Block	Block
 # bnd	bnd  value  mean   type  SD		phase	var	dev	minyr	maxyr SD	design	switch
-## selparm[20]; cole added N(12,2)
-7	    14	 12		12    0    2 	5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
+## selparm[20]; cole added N(12,2) and extended upper boun to 15
+7	    15	 12		12    0    2 	5 	    0   0   0 	    0     0	    0 	    0		# Age at peak selectivity
   -8    8	 -2     9      -1    99 	-5   	0   0   0 	    0     0 	0  	    0       # Top width
   -4	5	 2		100    -1    99 	5 	    0   0   0 	    0 	  0		0	 	0    	# Ascending width
 # selparm[23]; coled added N(0,1)
@@ -290,7 +290,7 @@
   -10	0	 0      9      -1    99     -50     0   0   0 	    0 	  0	   	0 	    0       # Additive to descending width
   -1	1	 0      9      -1    99 	-50     0   0   0 	    0 	  0	    0 	    0       # Additive to final
 # selparm[53]: cole added N(.7 .1) prior
- 0.1	1.00 0.7    .7      0   .19 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
+ 0.1	1.00 0.7    .7      0   .1 	5       0   3   1998 	2014  0.06	0 	    0       # Asymptote for males
 #############################################################################################################################
 
 ### Extra parameters for selectivity deviations
