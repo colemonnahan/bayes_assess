@@ -77,8 +77,8 @@
 2016    # First_recent_yr_nobias_adj_in_MPD
 0.87    # Maximum bias adjustment in MPD
 0       # Period of cycles in recruitment (N parms read below)
--6      # Lower bound rec devs
-6       # Upper bound rec devs
+-7      # Lower bound rec devs
+7       # Upper bound rec devs
 0       # Read init values for rec devs
 
 # Fishing mortality setup
