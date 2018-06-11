@@ -51,8 +51,8 @@ tt <- floor(4*mean(extract_sampler_params( fit.nuts.dense)$n_leapfrog__))
 ##               algorithm='RWM')
 fit.rwm.dense <- fit.rwm.mle
 ## Save fits
-saveRDS(list(fit.nuts.mle=fit.nuts.mle,
-             fit.rwm.mle=fit.rwm.mle),
+saveRDS(list(fit.nuts.mle=fit.nuts.mle, fit.nuts.dense=fit.nuts.dense,
+             fit.rwm.mle=fit.rwm.mle, fit.rwm.dense=fit.rwm.dense),
         file=paste0('results/', d,'_fits.RDS'))
 
 
