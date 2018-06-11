@@ -44,12 +44,12 @@ fit.rwm.mle <-
               path=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
 tt <- floor(4*mean(extract_sampler_params( fit.nuts.dense)$n_leapfrog__))
-fit.rwm.dense <-
-  sample_admb(m, iter=tt*iter, init=inits, thin=tt,
-              parallel=TRUE, chains=reps, warmup=tt*warmup,
-              path=d, cores=reps, control=list(metric=fit.rwm.mle$covar.est),
-              algorithm='RWM')
-
+## fit.rwm.dense <-
+##   sample_admb(m, iter=tt*iter, init=inits, thin=tt,
+##               parallel=TRUE, chains=reps, warmup=tt*warmup,
+##               path=d, cores=reps, control=list(metric=fit.rwm.mle$covar.est),
+##               algorithm='RWM')
+fit.rwm.dense <- fit.rwm.mle
 ## Save fits
 saveRDS(list(fit.nuts.mle=fit.nuts.mle,
              fit.rwm.mle=fit.rwm.mle),
@@ -93,12 +93,12 @@ ggheight <- 5
 pdf(paste0('plots/', d, '_comparison.pdf'), width=7, height=5)
 g <- ggplot(adaptation.long, aes(y=value, x=m)) + geom_point(alpha=.5) +
   facet_wrap('variable', scales='free')
-g#ggsave(paste0('plots/', d, '_adaptation.png'),g, width=ggwidth, height=ggheight, units='in')
+print(g)
 g <- ggplot(stats.long, aes(y=value, x=m, color=alg)) + geom_jitter(alpha=.5) +
   facet_wrap('variable', scales='free')
-g#ggsave(paste0('plots/', d, '_stats.png'),g, width=ggwidth, height=ggheight, units='in')
+print(g)
 g <- ggplot(perf.all, aes(m, efficiency, color=alg)) + geom_point()
-g#ggsave(paste0('plots/', d, '_perf.png'),g, width=ggwidth, height=ggheight, units='in')
+print(g)
 plot.ess(rwm=fit.rwm.mle, nuts=fit.nuts.mle)
 dev.off()
 

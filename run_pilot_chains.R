@@ -14,6 +14,7 @@ set.seed(352)
 seeds <- sample(1:1e4, size=reps)
 
 m <- 'hake'
+m <- 'hake2'
 setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
 thin <- 100
 iter <- 2000
@@ -85,7 +86,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'snowcrab';
 m <- 'snowcrab2';
-setwd(m); system(m); setwd('..')
+setwd(m); system(paste0(m, ' -phase 50 -ainp ', m,'.par')); setwd('..')
 thin <- 100
 iter <- 2000
 warmup <- iter/4

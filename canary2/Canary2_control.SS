@@ -356,7 +356,8 @@
 -5.0	 5.0	-1.0	  5	    -1	50  	5	  0	0	0	0	0	0 0	# FINAL (logistic)
 
 # 10_CA_AHSOP double normal
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
+## selparm[19]; cole added N(46,2)
+13.001 65	   40	    46	  0	2	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
 ## selparm[22]; cole fixed at lower bound 0
@@ -402,7 +403,7 @@
 13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 ## selparm[39]; cole added N(6,1);
-0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
+0.0	   9.0	 4.3	  6	  0	1	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
 ## selparm[40]; cole fixed at MLE 4.00910911871
 0.0	   9.0	 4.01	  2.6	  -1	50	  -5	  0	0	0	0	0	0	0	# Desc WIDTH exp
 -9.0	 5.0	-8.999	 -9.0	  -1	50	 -50	0	0	0	0	0	0	0	# INIT (logistic)
@@ -414,7 +415,8 @@
 1	# Selex block setup: 0=Read one line apply all, 1=read one line each parameter
 
 # 1CA_TWL double normal
-13.001 65	   40	    50	  -1	50	  4	  	# PEAK
+  ## selparm[43]; cole added N(44,2) prior
+13.001 65	   40	    44	  0	2	  4	  	# PEAK
 13.001 65	   40	    50	  -1	50	  4	  	# PEAK
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  	# Asc WIDTH exp
@@ -422,7 +424,8 @@
 0.0	   9.0	 1.522  3	  -1	1	  -5	  	# Desc WIDTH exp
 ## selparm[48]; cole fixed at MLE: 1.45789505190 (also not clear why)
 0.0	   9.0	 1.458  2	  -1	0.5	  -5	  	# Desc WIDTH exp
--5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
+## selparm[49] cole added N(0,1) prior
+-5.0	 5.0	-1.0	  0	    0	1  	5	    # FINAL (logistic)
 -5.0	 5.0	-1.0	  5	    -1	50  	5	    # FINAL (logistic)
 
 # 4CA_NONTWL double normal

@@ -5,13 +5,15 @@ source("startup.R")
 ### Make plots for each model to examine what's going on.
 hake <- readRDS('results/pilot_rwm_hake.RDS')
 plot.slow(hake)
-## Look at which parameter MLE vs posterior variances are different
-plot.sds(hake)
-## Compare estimates of DQs
-xlims <- list(c(0, 7e6), c(0, 1.5), c(0, 3e6))
-ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
-plot.uncertainties(hake, xlims=xlims, ylims=ylims)
 plot.marginal(hake, save=TRUE)
+hake2 <- readRDS('results/pilot_rwm_hake2.RDS')
+plot.slow(hake2)
+plot.sds(hake2)
+xlims <- list(c(0, 9e6), c(0, 2.4), c(0, 2e6))
+ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
+plot.uncertainties(regularized=hake2, original=hake, xlims=xlims, ylims=ylims)
+plot.improvement(hake, hake2)
+plot.marginal(hake2, save=TRUE)
 
 ## For models which need regularization (all but hake), only make the SD
 ## and management plots for the regularized version
@@ -56,6 +58,17 @@ plot.improvement(snowcrab, snowcrab2)
 
 ### Examine other things ( in development)
 
+fit <- readRDS(file='results/pilot_rwm_hake.RDS')
+pars.all <- dimnames(fit$samples)[[3]]
+pars <- grep('recdev_early', pars.all)[1:12]
+pars <- grep('recdev_early', pars.all)[13:24]
+pairs_admb(fit, pars=pars)
+pars <- grep('recdev2', pars.all)[1:15]
+pars <- grep('recdev2', pars.all)[16:30]
+pars <- grep('recdev2', pars.all)[31:45]
+pairs_admb(fit, pars=pars)
+
+
 ## halibut2 NUTs chains having issues with some pars
 fit <- readRDS(file='results/halibut2_fits.RDS')[[1]]
 
@@ -97,6 +110,7 @@ plot.slow(snowcrab2, fast=FALSE, save=FALSE)
 pars <- c("af", "am", "bf", "bm", "log_avg_fmortdf", "log_avg_fmortf", "Fem_F_prop_constant",
 "srv3_q_f", "srvind_sel95_f", "srv10ind_q_f")
 plot.slow(snowcrab2, pars=pars, save=FALSE)
+pairs_admb(snowcrab2, pars=pars, diag='hist')
 
 pars <- grep('matestfe', x=xx)
 plot.slow(snowcrab2, pars=pars, save=FALSE)
