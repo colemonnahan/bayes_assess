@@ -56,6 +56,73 @@ plot.improvement(snowcrab, snowcrab2)
 ### End of looking at the pilot chains
 
 
+#### Look at mass matrix effect with NUTS
+fits <- readRDS('results/halibut2_fits.RDS')
+dense <- fits$fit.nuts.dense
+mle <- fits$fit.nuts.mle
+
+d <- dense; m <- mle
+post.m <- extract_samples(mle)
+mle.m <- m$mle$se[1:ncol(post.m)]
+ess.m <- monitor(m$samples, warmup=m$warmup, print=FALSE)[,'n_eff']
+post.d <- extract_samples(dense)
+mle.d <- d$mle$se[1:ncol(post.d)]
+ess.d <- monitor(d$samples, warmup=d$warmup, print=FALSE)[,'n_eff']
+plot(ess.m, ess.d); abline(0,1)
+which.min(ess.m)
+qqplot(post.m[,9], post.d[,9])
+plot.marginal(d)
+
+m2 <- m
+m2$mle$cor <- cor(post.m)
+m2$mle$se <- sqrt(diag(cov(post.m)))
+pairs_admb(m, pars=95+1:10)
+pairs_admb(d, pars=3+1:10)
+
+hist(post.d[,i], breaks=50, freq=FALSE)
+xseq <- seq(.9*min(post.d[,i]), 1.1*max(post.d[,i]), len=100)
+lines(xseq, dnorm(xseq, mean=mean(post.d[,i]), sd=sd(post.d[,i])))
+lines(xseq, dnorm(xseq, mean=mean(post.m[,i]), sd=sd(post.m[,i])), col='red')
+
+## are some entries in the cor matrix that different?
+cor1 <- m$mle$cor
+cor2 <- cor(post.m)
+
+cor1[upper.tri(cor1, diag=TRUE)] <- 0
+which(abs(cor1) > .8)
+re1 <- 100*(cor1-cor2)/cor1
+
+plot.marginal2 <- function(fit, nrow=5, ncol=5, save=FALSE){
+  post <- extract_samples(fit=fit)
+  stds <- fit$mle$se[1:ncol(post)]
+  mles <- fit$mle$est[1:ncol(post)]
+  par.names <- names(post)
+  names(mles) <- names(stds) <- par.names
+  if(save)
+    ## png(paste0('plots/marginal_fits_', fit$model,'_%02d.png'), units='in', res=500,
+    ##     width=7,height=5)
+    pdf(paste0('plots/marginal_fits_', fit$model,'.pdf'),
+        width=7,height=5)
+  par(mfrow=c(nrow,ncol), mar=c(1.5,0,0,0), mgp=c(1,.01, 0), tck=-.01)
+  for(pp in par.names){
+    temp <- hist(post[,pp], plot=FALSE)
+    std <- stds[pp]
+    est <- mles[pp]
+    x <- seq(-3*std+est, to=3*std+est, len=1000)
+    y <- dnorm(x, mean=est, sd=std)
+    xlim <- range(c(x, temp$mids))
+    ylim <- c(0, 1.3*max(c(y, temp$density)))
+    plot(x,y, xlim=xlim, ylim=ylim, type='n', ann=FALSE, axes=FALSE)
+    hist(post[,pp], col=gray(.8), plot=TRUE, add=TRUE, freq=FALSE)
+    lines(x,y, lwd=2, col='red')
+    axis(1, col=gray(.5))
+    box(col=gray(.5))
+    mtext(pp, line=-1.5)
+  }
+  if(save) dev.off()
+}
+
+
 ### Examine other things ( in development)
 
 fit <- readRDS(file='results/pilot_rwm_hake.RDS')
