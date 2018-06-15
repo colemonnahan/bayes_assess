@@ -225,7 +225,8 @@
 # Catchability parameter lines
 0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
 0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
-0     3   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
+## cole extended upper bound to 4
+0     4   0.4     0.1     -1         99         2       # Q_extraSD_14_pre-recruit
 
 # Selectivity section
 # Size-based setup
@@ -400,7 +401,7 @@
 
 # 22_CA_Tri_late double normal
 ## selparm[37]; cole added N(50,4)
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	0	0	# PEAK
+13.001 65	   40	    50	  0	4	  4	  0	0	0	0	0	0	0	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 ## selparm[39]; cole added N(6,1);
 0.0	   9.0	 4.3	  6	  0	1	  5	  0	0	0	0	0	0	0	# Asc WIDTH exp
