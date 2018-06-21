@@ -1,4 +1,5 @@
 library(r4ss)
+library(R2admb)
 library(adnuts)
 library(shinystan)
 library(rstan)
