@@ -86,7 +86,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 m <- 'snowcrab';
 m <- 'snowcrab2';
-setwd(m); system(paste0(m, ' -phase 50 -ainp ', m,'.par')); setwd('..')
+setwd(m); system(paste0(m, ' -nox -phase 50 -ainp ', m,'.par')); setwd('..')
 thin <- 100
 iter <- 2000
 warmup <- iter/4
@@ -94,6 +94,7 @@ inits <- get.inits(m, reps, seed=678)
 fit.rwm <-
   sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
               parallel=TRUE, chains=reps, warmup=warmup*thin,
+              mceval=FALSE,
               path=m, cores=reps, algorithm='RWM')
 ## Get posterior draws of dqs to cbind onto parameter draws later
 dq.names <- c("SSB_2015", "F35sd", "OFL_main")
