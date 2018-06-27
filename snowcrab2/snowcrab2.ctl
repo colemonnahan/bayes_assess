@@ -34,7 +34,7 @@
 0
 # var_rec_obs : sd at recruitment
 3.6
-# sd_var_rec : 
+# sd_var_rec :
 0.1
 
 #==selectivity==
@@ -111,7 +111,7 @@
 0.2
 # var_last_obs : sd at max length
 10.5
-# sd_var_last : 
+# sd_var_last :
 0.2
 # mate_ratio : mating ratio for estimation of effective spawning biomass
  1.72
@@ -122,7 +122,8 @@
 # nages : number of ages to track for old shell mature animals
 10
 # matest_n : number of parameters (one per length bin) to estimate for maturity estimation females
- 8
+## cole lowered this from 8 to 6
+7
 # matestm_n : number of parameters (one per length bin) to estimate for maturity estimation males
 ## cole lowered this from 17
  16
