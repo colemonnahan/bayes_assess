@@ -20,7 +20,7 @@ fit.nuts1 <-
   sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=chains,
               warmup=warmup, path=d, cores=chains, seeds=1:chains,
               control=list(max_treedepth=td, metric=mat,
-                           adapt_delta=.8))
+                           adapt_delta=.9))
 fit.nuts2 <-
   sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=chains,
               warmup=warmup, path=d, cores=chains, seeds=seeds,
@@ -41,7 +41,7 @@ fit.rwm <-
               algorithm='RWM')
 
 post.nuts1 <-
-  cbind(alg='NUTS, 0.8',
+  cbind(alg='NUTS, 0.9',
         div=extract_sampler_params(fit.nuts1)$divergent__,
         extract_samples(fit.nuts1))
 post.nuts2 <-
