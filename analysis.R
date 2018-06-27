@@ -48,19 +48,22 @@ plot.marginal(snowcrab, save=TRUE)
 snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
 plot.slow(snowcrab2, n.slow=12)
 plot.sds(snowcrab2)
-plot.marginal(snowcrab2, save=TRUE)
+plot.marginal(fit.nuts.mle, save=TRUE)
 xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
 ylims <- list(c(0, .06), c(0, 4),c(0, .2))
-plot.uncertainties(snowcrab, snowcrab2, xlims=xlims, ylims=ylims)
+plot.uncertainties(original=snowcrab, regularized=snowcrab2, xlims=xlims, ylims=ylims)
 plot.improvement(snowcrab, snowcrab2)
 ### End of looking at the pilot chains
 
 
 #### Look at mass matrix effect with NUTS
 fits <- readRDS('results/halibut2_fits.RDS')
+fits <- readRDS('results/snowcrab2_fits.RDS')
 dense <- fits$fit.nuts.dense
 mle <- fits$fit.nuts.mle
-
+plot.slow(fit.nuts.mle, save=FALSE)
+plot.slow(fit.nuts.dense, save=FALSE)
+plot.slow(fit.rwm.mle, save=FALSE)
 d <- dense; m <- mle
 post.m <- extract_samples(mle)
 mle.m <- m$mle$se[1:ncol(post.m)]
@@ -69,9 +72,23 @@ post.d <- extract_samples(dense)
 mle.d <- d$mle$se[1:ncol(post.d)]
 ess.d <- monitor(d$samples, warmup=d$warmup, print=FALSE)[,'n_eff']
 plot(ess.m, ess.d); abline(0,1)
+slow <- names(sort(ess.m)[1:15])
+pairs_admb(m, pars=slow, diag='acf')
+pairs_admb(d, pars=slow, diag='acf')
+png('snowcrab2_nuts_mle.png', width=7, height=5, units='in', res=500)
+pairs_admb(m, pars=grep('mateste', x=names(ess.d)))
+dev.off()
+png('snowcrab2_nuts_dense.png', width=7, height=5, units='in', res=500)
+pairs_admb(d, pars=grep('mateste', x=names(ess.d)))
+dev.off()
 which.min(ess.m)
 qqplot(post.m[,9], post.d[,9])
 plot.marginal(d)
+
+ess.r <- monitor(fit.rwm.mle$samples, warmup=fit.rwm.mle$warmup, print=FALSE)[,'n_eff']
+slow <- names(sort(ess.r)[1:10])
+pairs_admb(snowcrab2, pars=slow)
+pairs_admb(fit.rwm.mle, pars=slow)
 
 m2 <- m
 m2$mle$cor <- cor(post.m)
