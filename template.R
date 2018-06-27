@@ -1,4 +1,5 @@
-
+set.seed(seed)
+seeds <- sample(1:1e4, size=reps)
 d <- m
 
 ## Run model with hbf=1 to get right covariance matrix and MLEs for NUTS
@@ -17,12 +18,12 @@ setwd('..')
 ### Run NUTS for different mass matrices
 ## Mass matrix is MLE covariance
 fit.nuts.mle <-
-  sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
+  sample_admb(m, iter=iter, init=inits, algorithm='NUTS',  seeds=seeds,
                parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric="mle", adapt_delta=ad))
 ## Mass matrix is dense one estimated from previous run
 fit.nuts.dense <-
-  sample_admb(m, iter=iter, init=inits, algorithm='NUTS',
+  sample_admb(m, iter=iter, init=inits, algorithm='NUTS', seeds=seeds,
                parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric=fit.nuts.mle$covar.est, adapt_delta=ad))
 
@@ -33,19 +34,20 @@ setwd(m)
 if(m!='snowcrab2'){
   system(paste(m, '-hbf 0 -mcmc 15 -nox'))
 } else {
-  system(paste(m, '-hbf 0 -ainp snowcrab2.par -phase 50 -nox'))
+  system(paste0(m, ' -nox -phase 50 -ainp ', m,'.par'))
+#  system(paste(m, '-hbf 0 -ainp snowcrab2.par -phase 50 -nox'))
 }
 setwd('..')
 
 tt <- floor(4*mean(extract_sampler_params( fit.nuts.mle)$n_leapfrog__))
 fit.rwm.mle <-
-  sample_admb(m, iter=tt*iter, init=inits, thin=tt,
+  sample_admb(m, iter=tt*iter, init=inits, thin=tt, seeds=seeds,
               parallel=TRUE, chains=reps, warmup=tt*warmup,
               path=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
-tt <- floor(4*mean(extract_sampler_params( fit.nuts.dense)$n_leapfrog__))
+## tt <- floor(4*mean(extract_sampler_params( fit.nuts.dense)$n_leapfrog__))
 ## fit.rwm.dense <-
-##   sample_admb(m, iter=tt*iter, init=inits, thin=tt,
+##   sample_admb(m, iter=tt*iter, init=inits, thin=tt,  seeds=seeds,
 ##               parallel=TRUE, chains=reps, warmup=tt*warmup,
 ##               path=d, cores=reps, control=list(metric=fit.rwm.mle$covar.est),
 ##               algorithm='RWM')
