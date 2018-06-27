@@ -8,6 +8,10 @@
 ## big problems if starting from the MLE. So make sure to optimize the
 ## model with the -mcmc flag so that SS turns it off for both.
 
+## !!!! Note the posteriors are rerun on the nuts dense chains in the
+## !!!! analysis.R sript and attached to the regularized pilot fits. Need
+## !!!! to update this next round.
+
 source('startup.R')
 reps <- 5 # chains to run in parallel
 set.seed(352)
