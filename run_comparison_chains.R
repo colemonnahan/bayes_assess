@@ -13,26 +13,26 @@ recompile <- FALSE # recomile .tpl files?
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/5)
 m <- 'halibut2'
-ad <- .9; td <- 10
-inits <- get.inits(m, reps, 12)
+ad <- .9; td <- 12
+inits <- get.inits(m, reps, 35024)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/5)
-m <- 'hake2'
+m <- 'hake'
 ad <- .9; td <- 12
 inits <- get.inits(m, reps, 12)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
-iter <- 1000; warmup <- (iter/5)
+iter <- 2000; warmup <- (iter/5)
 m <- 'canary2'
 ad <- .8; td <- 10
 inits <- get.inits(m, reps, 12)
 source('template.R')
 
 reps <- 5                        # chains/reps to run
-iter <- 2000; warmup <- (iter/4)
+iter <- 2000; warmup <- (iter/5)
 m <- 'snowcrab2'
 ad <- .8; td <- 10
 inits <- get.inits(m, reps, 12)
