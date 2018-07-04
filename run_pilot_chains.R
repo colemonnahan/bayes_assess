@@ -1,3 +1,4 @@
+
 ## Run pilot chains for individual models using RWM, and then the "fixed"
 ## version of the model. Each model saves a few key management parameters
 ## in MLE and MCMC estimates, for both versions of models if they exist.
@@ -17,10 +18,10 @@ reps <- 5 # chains to run in parallel
 set.seed(352)
 seeds <- sample(1:1e4, size=reps)
 
-m <- 'hake'
 m <- 'hake2'
+m <- 'hake'
 setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
-thin <- 100
+thin <- 200
 iter <- 2000
 warmup <- iter/4
 inits <- get.inits(m, reps, seed=12)
@@ -43,10 +44,10 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 m <- 'halibut'
 m <- 'halibut2'
 setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
-thin <- 100
+thin <- 200
 iter <- 2000
 warmup <- iter/4
-inits <- get.inits(m, reps, seed=121)
+inits <- get.inits(m, reps, seed=12234)
 fit.rwm <-
   sample_admb(m, iter=iter*thin, thin=thin, seeds=seeds, init=inits,
               parallel=TRUE, chains=reps, warmup=warmup*thin,
@@ -66,7 +67,7 @@ saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 m <- 'canary'
 m <- 'canary2'
 setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
-thin <- 100
+thin <- 200
 iter <- 2000
 warmup <- iter/4
 inits <- get.inits(m, reps, seed=12)
@@ -88,10 +89,10 @@ fit.rwm$dq <- dq
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
 
 
-m <- 'snowcrab';
 m <- 'snowcrab2';
+m <- 'snowcrab';
 setwd(m); system(paste0(m, ' -nox -phase 50 -ainp ', m,'.par')); setwd('..')
-thin <- 100
+thin <- 200
 iter <- 2000
 warmup <- iter/4
 inits <- get.inits(m, reps, seed=678)
@@ -107,4 +108,3 @@ fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
 xx <- R2admb::read_admb(file.path(m,m))
 fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
 saveRDS(fit.rwm, file=paste0("results/pilot_rwm_", m, ".RDS"))
-
