@@ -1,5 +1,5 @@
-## This script is used to test recdev behavior for the hake model between
-## RWM and different NUTS settings
+## This script is used to test recdev behavior for the halibut model
+## between RWM and different NUTS settings.
 source("startup.R")
 iter <- 4000
 warmup <- iter/2
