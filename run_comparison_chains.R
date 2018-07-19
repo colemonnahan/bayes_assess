@@ -27,7 +27,7 @@ source('template.R')
 reps <- 5                        # chains/reps to run
 iter <- 2000; warmup <- (iter/5)
 m <- 'canary2'
-ad <- .8; td <- 10
+ad <- .92; td <- 10
 inits <- get.inits(m, reps, 12)
 source('template.R')
 
@@ -38,3 +38,4 @@ ad <- .8; td <- 10
 inits <- get.inits(m, reps, 12)
 source('template.R')
 
+pairs_admb(fit.nuts.dense, pars=270+1:20)
