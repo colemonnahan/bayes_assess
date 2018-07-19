@@ -332,7 +332,8 @@
 #0			0			0			0			-1				99		-3			0				0				0				0				0				0				0	          #Male offset To inflection
 
 # 4_CA_NTWL double normal
-13.001 65	   40	    50	  -1	50	  4	  0	0	0	0	0	1 2	# PEAK
+## selparm[7]: cole  added N(45,5)
+13.001 65	   40	    45	  0	5	  4	  0	0	0	0	0	1 2	# PEAK
 -9.0	 4.0	-4	   -4	    -1	50   -50	0	0	0	0	0	0	0	# TOP (logistic)
 0.0	   9.0	 4.3	  4.2	  -1	50	  5	  0	0	0	0	0	1 2	# Asc WIDTH exp
 # selparm[10]; cole fixed at mle 7.31872111286
