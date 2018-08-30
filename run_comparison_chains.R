@@ -37,5 +37,3 @@ m <- 'snowcrab2'
 ad <- .8; td <- 10
 inits <- get.inits(m, reps, 12)
 source('template.R')
-
-pairs_admb(fit.nuts.dense, pars=270+1:20)
