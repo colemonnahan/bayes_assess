@@ -1,12 +1,5 @@
 ## This script is used to test recdev behavior for the halibut model
 ## between RWM and different NUTS settings.
-source("startup.R")
-iter <- 4000
-warmup <- iter/2
-chains <- 5
-td <- 15
-inits <- NULL # start from MLE
-seeds <- 1:chains
 
 ## Run model with hbf=1 to get right covariance matrix and MLEs
 d <- m <- 'halibut3'
@@ -14,16 +7,16 @@ setwd(d)
 system(paste(m, '-hbf 1 -nox -mcmc 10'))
 setwd('..')
 
-## Fit with a low acceptance rate
-mat <- 'mle'#fit.nuts2$covar.est # for now using mle matrix
+## Fit with two levels of adapt_delta.
+mat <- 'mle' # use mle matrix
 fit.nuts1 <-
-  sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=chains,
-              warmup=warmup, path=d, cores=chains, seeds=1:chains,
+  sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=reps,
+              warmup=warmup, path=d, cores=reps, seeds=1:reps,
               control=list(max_treedepth=td, metric=mat,
                            adapt_delta=.8))
 fit.nuts2 <-
-  sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=chains,
-              warmup=warmup, path=d, cores=chains, seeds=seeds,
+  sample_admb(m, iter=iter, init=inits, parallel=TRUE, chains=reps,
+              warmup=warmup, path=d, cores=reps, seeds=seeds,
               control=list(max_treedepth=td, metric=mat,
                            adapt_delta=.98))
 
@@ -35,9 +28,9 @@ setwd(d)
 system(paste(m, '-nox -mcmc 10 -phase 10'))
 setwd('..')
 fit.rwm <-
-  sample_admb(m, iter=tt*iter, init=inits, thin=tt, seeds=1:chains,
-              parallel=TRUE, chains=chains, warmup=tt*warmup,
-              path=d, cores=chains, control=list(metric=NULL),
+  sample_admb(m, iter=tt*iter, init=inits, thin=tt, seeds=1:reps,
+              parallel=TRUE, chains=reps, warmup=tt*warmup,
+              path=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
 
 post.nuts1 <-

@@ -1,3 +1,6 @@
+
+inits <- get.inits(m, reps, 35024)
+recompile <- FALSE # recomile .tpl files?
 set.seed(seed)
 seeds <- sample(1:1e4, size=reps)
 d <- m

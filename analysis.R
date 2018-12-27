@@ -1,7 +1,8 @@
 ## This file is where I do the analysis and explore the MCMC fits from the
 ## already run models
-source("startup.R")
 
+
+message("Make model specific plots and diagnostics...")
 ### Make plots for each model to examine what's going on.
 hake <- readRDS('results/pilot_rwm_hake.RDS')
 plot.slow(hake)
@@ -57,6 +58,7 @@ plot.improvement(snowcrab, snowcrab2)
 
 #### Run mceval for the dense NUTS runs which have the best samples. Attach
 #### it to the regularized pilot fit
+message("Get posterior distribution for derived quantities and append to pilot chains...")
 m <- 'hake2'
 fit <- readRDS('results/hake2_fits.RDS')[[2]]
 fitp <- readRDS('results/pilot_rwm_hake2.RDS')
@@ -97,9 +99,10 @@ setwd('..')
 fitp$dq.post <- read.csv(file.path(m, "posterior.csv"))
 saveRDS(fitp, 'results/pilot_rwm_snowcrab2.RDS')
 ### End of mceval stage
-
+stop("Don't source past this point")
 
 #### Look at mass matrix effect with NUTS
+
 fits <- readRDS('results/halibut2_fits.RDS')
 fits <- readRDS('results/snowcrab2_fits.RDS')
 dense <- fits$fit.nuts.dense
