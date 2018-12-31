@@ -4,10 +4,10 @@
 
 message("Make model specific plots and diagnostics...")
 ### Make plots for each model to examine what's going on.
-hake <- readRDS('results/pilot_rwm_hake.RDS')
+hake <- readRDS('results/pilot_hake.RDS')
 plot.slow(hake)
 plot.marginal(hake, save=TRUE)
-hake2 <- readRDS('results/pilot_rwm_hake2.RDS')
+hake2 <- readRDS('results/pilot_hake2.RDS')
 plot.slow(hake2)
 plot.sds(hake2)
 xlims <- list(c(0, 9e6), c(0, 2.4), c(0, 2e6))
@@ -18,10 +18,10 @@ plot.marginal(hake2, save=TRUE)
 
 ## For models which need regularization (all but hake), only make the SD
 ## and management plots for the regularized version
-halibut <- readRDS('results/pilot_rwm_halibut.RDS')
+halibut <- readRDS('results/pilot_halibut.RDS')
 plot.slow(halibut)
 plot.marginal(halibut, save=TRUE)
-halibut2 <- readRDS('results/pilot_rwm_halibut2.RDS')
+halibut2 <- readRDS('results/pilot_halibut2.RDS')
 plot.slow(halibut2)
 plot.sds(halibut2)
 xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
@@ -30,10 +30,10 @@ plot.uncertainties(regularized=halibut2, original=halibut, xlims=xlims, ylims=yl
 plot.improvement(halibut, halibut2)
 plot.marginal(halibut2, save=TRUE)
 
-canary <- readRDS('results/pilot_rwm_canary.RDS')
+canary <- readRDS('results/pilot_canary.RDS')
 plot.slow(canary)
 plot.marginal(canary, save=TRUE)
-canary2 <- readRDS('results/pilot_rwm_canary2.RDS')
+canary2 <- readRDS('results/pilot_canary2.RDS')
 plot.slow(canary2)
 plot.sds(canary2)
 plot.marginal(canary2, save=TRUE)
@@ -43,10 +43,10 @@ plot.uncertainties(original=canary, regularized=canary2,
                    xlims=xlims, ylims=ylims)
 plot.improvement(canary, canary2)
 
-snowcrab <- readRDS('results/pilot_rwm_snowcrab.RDS')
+snowcrab <- readRDS('results/pilot_snowcrab.RDS')
 plot.slow(snowcrab)
 plot.marginal(snowcrab, save=TRUE)
-snowcrab2 <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+snowcrab2 <- readRDS('results/pilot_snowcrab2.RDS')
 plot.slow(snowcrab2, n.slow=12)
 plot.sds(snowcrab2)
 plot.marginal(fit.nuts.mle, save=TRUE)
@@ -61,43 +61,43 @@ plot.improvement(snowcrab, snowcrab2)
 message("Get posterior distribution for derived quantities and append to pilot chains...")
 m <- 'hake2'
 fit <- readRDS('results/hake2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_rwm_hake2.RDS')
+fitp <- readRDS('results/pilot_hake2.RDS')
 setwd(m)
 adnuts:::.write_psv(m, samples=extract_samples(fit))
 system(paste(m, '-mceval'))
 setwd('..')
 dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
 fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_rwm_hake2.RDS')
+saveRDS(fitp, 'results/pilot_hake2.RDS')
 m <- 'halibut2'
 fit <- readRDS('results/halibut2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_rwm_halibut2.RDS')
+fitp <- readRDS('results/pilot_halibut2.RDS')
 setwd(m)
 adnuts:::.write_psv(m, samples=extract_samples(fit))
 system(paste(m, '-mceval'))
 setwd('..')
 dq.names <- c("SPB_2000", "SPB_2010", "SPB_2015")
 fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_rwm_halibut2.RDS')
+saveRDS(fitp, 'results/pilot_halibut2.RDS')
 m <- 'canary2'
 fit <- readRDS('results/canary2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_rwm_canary2.RDS')
+fitp <- readRDS('results/pilot_canary2.RDS')
 setwd(m)
 adnuts:::.write_psv(m, samples=extract_samples(fit))
 system(paste(m, '-mceval'))
 setwd('..')
 dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
 fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_rwm_canary2.RDS')
+saveRDS(fitp, 'results/pilot_canary2.RDS')
 m <- 'snowcrab2'
 fit <- readRDS('results/snowcrab2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+fitp <- readRDS('results/pilot_snowcrab2.RDS')
 setwd(m)
 adnuts:::.write_psv(m, samples=extract_samples(fit))
 system(paste(m, '-mceval'))
 setwd('..')
 fitp$dq.post <- read.csv(file.path(m, "posterior.csv"))
-saveRDS(fitp, 'results/pilot_rwm_snowcrab2.RDS')
+saveRDS(fitp, 'results/pilot_snowcrab2.RDS')
 ### End of mceval stage
 stop("Don't source past this point")
 
@@ -188,7 +188,7 @@ plot.marginal2 <- function(fit, nrow=5, ncol=5, save=FALSE){
 
 ### Examine other things ( in development)
 
-fit <- readRDS(file='results/pilot_rwm_hake.RDS')
+fit <- readRDS(file='results/pilot_hake.RDS')
 pars.all <- dimnames(fit$samples)[[3]]
 pars <- grep('recdev_early', pars.all)[1:12]
 pars <- grep('recdev_early', pars.all)[13:24]
@@ -291,7 +291,7 @@ pairs_admb(fit.rwm, diag='acf', pars=slow)
 
 n.slow <- 6
 
-halibut <- readRDS('results/pilot_rwm_halibut.RDS')
+halibut <- readRDS('results/pilot_halibut.RDS')
 plot.slow(halibut)
 
 ## This is old  code to look at specfic halibut parameters, which now can
@@ -300,7 +300,7 @@ halibut.post <- extract_samples(halibut.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut.rwm$ess))[1:n.slow]
 png('plots/pairs.halibut.rwm.png', width=7, height=5, units='in', res=500)
 pairs_admb(halibut.post, mle=halibut.rwm$mle, pars=slow);dev.off()
-halibut2.rwm <- readRDS('results/pilot_rwm_halibut2.RDS')
+halibut2.rwm <- readRDS('results/pilot_halibut2.RDS')
 chain <- rep(1:dim(halibut.rwm$samples)[2], each=dim(halibut.rwm$samples)[1]-halibut.rwm$warmup)
 halibut2.post <- extract_samples(halibut2.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut2.rwm$ess))[1:n.slow]
@@ -315,7 +315,7 @@ vars <- data.frame(post=var.post, mle=var.mle)
 g <- ggplot(vars, aes(x=log10(mle), log10(post))) + geom_point(alpha=.7) +
   geom_abline(slope=1) + xlab("MLE Variance") + ylab("Posterior Variance")
 ggsave(paste0('plots/vars.halibut2.png'), g, width=7, height=5)
-halibut3.rwm <- readRDS('results/pilot_rwm_halibut3.RDS')
+halibut3.rwm <- readRDS('results/pilot_halibut3.RDS')
 chain <- rep(1:dim(halibut.rwm$samples)[2], each=dim(halibut.rwm$samples)[1]-halibut.rwm$warmup)
 halibut3.post <- extract_samples(halibut3.rwm, inc_lp=TRUE)
 slow <- names(sort(halibut3.rwm$ess))[1:n.slow]
@@ -341,7 +341,7 @@ dev.off()
 
 
 n.slow <- 16
-fit <- readRDS('results/pilot_rwm_snowcrab.RDS')
+fit <- readRDS('results/pilot_snowcrab.RDS')
 fit$ess <- monitor(fit$samples, warmup=fit$warmup, print=FALSE)[,'n_eff']
 slow <- names(sort(fit$ess, FALSE))[1:n.slow]
 png('plots/pairs.snowcrab.slow.png', width=7, height=5, units='in', res=500)
@@ -351,7 +351,7 @@ dev.off()
 hitbounds <- sort(c(293,309, 310:312, 323, 324,331,6,268, 269, 284, 286, 287))
 png('plots/pairs.snowcrab.hitbounds.png', width=7, height=5, units='in', res=500)
 pairs_admb(snowcrab.post, mle=fit$mle, chain=chain, diag='trace', pars=hitbounds);dev.off()
-snowcrab2.rwm <- readRDS('results/pilot_rwm_snowcrab2.RDS')
+snowcrab2.rwm <- readRDS('results/pilot_snowcrab2.RDS')
 snowcrab2.post <- extract_samples(snowcrab2.rwm, TRUE, inc_lp=TRUE)
 chain <- rep(1:dim(snowcrab2.rwm$samples)[2], each=dim(snowcrab2.rwm$samples)[1]-snowcrab2.rwm$warmup)
 slow <- names(sort(snowcrab2.rwm$ess, FALSE))[1:n.slow]

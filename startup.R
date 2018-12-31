@@ -118,7 +118,7 @@ plot.improvement <- function(fit1, fit2){
 
 get.inits <- function(model, chains, seed){
   set.seed(seed)
-  file <- file.path(getwd(),'results', paste0('pilot_rwm_',model, '.RDS'))
+  file <- file.path(getwd(),'results', paste0('pilot_',model, '.RDS'))
   if(!file.exists(file)) {
     warning("pilot file not found for inits so using NULL")
     print(file)

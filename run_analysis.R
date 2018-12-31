@@ -15,8 +15,8 @@ set.seed(352)
 seeds <- sample(1:1e4, size=reps)
 
 ## The pilot runs
-thin <- 200
-iter <- 2000
+thin <- 500
+iter <- 2000*thin
 warmup <- iter/4
 source('run_pilot_chains.R')
 
