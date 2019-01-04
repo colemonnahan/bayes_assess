@@ -55,50 +55,9 @@ plot.uncertainties(original=snowcrab, regularized=snowcrab2, xlims=xlims, ylims=
 plot.improvement(snowcrab, snowcrab2)
 ### End of looking at the pilot chains
 
-#### Run mceval for the dense NUTS runs which have the best samples. Attach
-#### it to the regularized pilot fit
-message("Get posterior distribution for derived quantities and append to pilot chains...")
-m <- 'hake2'
-fit <- readRDS('results/hake2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_hake2.RDS')
-setwd(m)
-adnuts:::.write_psv(m, samples=extract_samples(fit))
-system(paste(m, '-mceval'))
-setwd('..')
-dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
-fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_hake2.RDS')
-m <- 'halibut2'
-fit <- readRDS('results/halibut2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_halibut2.RDS')
-setwd(m)
-adnuts:::.write_psv(m, samples=extract_samples(fit))
-system(paste(m, '-mceval'))
-setwd('..')
-dq.names <- c("SPB_2000", "SPB_2010", "SPB_2015")
-fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_halibut2.RDS')
-m <- 'canary2'
-fit <- readRDS('results/canary2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_canary2.RDS')
-setwd(m)
-adnuts:::.write_psv(m, samples=extract_samples(fit))
-system(paste(m, '-mceval'))
-setwd('..')
-dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
-fitp$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-saveRDS(fitp, 'results/pilot_canary2.RDS')
-m <- 'snowcrab2'
-fit <- readRDS('results/snowcrab2_fits.RDS')[[2]]
-fitp <- readRDS('results/pilot_snowcrab2.RDS')
-setwd(m)
-adnuts:::.write_psv(m, samples=extract_samples(fit))
-system(paste(m, '-mceval'))
-setwd('..')
-fitp$dq.post <- read.csv(file.path(m, "posterior.csv"))
-saveRDS(fitp, 'results/pilot_snowcrab2.RDS')
-### End of mceval stage
+
 stop("Don't source past this point")
+
 
 #### Look at mass matrix effect with NUTS
 
