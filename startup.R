@@ -131,3 +131,24 @@ get.inits <- function(model, chains, seed){
   inits <- lapply(ind, function(i) as.numeric(post[i,]))
   return(inits)
 }
+
+
+check.identifiable <- function(path, model=path){
+  ## Check eigendecomposition
+  fit <- R2admb::read_pars(file.path(path, model))
+  hes <- r4ss::getADMBHessian(file.path(path,'admodel.hes'),NULL)$hes
+  ev  <-  eigen(hes)
+  WhichBad <-  which( ev$values < sqrt(.Machine$double.eps) )
+  if(length(WhichBad)==0){
+    message( "All parameters are identifiable" )
+    return(NULL)
+  }
+  ## Check for parameters
+  RowMax  <-  apply(ev$vectors[, WhichBad], MARGIN=1, FUN=function(vec){max(abs(vec))} )
+  bad <- data.frame(ParNum=1:nrow(hes), Param=names(fit$coefficients)[1:nrow(hes)], MLE=fit$coefficients[1:nrow(hes)], Param_check=ifelse(RowMax>0.1, "Bad","OK"))
+  row.names(bad) <- NULL
+  bad <- subset(bad, Param_check=='Bad')
+  print(bad)
+  return(invisible(bad))
+}
+check.identifiable('snowcrab2')
