@@ -7,6 +7,20 @@ library(plyr)
 library(snowfall)
 library(vioplot)
 
+## Get initial values for the pilot chains instead of starting from the
+## MLE, using a previously run model and then saving these to file so they
+## are reproducible.
+## pilot.inits <- list(halibut=get.inits('halibut', 50, seed=1),
+##               hake=get.inits('hake', 50, seed=1),
+##               snowcrab=get.inits('snowcrab', 50, seed=1),
+##               canary=get.inits('canary', 50, seed=1),
+##               halibut2=get.inits('halibut2', 50, seed=1),
+##               ## hake2=get.inits('hake2', 50, seed=1),
+##               snowcrab2=get.inits('snowcrab2', 50, seed=1),
+##               canary2=get.inits('canary2', 50, seed=1))
+## saveRDS(pilot.inits, 'results/pilot.inits.RDS')
+pilot.inits <- readRDS('results/pilot.inits.RDS')
+
 plot.marginal <- function(fit, nrow=5, ncol=5, save=FALSE){
   post <- extract_samples(fit=fit)
   stds <- fit$mle$se[1:ncol(post)]
