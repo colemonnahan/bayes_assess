@@ -12,9 +12,9 @@ if(recompile)
 ## Add the -mcmc so SS turns off bias adjustment and we get a covariance
 ## that matches this to use for sampling. Otherwise there is a mismatch.
 if(m!='snowcrab2'){
-  system(paste(m, '-hbf 1 -mcmc 15 '))
+  system(paste(m, '-hbf 1 -mcmc 15 -iprint 100 -nox'))
 } else {
-  system(paste(m, '-hbf 1 -ainp snowcrab2.par -phase 50'))
+  system(paste(m, '-hbf 1 -iprint 100 -nox -ainp snowcrab2.par'))
 }
 setwd('..')
 
@@ -35,9 +35,9 @@ fit.nuts.dense <-
 ## Rerun model with hbf=0
 setwd(m)
 if(m!='snowcrab2'){
-  system(paste(m, '-hbf 0 -mcmc 15 -nox'))
+  system(paste(m, '-hbf 0 -mcmc 15 -nox -iprint 100'))
 } else {
-  system(paste0(m, ' -nox -phase 50 -ainp ', m,'.par'))
+  system(paste0(m, ' -nox -phase 50 -iprint 100 -ainp ', m,'.par'))
 #  system(paste(m, '-hbf 0 -ainp snowcrab2.par -phase 50 -nox'))
 }
 setwd('..')

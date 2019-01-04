@@ -5,6 +5,7 @@ library(shinystan)
 library(rstan)
 library(plyr)
 library(snowfall)
+library(vioplot)
 
 plot.marginal <- function(fit, nrow=5, ncol=5, save=FALSE){
   post <- extract_samples(fit=fit)
@@ -105,7 +106,6 @@ plot.improvement <- function(fit1, fit2){
   ## xx$par <- row.names(xx)
   ## levels(xx$model) <- c("Original", "Fixed")
   ## ggplot(xx, aes(x=model, y=ess)) +geom_violin() + scale_y_log10()
-  library(vioplot)
   x <- monitor(fit1$samples, print=FALSE)[,'n_eff'];
   y <- monitor(fit2$samples, print=FALSE)[,'n_eff'];
   png(paste0('plots/ess_improvement_',fit1$model, '.png'), width=3, height=5,
