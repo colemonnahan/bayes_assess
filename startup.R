@@ -6,6 +6,8 @@ library(rstan)
 library(plyr)
 library(snowfall)
 library(vioplot)
+library(reshape2)
+
 
 ## Get initial values for the pilot chains instead of starting from the
 ## MLE, using a previously run model and then saving these to file so they
