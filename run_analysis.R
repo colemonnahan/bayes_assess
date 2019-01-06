@@ -40,13 +40,9 @@ source('template.R')
 
 ## If desired, run the bias checks which looks at the recdevs for the
 ## halibut model. Compares RWM vs NUTS and explores adapt_delta.
-source("startup.R")
-iter <- 4000
+iter <- 200#4000
 warmup <- iter/2
-chains <- 5
-td <- 15
-inits <- NULL # start from MLE
-seeds <- 1:chains
+source("run_bias_check.R")
 
 ## Now run the analysis script
 source("analysis.R")

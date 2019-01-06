@@ -167,4 +167,3 @@ check.identifiable <- function(path, model=path){
   print(bad)
   return(invisible(bad))
 }
-check.identifiable('snowcrab2')
