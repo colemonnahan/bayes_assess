@@ -37,6 +37,9 @@ source('template.R')
 m <- 'canary2' # this one takes way longer
 ad <- .92; td <- 12
 source('template.R')
+m <- 'pollock' # this one takes way longer
+ad <- .92; td <- 12
+source('template.R')
 
 ## If desired, run the bias checks which looks at the recdevs for the
 ## halibut model. Compares RWM vs NUTS and explores adapt_delta.

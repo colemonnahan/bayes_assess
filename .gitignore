@@ -82,4 +82,12 @@ admb_models/hake/plots
 cod2.tpl
 *_chain_*
 posterior.csv
+pollock/gradient*
+pollock2/gradient*
+pollock/*.dat
+pollock2/*.dat
+pollock/pollock.tpl
+pollock2/pollock.tpl
+*.prj
+pm.tpl
 results/*.RDS

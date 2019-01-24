@@ -70,6 +70,22 @@ fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq
 saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
 }
 
+## this is the only non-SS model so ignore the advice about the -mcmc flag above
+for(m in c('pollock', 'pollock2')[1]){
+setwd(m); system(paste0(m, ' -nox -phase 50 -ainp ', m,'.par')); setwd('..')
+inits <- pilot.inits[[m]][1:reps]
+fit.rwm <-
+  sample_admb(m, iter=iter, thin=thin, seeds=seeds, init=inits,
+              parallel=TRUE, chains=reps, warmup=warmup,
+              path=m, cores=reps, algorithm='RWM')
+## No need to rerun it, the DQs are ready
+## dq.names <- c("SSB_2015", "F35sd", "OFL_main")
+## fit.rwm$dq.post <- read.csv(file.path(m, "posterior.csv"))
+## xx <- R2admb::read_admb(file.path(m,m))
+## fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
+saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
+}
+
 ## this is by far the slowest model
 for(m in c('canary', 'canary2')){
 setwd(m); system(paste(m,"-mcmc 100 -nox")); setwd('..')
