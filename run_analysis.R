@@ -15,8 +15,8 @@ set.seed(352)
 seeds <- sample(1:1e4, size=reps)
 
 ## The pilot runs
-thin <- 500
-iter <- 2000*thin
+thin <- 1000
+iter <- 3000*thin
 warmup <- iter/4
 source('run_pilot_chains.R')
 
@@ -27,20 +27,19 @@ source('run_pilot_chains.R')
 ## (td) are set at defaults unless needed to be tweaked. inits is from the
 ## previous run.
 seed <- 2352 # used to draw seeds in the template file
-iter <- 2000; warmup <- (iter/5)
-m <- 'halibut2'; ad <- .9; td <- 12
+iter <- 3000; warmup <- (iter/5)
+m <- 'halibut2'; ad <- .9
 source('template.R') # this file runs everything globally
-m <- 'hake'; ad <- .9; td <- 12
+m <- 'hake'; ad <- .9
 source('template.R')
-m <- 'snowcrab2'; ad <- .9; td <- 12
+m <- 'snowcrab2'; ad <- .9
 source('template.R')
-m <- 'canary2' # this one takes way longer
-ad <- .92; td <- 12
+m <- 'canary2'; ad <- .92
 source('template.R')
 
 ## If desired, run the bias checks which looks at the recdevs for the
 ## halibut model. Compares RWM vs NUTS and explores adapt_delta.
-iter <- 200#4000
+iter <- 4000
 warmup <- iter/2
 source("run_bias_check.R")
 

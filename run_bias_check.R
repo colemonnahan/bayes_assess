@@ -11,12 +11,10 @@ setwd('..')
 
 ## Fit with two levels of adapt_delta.
 mat <- 'mle' # use mle matrix
-## inits <- NULL # start from MLE
-## seeds <- 1:reps
+inits <- NULL # start from MLE
+seeds <- 1:reps
+##inits <- pilot.inits$halibut2[1:reps]
 td <- 15 # max treedepth
-## These inits an seeds set in the startup file allow this to be
-## reproducible
-inits <- pilot.inits$halibut2[1:reps]
 
 ## NUTS with a lower target acceptance ratio so that it takes bigger steps
 fit.nuts1 <-

@@ -1,13 +1,60 @@
 ## This file is where I do the analysis and explore the MCMC fits from the
 ## already run models
 
+message("Loading result fits into workspace..")
+hake <- readRDS('results/pilot_hake.RDS')
+hake2 <- hake##readRDS('results/pilot_hake2.RDS')
+halibut <- readRDS('results/pilot_halibut.RDS')
+halibut2 <- readRDS('results/pilot_halibut2.RDS')
+canary <- readRDS('results/pilot_canary.RDS')
+canary2 <- readRDS('results/pilot_canary2.RDS')
+snowcrab <- readRDS('results/pilot_snowcrab.RDS')
+snowcrab2 <- readRDS('results/pilot_snowcrab2.RDS')
+## Now the comparison fits
+hakefits <- readRDS('results/hake_fits.RDS')
+halibutfits <- readRDS('results/halibut2_fits.RDS')
+canaryfits <- readRDS('results/canary2_fits.RDS')
+snowcrabfits <- readRDS('results/snowcrab2_fits.RDS')
+
+## Look at convergence and ESS for pilot chains
+hake <- add.monitor(hake)
+hake2 <- add.monitor(hake2)
+halibut <- add.monitor(halibut)
+halibut2 <- add.monitor(halibut2)
+snowcrab <- add.monitor(snowcrab)
+snowcrab2 <- add.monitor(snowcrab2)
+canary <- add.monitor(canary)
+canary2 <- add.monitor(canary2)
+conv <- ldply(list(hake, hake2, halibut, halibut2, snowcrab, snowcrab2,
+                                    canary, canary2), function(x) x$monitor)
+conv <- melt(conv, measure.vars=c('Rhat', 'n_eff'))
+g <- ggplot(conv, aes(version, y=value)) + geom_jitter() +
+  facet_grid(variable~model, scales='free') + geom_hline(yintercept=1.1) +
+  scale_y_log10()
+ggsave('plots/pilot_convergence.png', g, width=7, height=5)
+
+## Look at convergence and ESS for pilot chains
+for(i in 1:3){
+  hakefits[[i]] <- add.monitor(hakefits[[i]], metric=i==2)
+  halibutfits[[i]] <- add.monitor(halibutfits[[i]], metric=i==2)
+  snowcrabfits[[i]] <- add.monitor(snowcrabfits[[i]], metric=i==2)
+  canaryfits[[i]] <- add.monitor(canaryfits[[i]], metric=i==2)
+}
+
+conv <- ldply(c(hakefits, halibutfits, snowcrabfits, canaryfits),
+              function(x) x$monitor)
+conv <- melt(conv, measure.vars=c('Rhat', 'n_eff'))
+conv$version2 <- paste0(conv$alg, "_", conv$metric)
+g <- ggplot(conv, aes(version2, y=value)) + geom_jitter() +
+  facet_grid(variable~model, scales='free') + geom_hline(yintercept=1.1) +
+  scale_y_log10()
+ggsave('plots/comparisons_convergence.png', g, width=7, height=5)
+
 
 message("Make model specific plots and diagnostics...")
 ### Make plots for each model to examine what's going on.
-hake <- readRDS('results/pilot_hake.RDS')
 plot.slow(hake)
 plot.marginal(hake, save=TRUE)
-hake2 <- readRDS('results/pilot_hake2.RDS')
 plot.slow(hake2)
 plot.sds(hake2)
 xlims <- list(c(0, 9e6), c(0, 2.4), c(0, 2e6))
@@ -18,10 +65,8 @@ plot.marginal(hake2, save=TRUE)
 
 ## For models which need regularization (all but hake), only make the SD
 ## and management plots for the regularized version
-halibut <- readRDS('results/pilot_halibut.RDS')
 plot.slow(halibut)
 plot.marginal(halibut, save=TRUE)
-halibut2 <- readRDS('results/pilot_halibut2.RDS')
 plot.slow(halibut2)
 plot.sds(halibut2)
 xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
@@ -30,10 +75,8 @@ plot.uncertainties(regularized=halibut2, original=halibut, xlims=xlims, ylims=yl
 plot.improvement(halibut, halibut2)
 plot.marginal(halibut2, save=TRUE)
 
-canary <- readRDS('results/pilot_canary.RDS')
 plot.slow(canary)
 plot.marginal(canary, save=TRUE)
-canary2 <- readRDS('results/pilot_canary2.RDS')
 plot.slow(canary2)
 plot.sds(canary2)
 plot.marginal(canary2, save=TRUE)
@@ -42,10 +85,8 @@ ylims <- list(c(0, 7), c(0, 0.002),c(0, 2e-03))
 plot.uncertainties(original=canary, regularized=canary2, xlims=xlims, ylims=ylims)
 plot.improvement(canary, canary2)
 
-snowcrab <- readRDS('results/pilot_snowcrab.RDS')
 plot.slow(snowcrab)
 plot.marginal(snowcrab, save=TRUE)
-snowcrab2 <- readRDS('results/pilot_snowcrab2.RDS')
 plot.slow(snowcrab2)
 plot.sds(snowcrab2)
 plot.marginal(snowcrab2, save=TRUE)

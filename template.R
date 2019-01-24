@@ -1,4 +1,5 @@
 
+td <- 12
 inits <- get.inits(m, reps, 35024)
 recompile <- FALSE # recomile .tpl files?
 set.seed(seed)
@@ -24,17 +25,16 @@ fit.nuts.mle <-
   sample_admb(m, iter=iter, init=inits, algorithm='NUTS',  seeds=seeds,
                parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric="mle", adapt_delta=ad))
-fit.nuts.mle$monitor <-
-  rstan::monitor(fit.nuts.mle$samples, warmup=fit.nuts.mle$warmup, probs=.5, print=FALSE)
+fit.nuts.mle <- add.monitor(fit.nuts.mle, FALSE)
 ## Mass matrix is dense one estimated from previous run. These are
 ## presumably the best posterior samples so use them for management
 ## quantities by running mceval and then saving the results
 fit.nuts.dense <-
-  sample_admb(m, iter=iter, init=inits, algorithm='NUTS', seeds=seeds, mceval=TRUE,
-               parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
+  sample_admb(m, iter=iter, init=inits, algorithm='NUTS', seeds=seeds,
+              mceval=TRUE,
+              parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric=fit.nuts.mle$covar.est, adapt_delta=ad))
-fit.nuts.dense$monitor <-
-  rstan::monitor(fit.nuts.dense$samples, warmup=fit.nuts.dense$warmup, probs=.5, print=FALSE)
+fit.nuts.dense <- add.monitor(fit.nuts.dense, FALSE, metric='dense')
 if(m == 'hake2'){
   dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
   fit.nuts.dense$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
@@ -70,8 +70,7 @@ fit.rwm.mle <-
               parallel=TRUE, chains=reps, warmup=tt*warmup,
               path=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
-fit.rwm.mle$monitor <-
-  rstan::monitor(fit.rwm.mle$samples, warmup=fit.rwm.mle$warmup, probs=.5, print=FALSE)
+fit.rwm.mle <- add.monitor(fit.rwm.mle, FALSE)
 
 ### This just didn't really work so took it out
 ## tt <- floor(4*mean(extract_sampler_params( fit.nuts.dense)$n_leapfrog__))

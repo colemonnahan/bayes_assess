@@ -23,6 +23,18 @@ library(reshape2)
 ## saveRDS(pilot.inits, 'results/pilot.inits.RDS')
 pilot.inits <- readRDS('results/pilot.inits.RDS')
 
+
+## This takes an adnuts fit and tacks on monitor and some other info for
+## use in analysis later
+add.monitor <- function(fit, pilot=TRUE, metric='mle'){
+  fit$monitor <- with(fit,
+   data.frame(model=model, alg=algorithm, pilot=pilot, metric=metric,
+              version=ifelse(length(grep('2', model))>0, 'regularized', 'original'),
+              monitor(samples, warmup=warmup, probs=.5, print=FALSE)[,5:6]))
+  return(invisible(fit))
+}
+
+
 plot.marginal <- function(fit, nrow=5, ncol=5, save=FALSE){
   post <- extract_samples(fit=fit)
   stds <- fit$mle$se[1:ncol(post)]
