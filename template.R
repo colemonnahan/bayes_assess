@@ -1,6 +1,6 @@
 
 td <- 12
-inits <- get.inits(m, reps, 35024)
+inits <- pilot.inits[[m]][1:reps]
 recompile <- FALSE # recomile .tpl files?
 set.seed(seed)
 seeds <- sample(1:1e4, size=reps)
@@ -119,7 +119,8 @@ perf.rwm.mle <- data.frame(alg='rwm', m='mle',
 ## stats.rwm.dense <- with(fit.rwm.dense, data.frame(alg='rwm', m='dense', time.total=sum(time.total), rstan::monitor(samples, warmup=warmup, probs=.5, print=FALSE)))
 ## perf.rwm.dense <- data.frame(alg='rwm', m='dense', efficiency=min(stats.rwm.dense$n_eff)/sum(fit.rwm.dense$time.total))
 stats.all <- rbind(stats.nuts.mle, stats.nuts.dense, stats.rwm.mle)
-stats.all[,c('mean', 'se_mean', 'sd', 'X50.')] <- NULL
+stats.all[,c('mean', 'se_mean', 'sd', 'X50.', 'model', 'metric', 'version',
+             'alg.1', 'pilot')] <- NULL
 stats.all <- ddply(stats.all, .(alg, m), mutate, perf=(n_eff)/time.total)
 stats.long <- reshape2::melt(stats.all, c('alg', 'm'))
 perf.all <- rbind(perf.nuts.mle, perf.nuts.dense, perf.rwm.mle)
