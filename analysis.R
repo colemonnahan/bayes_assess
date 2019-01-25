@@ -17,34 +17,21 @@ canaryfits <- readRDS('results/canary2_fits.RDS')
 snowcrabfits <- readRDS('results/snowcrab2_fits.RDS')
 
 ## Look at convergence and ESS for pilot chains
-hake <- add.monitor(hake)
-hake2 <- add.monitor(hake2)
-halibut <- add.monitor(halibut)
-halibut2 <- add.monitor(halibut2)
-snowcrab <- add.monitor(snowcrab)
-snowcrab2 <- add.monitor(snowcrab2)
-canary <- add.monitor(canary)
-canary2 <- add.monitor(canary2)
 conv <- ldply(list(hake, hake2, halibut, halibut2, snowcrab, snowcrab2,
                                     canary, canary2), function(x) x$monitor)
 conv <- melt(conv, measure.vars=c('Rhat', 'n_eff'))
+write.csv(conv, file='results/table_convergence_pilot.csv')
 g <- ggplot(conv, aes(version, y=value)) + geom_jitter() +
   facet_grid(variable~model, scales='free') + geom_hline(yintercept=1.1) +
   scale_y_log10()
 ggsave('plots/pilot_convergence.png', g, width=7, height=5)
 
 ## Look at convergence and ESS for pilot chains
-for(i in 1:3){
-  hakefits[[i]] <- add.monitor(hakefits[[i]], metric=i==2)
-  halibutfits[[i]] <- add.monitor(halibutfits[[i]], metric=i==2)
-  snowcrabfits[[i]] <- add.monitor(snowcrabfits[[i]], metric=i==2)
-  canaryfits[[i]] <- add.monitor(canaryfits[[i]], metric=i==2)
-}
-
 conv <- ldply(c(hakefits, halibutfits, snowcrabfits, canaryfits),
               function(x) x$monitor)
 conv <- melt(conv, measure.vars=c('Rhat', 'n_eff'))
 conv$version2 <- paste0(conv$alg, "_", conv$metric)
+write.csv(conv, file='results/table_convergence_updated.csv')
 g <- ggplot(conv, aes(version2, y=value)) + geom_jitter() +
   facet_grid(variable~model, scales='free') + geom_hline(yintercept=1.1) +
   scale_y_log10()
@@ -99,6 +86,17 @@ plot.improvement(snowcrab, snowcrab2)
 
 stop("Don't source past this point")
 
+## Look at divergences
+fit <- snowcrabfits[[2]]
+post <- extract_samples(fit)
+divs <- extract_sampler_params(fit)[,'divergent__']
+post2 <- apply(post, 2, function(x) (x-mean(x))/sd(x))
+ind <- order(divs)
+post2 <- post2[ind,]
+divs2 <- divs[ind]
+plot(1:ncol(post2), post2[1,], ylim=c(-4,4), type='n')
+trash <- sapply(seq(1, nrow(post), by=100), function(i) lines(1:ncol(post2), post2[i,]))
+trash <- sapply(which(divs2==1), function(i) lines(1:ncol(post2), post2[i,], col='red'))
 
 #### Look at mass matrix effect with NUTS
 
@@ -106,9 +104,9 @@ fits <- readRDS('results/halibut2_fits.RDS')
 fits <- readRDS('results/snowcrab2_fits.RDS')
 dense <- fits$fit.nuts.dense
 mle <- fits$fit.nuts.mle
-plot.slow(fit.nuts.mle, save=FALSE)
-plot.slow(fit.nuts.dense, save=FALSE)
-plot.slow(fit.rwm.mle, save=FALSE)
+plot.slow(fits$fit.nuts.mle, save=FALSE)
+plot.slow(fits$fit.nuts.dense, save=FALSE)
+plot.slow(fits$fit.rwm.mle, save=FALSE)
 d <- dense; m <- mle
 post.m <- extract_samples(mle)
 mle.m <- m$mle$se[1:ncol(post.m)]
@@ -362,20 +360,4 @@ plot.improvement(fit, snowcrab2.rwm)
 
 
 
-
-all.fits <- list(cod.rwm, cod.nuts, halibut.rwm, halibut.nuts, hake.rwm,
-                 hake.nuts)
-perf.wide <- ldply(all.fits, function(x){
-  data.frame(model=x$model, alg=x$algorithm, runtime=sum(x$time.total),
-        minESS=min(x$ess), maxRhat=max(x$Rhat))})
-g <- ggplot(perf.wide, aes(model, maxRhat, color=alg)) + geom_point()
-ggsave('plots/maxRhat_comparison.png', g, width=7, height=5)
-perf.wide$perf <- with(perf.wide, minESS/runtime)
-g <- ggplot(perf.wide, aes(model, y=log(perf), color=alg)) + geom_point()
-ggsave('plots/efficienty_comparison.png', g, width=7, height=5)
-temp <- reshape2::melt(subset(perf.wide, select=-c(maxRhat)), c('model', 'alg'))
-perf.long <- reshape2::dcast(temp, model+variable~alg)
-g <- ggplot(perf.long, aes(x=log10(RWM), y=log10(NUTS), color=model)) + geom_point() +
-  geom_abline(slope=1)+ facet_wrap('variable', scales='free') + coord_equal()
-ggsave('plots/perf_comparison.png', g, width=7, height=5)
 
