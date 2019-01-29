@@ -34,7 +34,7 @@ m <- 'hake'; ad <- .9
 source('template.R')
 m <- 'snowcrab2'; ad <- .9
 source('template.R')
-m <- 'canary2'; ad <- .92
+m <- 'canary2'; ad <- .95
 source('template.R')
 
 ## If desired, run the bias checks which looks at the recdevs for the
