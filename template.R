@@ -26,31 +26,17 @@ fit.nuts.mle <-
                parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric="mle", adapt_delta=ad))
 fit.nuts.mle <- add.monitor(fit.nuts.mle, FALSE)
-## Mass matrix is dense one estimated from previous run. These are
-## presumably the best posterior samples so use them for management
-## quantities by running mceval and then saving the results
+## Mass matrix is dense one estimated from previous run.
 fit.nuts.dense <-
   sample_admb(m, iter=iter, init=inits, algorithm='NUTS', seeds=seeds,
               mceval=TRUE,
               parallel=TRUE, chains=reps, warmup=warmup, path=d, cores=reps,
               control=list(max_treedepth=td, metric=fit.nuts.mle$covar.est, adapt_delta=ad))
+## These are presumably the best posterior samples so use them for
+## management quantities by running mceval and then saving the results onto
+## the output for later use in plotting and analysis.
 fit.nuts.dense <- add.monitor(fit.nuts.dense, FALSE, metric='dense')
-if(m == 'hake2'){
-  dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
-  fit.nuts.dense$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-}
-if(m == 'halibut2'){
-  dq.names <- c("SPB_2000", "SPB_2010", "SPB_2015")
-  fit.nuts.dense$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-}
-if(m == 'canary2'){
-  dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
-  fit.nuts.dense$dq.post <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
-}
-if(m == 'snowcrab2'){
-  fit.nuts.dense$dq.post <- read.csv(file.path(m, "posterior.csv"))
-}
-
+fit.nuts.dense$dq.post <- get.dq(m, TRUE)
 
 ## Now run RWM but using a thinning rate similar to NUTS so the time is
 ## roughly equivalent.

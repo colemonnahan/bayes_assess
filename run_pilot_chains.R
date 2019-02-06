@@ -28,10 +28,7 @@ fit.rwm <- add.monitor(fit.rwm)
 ## Need to rerun model so r4ss works right
 setwd(m);system(m);  setwd('..')
 ## Get estimates for derived quantitiesd
-xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
-dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
-names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
-fit.rwm$dq <- dq
+fit.rwm$dq <- get.dq(m)
 saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
 }
 
@@ -45,10 +42,7 @@ fit.rwm <-
 fit.rwm <- add.monitor(fit.rwm)
 ## Need to rerun model so r4ss works right
 setwd(m);system(m); setwd('..')
-xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
-dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
-names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
-fit.rwm$dq <- dq
+fit.rwm$dq <- get.dq(m)
 saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
 }
 
@@ -62,9 +56,7 @@ fit.rwm <-
               mceval=FALSE,
               path=m, cores=reps, algorithm='RWM')
 fit.rwm <- add.monitor(fit.rwm)
-## No need to rerun it, the DQs are ready
-xx <- R2admb::read_admb(file.path(m,m))
-fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
+fit.rwm$dq <- get.dq(m)
 saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
 }
 
@@ -79,9 +71,6 @@ fit.rwm <-
 fit.rwm <- add.monitor(fit.rwm)
 ## Need to rerun model so r4ss works right
 setwd(m);system(m); setwd('..')
-xx <- SS_output(m, model=m, verbose=FALSE, covar=T, ncols=500)
-dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
-names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
-fit.rwm$dq <- dq
+fit.rwm$dq <- get.dq(m)
 saveRDS(fit.rwm, file=paste0("results/pilot_", m, ".RDS"))
 }

@@ -46,7 +46,9 @@ plot.slow(hake2)
 plot.sds(hake2)
 xlims <- list(c(0, 9e6), c(0, 2.4), c(0, 2e6))
 ylims <- list(c(0, 6e-7), c(0, 3),c(0, 2e-6))
-plot.uncertainties(regularized=hake2, original=hake, xlims=xlims, ylims=ylims)
+inputs <- list(model='hake', posterior=hakefits[[2]]$dq.post, mle=hake2$dq,
+               mle0=hake$dq)
+plot.uncertainties(inputs, xlims=xlims, ylims=ylims)
 plot.improvement(hake, hake2)
 plot.marginal(hake2, save=TRUE)
 
@@ -58,7 +60,9 @@ plot.slow(halibut2)
 plot.sds(halibut2)
 xlims <- list(c(350000, 650000), c(100000, 300000), c(100000, 300000))
 ylims <- list(c(0, 2.5e-5), c(0, 5e-5),c(0, 4e-5))
-plot.uncertainties(regularized=halibut2, original=halibut, xlims=xlims, ylims=ylims)
+inputs <- list(model='halibut', posterior=halibutfits[[2]]$dq.post, mle=halibut2$dq,
+               mle0=halibut$dq)
+plot.uncertainties(inputs, xlims=xlims, ylims=ylims)
 plot.improvement(halibut, halibut2)
 plot.marginal(halibut2, save=TRUE)
 
@@ -69,7 +73,9 @@ plot.sds(canary2)
 plot.marginal(canary2, save=TRUE)
 xlims <- list(c(0, 1.1), c(2000, 5000), c(0, 3500))
 ylims <- list(c(0, 7), c(0, 0.002),c(0, 2e-03))
-plot.uncertainties(original=canary, regularized=canary2, xlims=xlims, ylims=ylims)
+inputs <- list(model='canary', posterior=canaryfits[[2]]$dq.post, mle=canary2$dq,
+               mle0=canary$dq)
+plot.uncertainties(inputs, xlims=xlims, ylims=ylims)
 plot.improvement(canary, canary2)
 
 plot.slow(snowcrab)
@@ -79,7 +85,9 @@ plot.sds(snowcrab2)
 plot.marginal(snowcrab2, save=TRUE)
 xlims <- list(c(250, 350), c(.8, 2), c(15, 40))
 ylims <- list(c(0, .06), c(0, 4),c(0, .2))
-plot.uncertainties(original=snowcrab, regularized=snowcrab2, xlims=xlims, ylims=ylims)
+inputs <- list(model='snowcrab', posterior=snowcrabfits[[2]]$dq.post, mle=snowcrab2$dq,
+               mle0=snowcrab$dq)
+plot.uncertainties(inputs, xlims=xlims, ylims=ylims)
 plot.improvement(snowcrab, snowcrab2)
 ### End of looking at the pilot chains
 

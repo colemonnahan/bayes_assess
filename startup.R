@@ -23,7 +23,47 @@ library(reshape2)
 ## saveRDS(pilot.inits, 'results/pilot.inits.RDS')
 pilot.inits <- readRDS('results/pilot.inits.RDS')
 
-
+## Get the MLEs or posterior for a model and return as data.frame
+get.dq <- function(m, post=FALSE){
+  if(m %in% c('hake', 'hake2')){
+    dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
+    if(!post){
+      xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
+      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
+      dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
+    } else {
+      dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+    }
+  } else if(m %in% c('halibut', 'halibut2')){
+    dq.names <- c("SPB_2000", "SPB_2010", "SPB_2015")
+    if(!post){
+      xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
+      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
+      dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
+    } else {
+      dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+    }
+  } else if(m %in% c('snowcrab', 'snowcrab2')){
+    if(!post){
+      ## No need to rerun it, the DQs are ready
+      xx <- R2admb::read_admb(file.path(m,m))
+      fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
+    } else {
+      dq <- read.csv(file.path(m, "posterior.csv"))
+    }
+  } else if(m %in% c('canary', 'canary2')){
+    dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
+    if(!post){
+      xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
+      dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+      dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
+      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
+    } else {
+      dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+    }
+  }
+  return(dq)
+}
 ## This takes an adnuts fit and tacks on monitor and some other info for
 ## use in analysis later
 add.monitor <- function(fit, pilot=TRUE, metric='mle'){
@@ -88,25 +128,25 @@ plot.sds <- function(fit){
   ggsave(paste0('plots/sds.', m, '.png'), g, width=7, height=5)
 }
 
-plot.uncertainties <- function(regularized, original=NULL, xlims, ylims){
-  fit2 <- original; fit1 <- regularized
-  n <- NROW(fit1$dq)
-  png(paste0('plots/uncertainties_', fit1$model, '.png'), units='in', width=7,
+plot.uncertainties <- function(inputs, xlims, ylims){
+  posterior <- inputs$posterior; mle <- inputs$mle; mle0 <- inputs$mle0
+  n <- NROW(mle$dq)
+  png(paste0('plots/uncertainties_', inputs$model, '.png'), units='in', width=7,
              height=3, res=300)
   par(mfrow=c(1,n), mar=c(5,2,1,1 ), oma=c(0,0, 0, 0))
   for(i in 1:n){
-    ii <- as.character(fit1$dq$dq[i])
-    xx <- fit1$dq.post[,ii]
+    ii <- as.character(mle$dq[i])
+    xx <- posterior[,ii]
     hist(xx, freq=FALSE, xlim=xlims[[i]], ylim=ylims[[i]], col=gray(.8),
          border=gray(.8), breaks=50, xlab=ii, main=NA, ylab=NA)
     abline(v=mean(xx), col=2)
     lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
-          y=dnorm(x, fit1$dq[i, 'mle'], fit1$dq[i,'se']))
+          y=dnorm(x, mle[i, 'mle'], mle[i,'se']))
     abline(v=fit1$dq[i, 'mle'], col=1)
-    if(!is.null(fit2)){
+    if(!is.null(mle0)){
       lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
-            y=dnorm(x, fit2$dq[i, 'mle'], fit2$dq[i,'se']), col='blue')
-      abline(v=fit2$dq[i, 'mle'], col='blue')
+            y=dnorm(x, mle0[i, 'mle'], mle0[i,'se']), col='blue')
+      abline(v=mle0[i, 'mle'], col='blue')
     }
   }
   dev.off()
