@@ -29,8 +29,8 @@ get.dq <- function(m, post=FALSE){
     dq.names <- c("SSB_MSY", "SPB_2013", "Bratio_2013")
     if(!post){
       xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
-      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
       dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
+      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
     } else {
       dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
     }
@@ -38,8 +38,8 @@ get.dq <- function(m, post=FALSE){
     dq.names <- c("SPB_2000", "SPB_2010", "SPB_2015")
     if(!post){
       xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
-      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
       dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
+      names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
     } else {
       dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
     }
