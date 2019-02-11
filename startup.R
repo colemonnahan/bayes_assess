@@ -44,10 +44,11 @@ get.dq <- function(m, post=FALSE){
       dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
     }
   } else if(m %in% c('snowcrab', 'snowcrab2')){
+    dq.names <- c("SSB_2015", "F35sd", "OFL_main")
     if(!post){
       ## No need to rerun it, the DQs are ready
       xx <- R2admb::read_admb(file.path(m,m))
-      fit.rwm$dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
+      dq <- data.frame(dq=dq.names, mle=xx$coefficients[dq.names], se=xx$se[dq.names])
     } else {
       dq <- read.csv(file.path(m, "posterior.csv"))
     }
