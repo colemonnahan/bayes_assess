@@ -43,6 +43,6 @@ iter <- 4000
 warmup <- iter/2
 source("run_bias_check.R")
 
-## Now run the analysis script
+## Now run the analysis script. This creates a bunch of plots.
 source("analysis.R")
 
