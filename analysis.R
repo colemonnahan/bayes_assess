@@ -37,6 +37,13 @@ g <- ggplot(conv, aes(version2, y=value)) + geom_jitter() +
   scale_y_log10()
 ggsave('plots/comparisons_convergence.png', g, width=7, height=5)
 
+## Quick check that divergences aren't a problem. < 1% seems very
+## reasonable
+ff <- function(fit){
+  x <- extract_sampler_params(fit)
+   data.frame(model=fit$model, pct.divs=100*sum(x$divergent__)/nrow(x))
+}
+rbind(ff(hakefits[[2]]), ff(halibutfits[[2]]), ff(snowcrabfits[[2]]), ff(canaryfits[[2]]))
 
 message("Make model specific plots and diagnostics...")
 ### Make plots for each model to examine what's going on.
