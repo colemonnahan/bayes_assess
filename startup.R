@@ -55,8 +55,7 @@ get.dq <- function(m, post=FALSE){
   } else if(m %in% c('canary', 'canary2')){
     dq.names <- c("SSB_MSY", "OFLCatch_2015", "Bratio_2015")
     if(!post){
-      xx <- SS_output(m, model=m, verbose=F, covar=TRUE)
-      dq <- r4ss::SSgetMCMC(dir=m)[[1]][,dq.names]
+      xx <- SS_output(m, model=m, verbose=F, covar=TRUE, ncols=300)
       dq <- subset(xx$derived_quants, LABEL %in% dq.names)[,1:3]
       names(dq) <- c('dq','mle', 'se'); rownames(dq) <- NULL
     } else {
@@ -131,7 +130,7 @@ plot.sds <- function(fit){
 
 plot.uncertainties <- function(inputs, xlims, ylims){
   posterior <- inputs$posterior; mle <- inputs$mle; mle0 <- inputs$mle0
-  n <- NROW(mle$dq)
+  n <- NROW(mle)
   png(paste0('plots/uncertainties_', inputs$model, '.png'), units='in', width=7,
              height=3, res=300)
   par(mfrow=c(1,n), mar=c(5,2,1,1 ), oma=c(0,0, 0, 0))
@@ -143,7 +142,7 @@ plot.uncertainties <- function(inputs, xlims, ylims){
     abline(v=mean(xx), col=2)
     lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
           y=dnorm(x, mle[i, 'mle'], mle[i,'se']))
-    abline(v=fit1$dq[i, 'mle'], col=1)
+    abline(v=mle$mle[i], col=1)
     if(!is.null(mle0)){
       lines(x <- seq(min(xlims[[i]]), max(xlims[[i]]), len=1000),
             y=dnorm(x, mle0[i, 'mle'], mle0[i,'se']), col='blue')
