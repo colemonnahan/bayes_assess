@@ -1,6 +1,11 @@
 ### This file demonstrates how to run Bayesian inference on ADMB stock
 ### assessments using the adnuts R package. We demonstrate a Stock
-### Synthesis (SS) model called 'halibut' (see paper).
+### Synthesis (SS) model called 'hake'. It is the supplemental material for
+### the paper:
+
+### Monnahan, C.C., T.A. Branch, J.T. Thorson, I.J Stewart, C.S. Szuwalski
+### (2019). Overcoming long Bayesian run times in integrated fisheries stock
+### assessments. In review at ICES Journal of Marine Science.
 
 ### The use of SS necessitates slightly different workflow for technical
 ### reasons. First, when optimizing before MCMC initiate -mcmc 50 to tell
@@ -10,7 +15,7 @@
 ### time we recommend setting SS to read from the .par file to speed up the
 ### optimizations below.
 
-### 8/2018 Cole Monnahan
+### 2/2019 Cole Monnahan | monnahc@uw.edu
 
 library(adnuts)
 library(snowfall)
@@ -28,33 +33,35 @@ get.inits <- function(fit, chains){
   lapply(ind, function(i) as.numeric(post[i,]))
 }
 
-## Here we assume the halibut.exe model is in a folder called 'halibut'
+## Here we assume the hake.exe model is in a folder called 'hake'
 ## as well. This folder gets copied during parallel runs.
-m <- 'halibut'
+m <- 'hake'
 ## First optimize the model to make sure the Hessian is good.
-setwd(m); system('halibut -nox -mcmc 15'); setwd('..')
+setwd(m); system('hake -nox -iprint 200 -mcmc 15'); setwd('..')
 
 ## Then run parallel RWM chains as a first test
-thin <- 100
-iter <- 2000*thin; warmup <- iter/4*thin
+thin <- 1
+iter <- 2000*thin; warmup <- iter/4
 inits <- NULL ## start chains from MLE
 pilot <- sample_admb(m, iter=iter, thin=thin, seeds=seeds, init=inits,
                      parallel=TRUE, chains=reps, warmup=warmup,
                      path=m, cores=reps, algorithm='RWM')
 
-## Plot slowest mixing pars compared to MLE estimates to check for issues.
-ess <- monitor(pilot$samples, warmup=pilot$warmup, print=FALSE)[,'n_eff']
-slow <- names(sort(ess))[1:8]
+## Check convergence
+mon <- monitor(pilot$samples, warmup=pilot$warmup, print=FALSE)
+max(mon[,'Rhat'])
+min(mon[,'n_eff'])
+## Examine the slowest mixing parameters
+slow <- names(sort(mon[,'n_eff']))[1:8]
 pairs_admb(fit=pilot, pars=slow)
-## Regularize as needed and repeat above code until model is satisfactory
+## Or can specify them by name
+pairs_admb(fit=pilot, pars=c('MGparm[1]', 'SR_parm[1]', 'SR_parm[2]'))
 
-## After regularizing (call it halibut2 and put it in halibut2 folder) we
-## can run NUTS chains.
-m <- 'halibut2'
-## Reoptimize to get the correct mass matrix for NUTS. Note the -hbf 1
-## argument. This is a technical requirement b/c NUTS uses a different set
-## of bounding functions and thus the mass matrix will be different.
-setwd(m); system(paste(m, '-hbf 1 -nox -mcmc 15')); setwd('..')
+## After regularizing we can run NUTS chains. First reoptimize to get the
+## correct mass matrix for NUTS. Note the -hbf 1 argument. This is a
+## technical requirement b/c NUTS uses a different set of bounding
+## functions and thus the mass matrix will be different.
+setwd(m); system(paste(m, '-hbf 1 -nox -iprint 200 -mcmc 15')); setwd('..')
 ## Use default MLE covariance (mass matrix) and short parallel NUTS chains
 ## started from the MLE.
 nuts.mle <-
@@ -75,6 +82,16 @@ nuts.updated <-
               mceval=TRUE, control=list(metric=mass, adapt_delta=0.9))
 ## Again check for issues of nonconvergence and other standard checks. Then
 ## use for inference.
+mon <- monitor(nuts.updated$samples, warmup=nuts.updated$warmup, print=FALSE)
+max(mon[,'Rhat'])
+min(mon[,'n_eff'])
+
+## We can calculate efficiecy as ess/time. Since there's multiple chains
+## add the time together because the ESS is summed across chains too.
+(eff <- min(mon[,'n_eff'])/sum(nuts.updated$time.total))
+## Or how long to get 1000 effective samples
+1000/eff                                # in seconds
+1000/eff/60                             # in minutes
 
 ## NOTE: the mceval=TRUE argument tells ADMB to run -mceval on ALL chains
 ## combined AFTER discarding warmup period and thinning. Thus whatever your
