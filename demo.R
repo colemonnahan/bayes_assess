@@ -25,13 +25,6 @@ reps <- parallel::detectCores()-1 # chains to run in parallel
 ## Reproducible seeds are passed to ADMB
 set.seed(352)
 seeds <- sample(1:1e4, size=reps)
-## Function to return starting values from a fit given the number of
-## chains. It randomly samples from the posterior.
-get.inits <- function(fit, chains){
-  post <- extract_samples(fit)
-  ind <- sample(1:nrow(post), size=chains)
-  lapply(ind, function(i) as.numeric(post[i,]))
-}
 
 ## Here we assume the hake.exe model is in a folder called 'hake'
 ## as well. This folder gets copied during parallel runs.
@@ -40,8 +33,8 @@ m <- 'hake'
 setwd(m); system('hake -nox -iprint 200 -mcmc 15'); setwd('..')
 
 ## Then run parallel RWM chains as a first test
-thin <- 1
-iter <- 2000*thin; warmup <- iter/4
+thin <- 100
+iter <- 1000*thin; warmup <- iter/4
 inits <- NULL ## start chains from MLE
 pilot <- sample_admb(m, iter=iter, thin=thin, seeds=seeds, init=inits,
                      parallel=TRUE, chains=reps, warmup=warmup,
@@ -75,7 +68,7 @@ launch_shinyadmb(nuts.mle)
 ## If good, run again for inference using updated mass matrix. Increase
 ## adapt_delta toward 1 if you have divergences (runs will take longer).
 mass <- nuts.mle$covar.est # note this is in unbounded parameter space
-inits <- get.inits(nuts.mle, reps) ## use inits from pilot run
+inits <- sample_inits(nuts.mle, reps) ## use inits from pilot run
 nuts.updated <-
   sample_admb(model=m, iter=1000, init=inits, algorithm='NUTS',  seeds=seeds,
                parallel=TRUE, chains=reps, warmup=100, path=m, cores=reps,
