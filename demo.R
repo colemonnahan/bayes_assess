@@ -68,7 +68,7 @@ launch_shinyadmb(nuts.mle)
 ## If good, run again for inference using updated mass matrix. Increase
 ## adapt_delta toward 1 if you have divergences (runs will take longer).
 mass <- nuts.mle$covar.est # note this is in unbounded parameter space
-inits <- sample_inits(nuts.mle, reps) ## use inits from pilot run
+inits <- generate_inits(nuts.mle, reps) ## use inits from pilot run
 nuts.updated <-
   sample_admb(model=m, iter=1000, init=inits, algorithm='NUTS',  seeds=seeds,
                parallel=TRUE, chains=reps, warmup=100, path=m, cores=reps,
