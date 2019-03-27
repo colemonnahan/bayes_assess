@@ -8,8 +8,8 @@
 ## author (monnahc@uw.edu) as the .tpl files are proprietary.
 
 source('startup.R')
-packageVersion('adnuts')
-packageVersion('r4ss')
+packageVersion('adnuts')  # 1.0.1
+packageVersion('r4ss')    # 1.24.0
 reps <- 5 # chains to run in parallel
 set.seed(352)
 seeds <- sample(1:1e4, size=reps)

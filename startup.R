@@ -7,6 +7,7 @@ library(plyr)
 library(snowfall)
 library(vioplot)
 library(reshape2)
+library(matrixcalc)
 
 
 ## Get initial values for the pilot chains instead of starting from the
